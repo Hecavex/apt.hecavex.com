@@ -19,7 +19,12 @@ test('required production routes and assets exist', () => {
     'index.html', 'actors/index.html', 'actors/apt28/index.html',
     'about/methodology/index.html', 'sources/index.html', 'updates/index.html',
     'feed.xml', 'robots.txt', '.well-known/security.txt', 'CNAME',
-    'sitemap-index.xml', 'pagefind/pagefind.js', 'og/default.png'
+    'sitemap-index.xml', 'pagefind/pagefind.js', 'og/default.png',
+    'fonts/Lato/Lato-Regular.woff2',
+    'fonts/Source_Sans_Pro/SourceSansPro-Regular.woff2',
+    'fonts/Source_Sans_Pro/SourceSansPro-SemiBold.woff2',
+    'fonts/Source_Sans_Pro/SourceSansPro-Bold.woff2',
+    'fonts/Source_Sans_Pro/SourceSansPro-Black.woff2'
   ]) assert.ok(fs.existsSync(path.join(root, file)), file);
 });
 
@@ -49,6 +54,23 @@ test('English-only document, themes and controls are accessible', () => {
   assert.match(css, /:root\[data-theme=dark\]/);
   assert.match(css, /:root\[data-theme=light\]/);
   assert.match(read('actors/index.html'), /name="region"/);
+});
+
+test('actor profiles keep the readable layout, resilient table and scroll-aware contents rail', () => {
+  const html = read('actors/apt28/index.html');
+  const css = files
+    .filter(file => file.endsWith('.css'))
+    .map(file => fs.readFileSync(file, 'utf8'))
+    .join('\n');
+
+  assert.match(html, /data-profile-toc/);
+  assert.match(html, /aria-current="location"/);
+  assert.match(html, /class="table-wrap profile-table"/);
+  assert.match(html, /<colgroup>/);
+  assert.match(css, /profile-toc.*aria-current/);
+  assert.match(css, /profile-table.*min-width:48rem/);
+  assert.match(css, /profile-table.*white-space:nowrap/);
+  assert.match(css, /Source Sans Pro/);
 });
 
 test('all root-relative links and assets resolve in the static build', () => {

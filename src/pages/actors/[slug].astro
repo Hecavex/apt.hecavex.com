@@ -1,13 +1,134 @@
 ---
-import { getCollection, render } from 'astro:content'; import BaseLayout from '../../layouts/BaseLayout.astro'; import { publicEntries, bySlug, label, formatDate } from '../../utils/content';
-export async function getStaticPaths(){return (await getCollection('actors',({data})=>!data.draft)).map(entry=>({params:{slug:entry.data.slug},props:{entry}}))}
-const {entry}=Astro.props; const {Content,headings}=await render(entry); const [sources, campaigns, malware, tools, techniques, updates]=await Promise.all(['sources','campaigns','malware','tools','techniques','updates'].map(n=>publicEntries(n as any))); const maps={sources:bySlug(sources as any),campaigns:bySlug(campaigns as any),malware:bySlug(malware as any),tools:bySlug(tools as any),techniques:bySlug(techniques as any),updates:bySlug(updates as any)} as any; const d=entry.data;
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProfileToc from '../../components/ProfileToc.astro';
+import { publicEntries, bySlug, label, formatDate } from '../../utils/content';
+
+export async function getStaticPaths() {
+  return (await getCollection('actors', ({ data }) => !data.draft)).map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const [sources, campaigns, malware, tools, techniques, updates] = await Promise.all(
+  ['sources', 'campaigns', 'malware', 'tools', 'techniques', 'updates'].map((name) => publicEntries(name as any))
+);
+const maps = {
+  sources: bySlug(sources as any),
+  campaigns: bySlug(campaigns as any),
+  malware: bySlug(malware as any),
+  tools: bySlug(tools as any),
+  techniques: bySlug(techniques as any),
+  updates: bySlug(updates as any)
+} as any;
+const d = entry.data;
+
+const tocItems = [
+  ...headings.filter((heading: any) => heading.depth === 2).map((heading: any) => ({ slug: heading.slug, text: heading.text })),
+  ...(d.aliases.length > 0 ? [{ slug: 'naming-and-aliases', text: 'Naming and aliases' }] : []),
+  ...(d.attribution.length > 0 ? [{ slug: 'attribution-statements', text: 'Attribution statements' }] : []),
+  ...(d.techniques.length > 0 ? [{ slug: 'techniques', text: 'MITRE ATT&CK techniques' }] : []),
+  ...(d.vulnerabilities.length > 0 ? [{ slug: 'vulnerabilities', text: 'Vulnerabilities' }] : []),
+  ...(d.related_research.length > 0 ? [{ slug: 'related-research', text: 'Related research' }] : []),
+  { slug: 'sources', text: 'Sources' },
+  ...(d.updates.length > 0 ? [{ slug: 'change-history', text: 'Change history' }] : [])
+];
 ---
-<BaseLayout title={`${d.name} | Actor Profile`} description={d.summary} type="ProfilePage"><article class="shell" data-pagefind-body data-pagefind-meta="type:Actor"><header class="profile-head"><p class="eyebrow">Actor profile · <span class="mono">{d.external_identifiers.mitre_attack||d.id}</span></p><h1>{d.name}</h1><p class="lead">{d.summary}</p><p class="alias-line">Also tracked as: {d.aliases.map((a:any)=>a.name).join(' · ')||'No public aliases recorded'}</p></header><dl class="fact-grid">{[['Actor type',d.actor_types.map(label).join(', ')],['Status',label(d.status)],['Suspected origin',d.suspected_origins.join(', ')||'Unknown'],['Motivation',d.motivations.map(label).join(', ')],['Active since',d.active_since],['Last observed',d.last_observed||'Not stated'],['Confidence',label(d.confidence)],['Last reviewed',formatDate(d.last_reviewed)],['Target regions',d.targeting.regions.join(', ')||'Not recorded'],['Target sectors',d.targeting.sectors.join(', ')||'Not recorded'],['Reviewer',d.authors.join(', ')],['Stable ID',d.id]].map(([term,value])=><div class="fact"><dt>{term}</dt><dd>{value}</dd></div>)}</dl><div class="profile-grid"><div class="prose"><Content />
-{d.aliases.length>0&&<section id="naming-and-aliases"><h2>Naming and aliases</h2><p class="callout">Vendor tracking clusters may overlap but are not necessarily exact one-to-one equivalents.</p><div class="table-wrap"><table><thead><tr><th>Alias</th><th>Source</th><th>Relationship</th><th>Confidence</th><th>Notes</th></tr></thead><tbody>{d.aliases.map((a:any)=><tr><td>{a.name}</td><td>{a.source}</td><td>{label(a.relationship)}</td><td><span class={`badge ${a.confidence}`}>{label(a.confidence)}</span></td><td>{a.notes||'—'}</td></tr>)}</tbody></table></div></section>}
-{d.attribution.length>0&&<section id="attribution-statements"><h2>Source-specific attribution statements</h2>{d.attribution.map((a:any)=><div class="panel"><span class={`badge ${a.status}`}>{label(a.status)}</span><h3>{a.attributed_entity}</h3><p>{a.claim}</p><p class="meta">Source: <a href={`/sources/${a.source}/`}>{maps.sources.get(a.source)?.data.name??a.source}</a> · {formatDate(a.published_at)} · {label(a.confidence)} confidence</p><p>{a.notes}</p></div>)}</section>}
-{d.techniques.length>0&&<section id="techniques"><h2>MITRE ATT&amp;CK techniques</h2><ul>{d.techniques.map((id:string)=>{const e=maps.techniques.get(id);return <li>{e?<a href={`/techniques/${id}/`}>{e.data.mitre_id} · {e.data.name}</a>:<span>{id} · profile pending</span>}</li>})}</ul></section>}
-{d.vulnerabilities.length>0&&<section id="vulnerabilities"><h2>Vulnerabilities</h2><ul>{d.vulnerabilities.map((v:string)=><li class="mono">{v}</li>)}</ul></section>}
-{d.related_research.length>0&&<section id="related-research"><h2>Related Hecavex research</h2><ul>{d.related_research.map((r:any)=><li><a href={r.url}>{r.title} ↗</a></li>)}</ul></section>}
-<section id="sources"><h2>Sources</h2><ol>{d.sources.map((id:string)=>{const s=maps.sources.get(id);return <li>{s?<><a href={s.data.url}>{s.data.title}</a> — {s.data.publisher}, {formatDate(s.data.published_at)}. <a href={`/sources/${s.data.slug}/`}>Source record</a></>:<span>{id} · source record pending</span>}</li>})}</ol></section>
-{d.updates.length>0&&<section id="change-history"><h2>Change history</h2><ol class="timeline">{d.updates.map((id:string)=>{const u=maps.updates.get(id);return u?<li><time>{formatDate(u.data.date)}</time><h3>{u.data.title}</h3><p>{u.data.summary}</p></li>:null})}</ol></section>}</div><nav class="profile-toc" aria-label="On this profile"><strong>Profile contents</strong>{headings.filter((h:any)=>h.depth===2).map((h:any)=><a href={`#${h.slug}`}>{h.text}</a>)}<a href="#naming-and-aliases">Naming and aliases</a><a href="#sources">Sources</a><a href="#change-history">Change history</a></nav></div></article></BaseLayout>
+
+<BaseLayout title={`${d.name} | Actor Profile`} description={d.summary} type="ProfilePage">
+  <article class="shell profile-shell" data-pagefind-body data-pagefind-meta="type:Actor">
+    <header class="profile-head">
+      <p class="eyebrow">Actor profile · <span class="mono">{d.external_identifiers.mitre_attack || d.id}</span></p>
+      <h1>{d.name}</h1>
+      <p class="lead">{d.summary}</p>
+      <p class="alias-line">Also tracked as: {d.aliases.map((alias: any) => alias.name).join(' · ') || 'No public aliases recorded'}</p>
+    </header>
+
+    <dl class="fact-grid">
+      {[
+        ['Actor type', d.actor_types.map(label).join(', ')],
+        ['Status', label(d.status)],
+        ['Suspected origin', d.suspected_origins.join(', ') || 'Unknown'],
+        ['Motivation', d.motivations.map(label).join(', ')],
+        ['Active since', d.active_since],
+        ['Last observed', d.last_observed || 'Not stated'],
+        ['Confidence', label(d.confidence)],
+        ['Last reviewed', formatDate(d.last_reviewed)],
+        ['Target regions', d.targeting.regions.join(', ') || 'Not recorded'],
+        ['Target sectors', d.targeting.sectors.join(', ') || 'Not recorded'],
+        ['Reviewer', d.authors.join(', ')],
+        ['Stable ID', d.id]
+      ].map(([term, value]) => <div class="fact"><dt>{term}</dt><dd>{value}</dd></div>)}
+    </dl>
+
+    <div class="profile-grid">
+      <div class="prose profile-body">
+        <Content />
+
+        {d.aliases.length > 0 && (
+          <section id="naming-and-aliases">
+            <h2>Naming and aliases</h2>
+            <p class="callout">Vendor tracking clusters may overlap but are not necessarily exact one-to-one equivalents.</p>
+            <div class="table-wrap profile-table" role="region" aria-label="Actor aliases" tabindex="0">
+              <table>
+                <colgroup><col class="alias-name" /><col class="alias-source" /><col class="alias-relationship" /><col class="alias-confidence" /><col class="alias-notes" /></colgroup>
+                <thead><tr><th>Alias</th><th>Source</th><th>Relationship</th><th>Confidence</th><th>Notes</th></tr></thead>
+                <tbody>
+                  {d.aliases.map((alias: any) => (
+                    <tr>
+                      <td>{alias.name}</td>
+                      <td>{alias.source}</td>
+                      <td>{label(alias.relationship)}</td>
+                      <td><span class={`badge ${alias.confidence}`}>{label(alias.confidence)}</span></td>
+                      <td>{alias.notes || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+
+        {d.attribution.length > 0 && (
+          <section id="attribution-statements">
+            <h2>Source-specific attribution statements</h2>
+            {d.attribution.map((attribution: any) => (
+              <div class="panel">
+                <span class={`badge ${attribution.status}`}>{label(attribution.status)}</span>
+                <h3>{attribution.attributed_entity}</h3>
+                <p>{attribution.claim}</p>
+                <p class="meta">Source: <a href={`/sources/${attribution.source}/`}>{maps.sources.get(attribution.source)?.data.name ?? attribution.source}</a> · {formatDate(attribution.published_at)} · {label(attribution.confidence)} confidence</p>
+                <p>{attribution.notes}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {d.techniques.length > 0 && (
+          <section id="techniques"><h2>MITRE ATT&amp;CK techniques</h2><ul>{d.techniques.map((id: string) => { const technique = maps.techniques.get(id); return <li>{technique ? <a href={`/techniques/${id}/`}>{technique.data.mitre_id} · {technique.data.name}</a> : <span>{id} · profile pending</span>}</li>; })}</ul></section>
+        )}
+
+        {d.vulnerabilities.length > 0 && <section id="vulnerabilities"><h2>Vulnerabilities</h2><ul>{d.vulnerabilities.map((vulnerability: string) => <li class="mono">{vulnerability}</li>)}</ul></section>}
+
+        {d.related_research.length > 0 && <section id="related-research"><h2>Related Hecavex research</h2><ul>{d.related_research.map((research: any) => <li><a href={research.url}>{research.title} ↗</a></li>)}</ul></section>}
+
+        <section id="sources">
+          <h2>Sources</h2>
+          <ol>{d.sources.map((id: string) => { const source = maps.sources.get(id); return <li>{source ? <><a href={source.data.url}>{source.data.title}</a> — {source.data.publisher}, {formatDate(source.data.published_at)}. <a href={`/sources/${source.data.slug}/`}>Source record</a></> : <span>{id} · source record pending</span>}</li>; })}</ol>
+        </section>
+
+        {d.updates.length > 0 && (
+          <section id="change-history">
+            <h2>Change history</h2>
+            <ol class="timeline">{d.updates.map((id: string) => { const update = maps.updates.get(id); return update ? <li><time>{formatDate(update.data.date)}</time><h3>{update.data.title}</h3><p>{update.data.summary}</p></li> : null; })}</ol>
+          </section>
+        )}
+      </div>
+
+      <ProfileToc items={tocItems} />
+    </div>
+  </article>
+</BaseLayout>

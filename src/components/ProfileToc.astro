@@ -1,0 +1,84 @@
+---
+interface TocItem {
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  items: TocItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="profile-toc" aria-label="On this profile" data-profile-toc>
+  <h2 class="profile-toc-title">Profile contents</h2>
+  <div class="profile-toc-list">
+    {items.map((item, index) => (
+      <a href={`#${item.slug}`} aria-current={index === 0 ? 'location' : undefined}>{item.text}</a>
+    ))}
+  </div>
+</nav>
+
+<script>
+  const initialiseProfileToc = () => {
+    document.querySelectorAll<HTMLElement>('[data-profile-toc]').forEach((toc) => {
+      if (toc.dataset.ready === 'true') return;
+      toc.dataset.ready = 'true';
+
+      const entries = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'))
+        .map((link) => {
+          const id = decodeURIComponent(link.hash.slice(1));
+          return { link, section: document.getElementById(id) };
+        })
+        .filter((entry): entry is { link: HTMLAnchorElement; section: HTMLElement } => Boolean(entry.section));
+
+      if (entries.length === 0) return;
+
+      const activate = (activeLink: HTMLAnchorElement) => {
+        entries.forEach(({ link }) => {
+          if (link === activeLink) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      };
+
+      const update = () => {
+        const topbar = document.querySelector<HTMLElement>('.topbar');
+        const readingLine = (topbar?.offsetHeight ?? 64) + 56;
+        let current = entries[0]!;
+
+        for (const entry of entries) {
+          if (entry.section.getBoundingClientRect().top <= readingLine) current = entry;
+          else break;
+        }
+
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+          current = entries[entries.length - 1]!;
+        }
+
+        activate(current.link);
+      };
+
+      let queued = false;
+      const requestUpdate = () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          update();
+          queued = false;
+        });
+      };
+
+      window.addEventListener('scroll', requestUpdate, { passive: true });
+      window.addEventListener('resize', requestUpdate, { passive: true });
+      window.addEventListener('hashchange', requestUpdate);
+      update();
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialiseProfileToc, { once: true });
+  } else {
+    initialiseProfileToc();
+  }
+</script>
