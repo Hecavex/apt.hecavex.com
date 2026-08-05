@@ -17,6 +17,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': type, name: title, d
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicons/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/lib/fontawesome-free/css/all.min.css" />
     <link rel="alternate" type="application/atom+xml" title="APT Notes updates" href="/feed.xml" />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
     <meta property="og:type" content="website" /><meta property="og:title" content={fullTitle} /><meta property="og:description" content={description} /><meta property="og:url" content={canonical} /><meta property="og:image" content={new URL(image, Astro.site)} />
