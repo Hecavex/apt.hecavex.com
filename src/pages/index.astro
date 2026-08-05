@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { publicEntries, formatDate } from '../utils/content';
+const actors:any[] = await publicEntries('actors');
+const campaigns:any[] = await publicEntries('campaigns');
+const malware:any[] = await publicEntries('malware');
+const tools:any[] = await publicEntries('tools');
+const sources:any[] = await publicEntries('sources');
+const updates:any[] = await publicEntries('updates');
+const aliases = actors.reduce((sum, actor:any) => sum + actor.data.aliases.length, 0);
+const recent = [...actors].sort((a:any,b:any) => +new Date(b.data.last_reviewed)-+new Date(a.data.last_reviewed)).slice(0,5);
+const latest = [...updates].sort((a:any,b:any) => +new Date(b.data.date)-+new Date(a.data.date)).slice(0,5);
+const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaigns.length],['Malware',malware.length],['Tools',tools.length],['Sources',sources.length]];
+---
+<BaseLayout>
+  <section class="shell">
+    <p class="eyebrow">Structured threat intelligence</p>
+    <h1>Threat actor intelligence,<br />structured for research.</h1>
+    <p class="lead">A source-driven knowledge base covering threat actors, aliases, campaigns, malware, targeting and attribution.</p>
+    <form class="search-hero" action="/search/" role="search"><label class="sr-only" for="overview-q">Search APT Notes</label><input id="overview-q" name="q" type="search" placeholder="Search actors, aliases, campaigns, malware or techniques" /><button>Search</button></form>
+    <div class="stat-grid" aria-label="Public knowledge base statistics">{stats.map(([name,count]) => <div class="stat"><strong>{count}</strong><span>{name}</span></div>)}</div>
+    <div class="section-head"><h2>Recently reviewed profiles</h2><a href="/actors/">All actors →</a></div>
+    {recent.length ? <div class="database-list">{recent.map((actor:any) => <article class="db-row"><div class="db-cell"><h3><a href={`/actors/${actor.data.slug}/`}>{actor.data.name}</a></h3><p>{actor.data.summary}</p></div><div class="db-cell"><small>Origin</small>{actor.data.suspected_origins.join(', ') || 'Unknown'}</div><div class="db-cell"><small>Status</small><span class={`badge ${actor.data.status}`}>{actor.data.status}</span></div><div class="db-cell"><small>Confidence</small><span class={`badge ${actor.data.confidence}`}>{actor.data.confidence}</span></div><div class="db-cell"><small>Reviewed</small>{formatDate(actor.data.last_reviewed)}</div></article>)}</div> : <div class="empty">No public actor profiles yet.</div>}
+    <div class="section-head"><h2>Browse the knowledge base</h2></div>
+    <div class="grid">{[['Actors','/actors/'],['Campaigns','/campaigns/'],['Malware','/malware/'],['Tools','/tools/'],['Techniques','/techniques/'],['Sources','/sources/']].map(([name,url]) => <a class="panel" href={url}><strong>{name}</strong><br/><span>Browse structured records →</span></a>)}</div>
+    <div class="section-head"><h2>Latest intelligence changes</h2><a href="/updates/">Complete change log →</a></div>
+    <ol class="timeline">{latest.map((update:any) => <li><time datetime={update.data.date.toISOString()}>{formatDate(update.data.date)}</time><h3>{update.data.title}</h3><p>{update.data.summary}</p></li>)}</ol>
+  </section>
+</BaseLayout>

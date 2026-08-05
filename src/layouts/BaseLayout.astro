@@ -1,0 +1,35 @@
+---
+import AppHeader from '../components/AppHeader.astro';
+import '../styles/global.css';
+
+interface Props { title?: string; description?: string; type?: string; noindex?: boolean; image?: string; }
+const { title = 'APT Notes by Hecavex', description = 'A structured knowledge base of threat actors and their operations.', type = 'WebSite', noindex = false, image = '/og/default.png' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const fullTitle = title === 'APT Notes by Hecavex' ? title : `${title} | APT Notes by Hecavex`;
+const jsonLd = { '@context': 'https://schema.org', '@type': type, name: title, description, url: canonical.href, isPartOf: { '@type': 'WebSite', name: 'APT Notes by Hecavex', url: 'https://apt.hecavex.com/' }, publisher: { '@type': 'Organization', name: 'Hecavex', url: 'https://hecavex.com/' } };
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicons/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/atom+xml" title="APT Notes updates" href="/feed.xml" />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <meta property="og:type" content="website" /><meta property="og:title" content={fullTitle} /><meta property="og:description" content={description} /><meta property="og:url" content={canonical} /><meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={fullTitle} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={new URL(image, Astro.site)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>
+      (() => { try { const mode = localStorage.getItem('apt-notes-theme'); if (mode === 'dark' || mode === 'light') document.documentElement.dataset.theme = mode; } catch {} })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <AppHeader />
+    <main id="main-content"><slot /></main>
+    <footer><span>Part of <a href="https://hecavex.com">Hecavex</a></span><nav aria-label="Footer"><a href="/about/methodology/">Methodology</a><a href="/feed.xml">Feed</a><a href="/security/">Security</a></nav></footer>
+  </body>
+</html>

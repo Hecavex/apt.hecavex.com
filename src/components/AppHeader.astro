@@ -1,0 +1,56 @@
+---
+const path = Astro.url.pathname;
+const navigation: Array<[string, string]> = [
+  ['Overview', '/'], ['Actors', '/actors/'], ['Campaigns', '/campaigns/'], ['Malware', '/malware/'], ['Tools', '/tools/'], ['Techniques', '/techniques/'], ['Sources', '/sources/'], ['Updates', '/updates/'], ['About', '/about/']
+];
+const active = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+---
+<header class="topbar">
+  <a class="brand" href="/" aria-label="APT Notes home">
+    <img src="/brand/hecavex-mark.svg" alt="" width="36" height="36" />
+    <span><strong>APT NOTES</strong><small>by HECAVEX</small></span>
+  </a>
+  <form class="global-search" action="/search/" role="search">
+    <label class="sr-only" for="global-q">Search APT Notes</label>
+    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.4-4.4m2.4-5.6a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" /></svg>
+    <input id="global-q" name="q" type="search" placeholder="Search actors, aliases, campaigns, malware or techniques" autocomplete="off" />
+  </form>
+  <button class="icon-button theme-toggle" type="button" aria-label="Change colour theme" title="Theme: system">
+    <span aria-hidden="true">◐</span><span class="theme-label">System</span>
+  </button>
+  <button class="icon-button menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="site-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span>Menu</span></button>
+</header>
+<aside class="sidebar" id="site-nav">
+  <nav aria-label="Primary navigation">
+    <ul>
+      {navigation.map(([name, href]) => <li><a href={href} aria-current={active(href) ? 'page' : undefined}>{name}</a></li>)}
+    </ul>
+    <a class="external" href="https://hecavex.com/en/">Hecavex Research <span aria-hidden="true">↗</span></a>
+  </nav>
+</aside>
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const button = document.querySelector('.theme-toggle');
+    const label = button?.querySelector('.theme-label');
+    const modes = ['system', 'dark', 'light'];
+    let mode = 'system';
+    try { mode = localStorage.getItem('apt-notes-theme') || 'system'; } catch {}
+    const apply = (next) => {
+      mode = modes.includes(next) ? next : 'system';
+      if (mode === 'system') root.removeAttribute('data-theme'); else root.dataset.theme = mode;
+      if (label) label.textContent = mode[0].toUpperCase() + mode.slice(1);
+      if (button) button.title = `Theme: ${mode}`;
+      try { localStorage.setItem('apt-notes-theme', mode); } catch {}
+    };
+    apply(mode);
+    button?.addEventListener('click', () => apply(modes[(modes.indexOf(mode) + 1) % modes.length]));
+    const menu = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    menu?.addEventListener('click', () => {
+      const open = menu.getAttribute('aria-expanded') === 'true';
+      menu.setAttribute('aria-expanded', String(!open));
+      sidebar?.classList.toggle('is-open', !open);
+    });
+  })();
+</script>

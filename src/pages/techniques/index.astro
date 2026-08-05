@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'; import EntityIndex from '../../components/EntityIndex.astro'; import { publicEntries } from '../../utils/content'; const entries:any[]=await publicEntries('techniques');
+---
+<BaseLayout title="Techniques" description="Relevant MITRE ATT&CK relationships, not a copy of ATT&CK."><EntityIndex title="Techniques" description="Only relationships relevant to APT Notes profiles are stored. MITRE ATT&CK remains the authoritative source for the complete framework." type="Technique" base="/techniques/" entries={entries}/></BaseLayout>
