@@ -16,7 +16,7 @@ walk(root);
 
 test('required production routes and assets exist', () => {
   for (const file of [
-    'index.html', 'actors/index.html', 'actors/apt28/index.html',
+    'index.html', 'actors/index.html', 'actors/apt28/index.html', 'actors/apt44/index.html',
     'about/methodology/index.html', 'sources/index.html', 'updates/index.html',
     'feed.xml', 'robots.txt', '.well-known/security.txt', 'CNAME',
     'sitemap-index.xml', 'pagefind/pagefind.js', 'og/default.png',
@@ -98,6 +98,8 @@ test('sitemap and feed contain only canonical public records', () => {
   const feed = read('feed.xml');
   assert.doesNotMatch(sitemap, /localhost|github\.io|example-actor/);
   assert.match(sitemap, /https:\/\/apt\.hecavex\.com\/actors\/apt28\//);
+  assert.match(sitemap, /https:\/\/apt\.hecavex\.com\/actors\/apt44\//);
   assert.match(feed, /APT28 profile/);
   assert.match(feed, /APT28 profile created/);
+  assert.match(feed, /APT44 profile/);
 });

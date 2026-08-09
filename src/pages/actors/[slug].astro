@@ -53,7 +53,7 @@ const tocItems = [
     <section class="assessment-strip" aria-labelledby="current-assessment-title">
       <div>
         <p class="eyebrow">Current assessment</p>
-        <h2 id="current-assessment-title">Active espionage threat through {d.last_observed}</h2>
+        <h2 id="current-assessment-title">Active threat through {d.last_observed}</h2>
         <p>{d.current_assessment}</p>
       </div>
       <dl>
@@ -82,9 +82,9 @@ const tocItems = [
         {d.aliases.length > 0 && (
           <section id="naming-and-aliases">
             <h2>Naming and aliases</h2>
-            <p class="callout">Unit 26165 is the attributed government operator, not another vendor alias. Tracking clusters may overlap without being exact one-to-one equivalents.</p>
-            <div class="identity-chain" aria-label="APT28 attribution hierarchy">
-              <span>Russian GRU</span><i aria-hidden="true">→</i><span>85th GTsSS</span><i aria-hidden="true">→</i><span>Military Unit 26165</span><i aria-hidden="true">→</i><strong>APT28 analytic record</strong>
+            <p class="callout">{d.parent_entities[0]?.name ?? 'The attributed operator'} is an attributed entity, not another vendor alias. Tracking clusters may overlap without being exact one-to-one equivalents.</p>
+            <div class="identity-chain" aria-label={`${d.name} attribution hierarchy`}>
+              <span>{d.parent_entities[0]?.name ?? 'Attributed operator not recorded'}</span><i aria-hidden="true">→</i><strong>{d.name} analytic record</strong>
             </div>
             <div class="table-wrap profile-table" role="region" aria-label="Actor aliases" tabindex="0">
               <table>
@@ -155,7 +155,7 @@ const tocItems = [
         {d.techniques.length > 0 && (
           <section id="techniques">
             <h2>High-confidence ATT&amp;CK evidence</h2>
-            <p>This is a curated evidence set, not a dump of every technique ever associated with APT28.</p>
+            <p>This is a curated evidence set, not a dump of every technique ever associated with {d.name}.</p>
             <div class="technique-grid">
               {d.techniques.map((id: string) => { const technique = maps.techniques.get(id); const evidence = d.technique_evidence.find((item: any) => item.technique === id); return technique ? <a href={`/techniques/${id}/`}><span class="mono">{technique.data.mitre_id}</span><strong>{technique.data.name}</strong><small>{technique.data.tactic}{evidence ? ` · ${label(evidence.confidence)} confidence` : ''}</small></a> : null; })}
             </div>
@@ -166,7 +166,7 @@ const tocItems = [
           <section id="vulnerabilities">
             <h2>Observed vulnerability use</h2>
             <p>Each entry records the vulnerability's operational role and source-specific confidence.</p>
-            <div class="table-wrap vulnerability-table" role="region" aria-label="Observed APT28 vulnerability use" tabindex="0">
+            <div class="table-wrap vulnerability-table" role="region" aria-label={`Observed ${d.name} vulnerability use`} tabindex="0">
               <table>
                 <thead><tr><th>CVE and product</th><th>Operational role</th><th>First observed</th><th>Confidence</th></tr></thead>
                 <tbody>{d.vulnerabilities.map((vulnerability: any) => <tr><td><a class="mono" href={`https://www.cve.org/CVERecord?id=${vulnerability.cve}`}>{vulnerability.cve}</a><small>{vulnerability.product}</small></td><td>{vulnerability.role}{vulnerability.campaign && <small><a href={`/campaigns/${vulnerability.campaign}/`}>{maps.campaigns.get(vulnerability.campaign)?.data.name ?? vulnerability.campaign}</a></small>}</td><td>{vulnerability.first_observed || 'Not stated'}</td><td><span class={`badge ${vulnerability.confidence}`}>{label(vulnerability.confidence)}</span><small><a href={`/sources/${vulnerability.source}/`}>Evidence</a></small></td></tr>)}</tbody>
