@@ -29,6 +29,9 @@ const d = entry.data;
 const tocItems = [
   ...headings.filter((heading: any) => heading.depth === 2).map((heading: any) => ({ slug: heading.slug, text: heading.text })),
   ...(d.aliases.length > 0 ? [{ slug: 'naming-and-aliases', text: 'Naming and aliases' }] : []),
+  ...(d.operational_timeline.length > 0 ? [{ slug: 'operational-timeline', text: 'Operational timeline' }] : []),
+  ...(d.campaigns.length > 0 ? [{ slug: 'campaigns', text: 'Campaigns' }] : []),
+  ...(d.malware.length > 0 || d.tools.length > 0 ? [{ slug: 'capabilities', text: 'Malware and tooling' }] : []),
   ...(d.attribution.length > 0 ? [{ slug: 'attribution-statements', text: 'Attribution statements' }] : []),
   ...(d.techniques.length > 0 ? [{ slug: 'techniques', text: 'MITRE ATT&CK techniques' }] : []),
   ...(d.vulnerabilities.length > 0 ? [{ slug: 'vulnerabilities', text: 'Vulnerabilities' }] : []),
@@ -44,8 +47,20 @@ const tocItems = [
       <p class="eyebrow">Actor profile · <span class="mono">{d.external_identifiers.mitre_attack || d.id}</span></p>
       <h1>{d.name}</h1>
       <p class="lead">{d.summary}</p>
-      <p class="alias-line">Also tracked as: {d.aliases.map((alias: any) => alias.name).join(' · ') || 'No public aliases recorded'}</p>
+      <p class="alias-line">Also tracked as: {d.aliases.slice(0, 6).map((alias: any) => alias.name).join(' · ') || 'No public aliases recorded'}</p>
     </header>
+
+    <section class="assessment-strip" aria-labelledby="current-assessment-title">
+      <div>
+        <p class="eyebrow">Current assessment</p>
+        <h2 id="current-assessment-title">Active espionage threat through {d.last_observed}</h2>
+        <p>{d.current_assessment}</p>
+      </div>
+      <dl>
+        <div><dt>Attributed operator</dt><dd>{d.parent_entities[0]?.name ?? 'Not recorded'}</dd></div>
+        <div><dt>Primary mission</dt><dd>{d.mission}</dd></div>
+      </dl>
+    </section>
 
     <dl class="fact-grid">
       {[
@@ -56,11 +71,7 @@ const tocItems = [
         ['Active since', d.active_since],
         ['Last observed', d.last_observed || 'Not stated'],
         ['Confidence', label(d.confidence)],
-        ['Last reviewed', formatDate(d.last_reviewed)],
-        ['Target regions', d.targeting.regions.join(', ') || 'Not recorded'],
-        ['Target sectors', d.targeting.sectors.join(', ') || 'Not recorded'],
-        ['Reviewer', d.authors.join(', ')],
-        ['Stable ID', d.id]
+        ['Last reviewed', formatDate(d.last_reviewed)]
       ].map(([term, value]) => <div class="fact"><dt>{term}</dt><dd>{value}</dd></div>)}
     </dl>
 
@@ -71,11 +82,14 @@ const tocItems = [
         {d.aliases.length > 0 && (
           <section id="naming-and-aliases">
             <h2>Naming and aliases</h2>
-            <p class="callout">Vendor tracking clusters may overlap but are not necessarily exact one-to-one equivalents.</p>
+            <p class="callout">Unit 26165 is the attributed government operator, not another vendor alias. Tracking clusters may overlap without being exact one-to-one equivalents.</p>
+            <div class="identity-chain" aria-label="APT28 attribution hierarchy">
+              <span>Russian GRU</span><i aria-hidden="true">→</i><span>85th GTsSS</span><i aria-hidden="true">→</i><span>Military Unit 26165</span><i aria-hidden="true">→</i><strong>APT28 analytic record</strong>
+            </div>
             <div class="table-wrap profile-table" role="region" aria-label="Actor aliases" tabindex="0">
               <table>
                 <colgroup><col class="alias-name" /><col class="alias-source" /><col class="alias-relationship" /><col class="alias-confidence" /><col class="alias-notes" /></colgroup>
-                <thead><tr><th>Alias</th><th>Source</th><th>Relationship</th><th>Confidence</th><th>Notes</th></tr></thead>
+                <thead><tr><th>Alias</th><th>Publisher</th><th>Relationship</th><th>Confidence</th><th>Scope and notes</th></tr></thead>
                 <tbody>
                   {d.aliases.map((alias: any) => (
                     <tr>
@@ -83,11 +97,42 @@ const tocItems = [
                       <td>{alias.source}</td>
                       <td>{label(alias.relationship)}</td>
                       <td><span class={`badge ${alias.confidence}`}>{label(alias.confidence)}</span></td>
-                      <td>{alias.notes || '—'}</td>
+                      <td>{alias.scope}{alias.notes ? ` ${alias.notes}` : ''}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+            {d.subclusters.length > 0 && <div class="subcluster-note"><span class="eyebrow">Related sub-cluster</span>{d.subclusters.map((cluster: any) => <p><strong>{cluster.name}</strong> · {cluster.source} · {cluster.notes}</p>)}</div>}
+          </section>
+        )}
+
+        {d.operational_timeline.length > 0 && (
+          <section id="operational-timeline">
+            <h2>Operational evolution</h2>
+            <ol class="timeline evidence-timeline">
+              {d.operational_timeline.map((event: any) => <li><time>{event.date}</time><h3>{event.title}</h3><p>{event.summary}</p><p class="evidence-line"><span class={`badge ${event.confidence}`}>{label(event.confidence)}</span>{event.sources.map((id: string) => <a href={`/sources/${id}/`}>{maps.sources.get(id)?.data.publisher ?? id}</a>)}</p></li>)}
+            </ol>
+          </section>
+        )}
+
+        {d.campaigns.length > 0 && (
+          <section id="campaigns">
+            <h2>Campaigns and operational clusters</h2>
+            <p>Campaign confidence is evaluated separately from the actor-level attribution.</p>
+            <div class="entity-card-grid">
+              {d.campaigns.map((id: string) => { const campaign = maps.campaigns.get(id); return campaign ? <a class="entity-card" href={`/campaigns/${id}/`}><span class="entity-card-meta">{campaign.data.start_date}{campaign.data.end_date ? `–${campaign.data.end_date}` : ''} · {label(campaign.data.confidence)} confidence</span><h3>{campaign.data.name}</h3><p>{campaign.data.summary}</p><strong>Open campaign →</strong></a> : null; })}
+            </div>
+          </section>
+        )}
+
+        {(d.malware.length > 0 || d.tools.length > 0) && (
+          <section id="capabilities">
+            <h2>Malware and tooling</h2>
+            <p>The inventory prioritises publicly documented capabilities relevant to current operations. It is not intended to be a complete historical malware catalogue.</p>
+            <div class="capability-list">
+              {d.malware.map((id: string) => { const item = maps.malware.get(id); return item ? <a href={`/malware/${id}/`}><span><strong>{item.data.name}</strong><small>{item.data.family_type} · {item.data.platforms.join(', ')}</small></span><i aria-hidden="true">→</i></a> : null; })}
+              {d.tools.map((id: string) => { const item = maps.tools.get(id); return item ? <a href={`/tools/${id}/`}><span><strong>{item.data.name}</strong><small>{label(item.data.tool_type)} tool · {item.data.platforms.join(', ')}</small></span><i aria-hidden="true">→</i></a> : null; })}
             </div>
           </section>
         )}
@@ -96,8 +141,8 @@ const tocItems = [
           <section id="attribution-statements">
             <h2>Source-specific attribution statements</h2>
             {d.attribution.map((attribution: any) => (
-              <div class="panel">
-                <span class={`badge ${attribution.status}`}>{label(attribution.status)}</span>
+              <div class="panel attribution-panel">
+                <span class={`badge ${attribution.confidence}`}>{label(attribution.status)}</span>
                 <h3>{attribution.attributed_entity}</h3>
                 <p>{attribution.claim}</p>
                 <p class="meta">Source: <a href={`/sources/${attribution.source}/`}>{maps.sources.get(attribution.source)?.data.name ?? attribution.source}</a> · {formatDate(attribution.published_at)} · {label(attribution.confidence)} confidence</p>
@@ -108,16 +153,33 @@ const tocItems = [
         )}
 
         {d.techniques.length > 0 && (
-          <section id="techniques"><h2>MITRE ATT&amp;CK techniques</h2><ul>{d.techniques.map((id: string) => { const technique = maps.techniques.get(id); return <li>{technique ? <a href={`/techniques/${id}/`}>{technique.data.mitre_id} · {technique.data.name}</a> : <span>{id} · profile pending</span>}</li>; })}</ul></section>
+          <section id="techniques">
+            <h2>High-confidence ATT&amp;CK evidence</h2>
+            <p>This is a curated evidence set, not a dump of every technique ever associated with APT28.</p>
+            <div class="technique-grid">
+              {d.techniques.map((id: string) => { const technique = maps.techniques.get(id); const evidence = d.technique_evidence.find((item: any) => item.technique === id); return technique ? <a href={`/techniques/${id}/`}><span class="mono">{technique.data.mitre_id}</span><strong>{technique.data.name}</strong><small>{technique.data.tactic}{evidence ? ` · ${label(evidence.confidence)} confidence` : ''}</small></a> : null; })}
+            </div>
+          </section>
         )}
 
-        {d.vulnerabilities.length > 0 && <section id="vulnerabilities"><h2>Vulnerabilities</h2><ul>{d.vulnerabilities.map((vulnerability: string) => <li class="mono">{vulnerability}</li>)}</ul></section>}
+        {d.vulnerabilities.length > 0 && (
+          <section id="vulnerabilities">
+            <h2>Observed vulnerability use</h2>
+            <p>Each entry records the vulnerability's operational role and source-specific confidence.</p>
+            <div class="table-wrap vulnerability-table" role="region" aria-label="Observed APT28 vulnerability use" tabindex="0">
+              <table>
+                <thead><tr><th>CVE and product</th><th>Operational role</th><th>First observed</th><th>Confidence</th></tr></thead>
+                <tbody>{d.vulnerabilities.map((vulnerability: any) => <tr><td><a class="mono" href={`https://www.cve.org/CVERecord?id=${vulnerability.cve}`}>{vulnerability.cve}</a><small>{vulnerability.product}</small></td><td>{vulnerability.role}{vulnerability.campaign && <small><a href={`/campaigns/${vulnerability.campaign}/`}>{maps.campaigns.get(vulnerability.campaign)?.data.name ?? vulnerability.campaign}</a></small>}</td><td>{vulnerability.first_observed || 'Not stated'}</td><td><span class={`badge ${vulnerability.confidence}`}>{label(vulnerability.confidence)}</span><small><a href={`/sources/${vulnerability.source}/`}>Evidence</a></small></td></tr>)}</tbody>
+              </table>
+            </div>
+          </section>
+        )}
 
         {d.related_research.length > 0 && <section id="related-research"><h2>Related Hecavex research</h2><ul>{d.related_research.map((research: any) => <li><a href={research.url}>{research.title} ↗</a></li>)}</ul></section>}
 
         <section id="sources">
           <h2>Sources</h2>
-          <ol>{d.sources.map((id: string) => { const source = maps.sources.get(id); return <li>{source ? <><a href={source.data.url}>{source.data.title}</a> — {source.data.publisher}, {formatDate(source.data.published_at)}. <a href={`/sources/${source.data.slug}/`}>Source record</a></> : <span>{id} · source record pending</span>}</li>; })}</ol>
+          <ol class="source-list">{d.sources.map((id: string) => { const source = maps.sources.get(id); return <li>{source ? <><a href={source.data.url}>{source.data.title}</a><span>{source.data.publisher} · {formatDate(source.data.published_at)} · <a href={`/sources/${source.data.slug}/`}>Source record</a></span></> : <span>{id} · source record pending</span>}</li>; })}</ol>
         </section>
 
         {d.updates.length > 0 && (
