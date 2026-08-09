@@ -3,7 +3,7 @@ id: apt44-profile-created
 slug: apt44-profile-created
 title: APT44 profile added with current access, defence and destructive-operation evidence
 summary: Added a source-specific APT44 record covering Unit 74455 attribution, BadPilot, defence-sector collection, major destructive campaigns, vulnerabilities, malware, techniques and the boundary with APT28.
-date: 2026-08-09
+date: 2026-08-09T10:10:00Z
 update_type: profile-created
 entity_type: actor
 entity: apt44
