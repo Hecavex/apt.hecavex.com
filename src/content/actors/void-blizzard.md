@@ -212,3 +212,7 @@ The July 2026 joint advisory adds a different collection path. Ulej exploited a 
 ## Analytic limitations
 
 The original profile was based on two coordinated disclosures published on the same day, so they were not fully independent investigations. The July 2026 multinational advisory adds later technical evidence and broader government participation, but no complete victim list exists. Overlap with other Russian actors at the same victim reflects shared intelligence priorities and does not establish cluster identity.
+
+## Related HECAVEX Labs evidence
+
+The [Baltic Threat Atlas](https://labs.hecavex.com/baltic-threat-atlas/) preserves the Estonia-linked public reporting associated with Laundry Bear and Void Blizzard. It explicitly distinguishes a Baltic reporting or attribution connection from evidence of a victim located in Estonia.

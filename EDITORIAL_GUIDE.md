@@ -1,16 +1,18 @@
-# APT Notes editorial guide
+# Editing APT Notes
 
-1. Put evidence before conclusion.
-2. Separate what a source reports from what APT Notes assesses.
-3. Map every alias to its source and relationship type.
-4. Do not claim actor equivalence without evidence; vendor clusters may overlap without being identical.
-5. State limitations, gaps and plausible alternatives.
-6. Preserve source context, dates and attribution wording.
-7. Avoid glorification, sensationalism and adversary branding theatre.
-8. Correct errors transparently through a structured correction update.
-9. Avoid unnecessary personal information and never publish private data.
-10. Do not create false certainty. Confidence is qualitative and evidence-led.
+APT Notes is useful only when a reader can trace a statement back to evidence and understand how strong the relationship is.
 
-Preferred formulations include “Public reporting associates…”, “Multiple sources assess…”, “The available evidence suggests…”, “APT Notes assesses with moderate confidence…”, “This alias may represent overlapping rather than identical activity…”, “The relationship remains disputed…” and “Insufficient public information is available to determine…”.
+Keep these rules in mind:
 
-Before setting `draft: false`, validate the identifiers, dates, controlled vocabularies, entity references, source URLs, source context, review date, confidence and update history. Never publish placeholder content.
+1. Add the evidence before writing the conclusion.
+2. Say what the source reports and what HECAVEX assesses. They are not the same thing.
+3. Record the source and relationship type for every alias.
+4. Do not turn overlapping vendor clusters into exact equivalents without evidence.
+5. Keep attribution wording as narrow as the original source.
+6. State gaps and plausible alternatives instead of hiding them behind a confidence label.
+7. Preserve dates, source context and corrections.
+8. Do not publish private data, credentials or unnecessary personal information.
+
+Useful wording includes "public reporting associates", "the available evidence suggests" and "insufficient public information is available to determine". Use it because it is accurate, not as decoration around a weak claim.
+
+Before changing `draft` to `false`, run `npm run verify` and read the rendered page once. Validators catch broken references. They do not catch a technically valid but misleading sentence.

@@ -33,8 +33,10 @@ jobs:
         run: npm run lint
       - name: Build and validate
         run: npm run build
+        env:
+          PUBLIC_HECAVEX_ANALYTICS_TOKEN: ${{ vars.HECAVEX_ANALYTICS_TOKEN }}
       - name: Test production output
-        run: npm test
+        run: npm run audit && npm test
       - name: Verify custom-domain artifact
         run: |
           test "$(cat dist/CNAME)" = "apt.hecavex.com"

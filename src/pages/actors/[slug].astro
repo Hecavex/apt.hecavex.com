@@ -42,7 +42,7 @@ const tocItems = [
 ];
 ---
 
-<BaseLayout title={`${d.name} | Actor Profile`} description={d.summary} type="ProfilePage">
+<BaseLayout title={`${d.name} | Actor Profile`} description={d.summary} type="ProfilePage" image={`/og/generated/actor-${d.slug}.png`} imageAlt={`${d.name} threat actor profile by APT Notes`}>
   <article class="shell profile-shell" data-pagefind-body data-pagefind-meta="type:Actor">
     <header class="profile-head">
       <p class="eyebrow">Actor profile · <span class="mono">{d.external_identifiers.mitre_attack || d.id}</span></p>

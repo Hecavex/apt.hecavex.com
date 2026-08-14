@@ -5,13 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run validate && astro check && astro build && pagefind --site dist",
+    "build": "npm run validate && npm run build:og && astro check && astro build && pagefind --site dist",
+    "build:og": "node scripts/generate-og.mjs",
     "preview": "astro preview",
     "check": "astro check",
+    "audit": "node scripts/audit-build.mjs",
     "lint": "node scripts/lint.mjs",
     "validate": "node scripts/validate-content.mjs",
     "test": "node --test tests/*.test.mjs",
-    "verify": "npm run lint && npm run build && npm test"
+    "verify": "npm run lint && npm run build && npm run audit && npm test"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.3",
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@astrojs/check": "latest",
     "pagefind": "1.5.2",
+    "sharp": "^0.35.3",
     "typescript": "latest",
     "yaml": "latest"
   }

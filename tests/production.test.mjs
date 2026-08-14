@@ -40,7 +40,10 @@ test('production metadata is canonical', () => {
   assert.match(html, /https:\/\/apt\.hecavex\.com\/actors\/apt28\//);
   assert.doesNotMatch(html, /localhost|github\.io/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(html, /https:\/\/apt\.hecavex\.com\/og\/default\.png/);
+  assert.match(html, /https:\/\/apt\.hecavex\.com\/og\/generated\/actor-apt28\.png/);
+  assert.match(html, /og:image:width[^>]+1200/);
+  assert.match(html, /og:image:height[^>]+630/);
+  assert.match(html, /og:image:alt/);
 });
 
 test('English-only document, themes and controls are accessible', () => {

@@ -112,7 +112,7 @@ h3 { font-size: 1.36rem; }
 :focus-visible { outline: 3px solid var(--hx-ember); outline-offset: 3px; }
 
 .topbar-wrapper { position: relative; z-index: 100; height: var(--topbar); margin-left: var(--sidebar); background: var(--hx-bg); }
-.topbar { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 74.625rem; height: 100%; margin: 0 auto; padding: 0 1rem; background: var(--hx-bg); }
+.topbar { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 76.5rem; height: 100%; margin: 0 auto; padding: 0 1rem; background: var(--hx-bg); }
 .breadcrumb { display: block; min-width: 0; padding-left: .5rem; color: var(--hx-text-muted); font-size: 1rem; }
 .breadcrumb a { color: var(--hx-text-soft); text-decoration: none; }
 .breadcrumb span:not(:last-child)::after { content: "›"; padding: 0 .3rem; }
@@ -131,6 +131,8 @@ h3 { font-size: 1.36rem; }
 .site-title { display: block; width: fit-content; margin: 1.25rem 0 .5rem; color: var(--hx-text); font-size: 1.75rem; font-weight: 800; line-height: 1.2; letter-spacing: .14em; text-decoration: none; transform: scaleX(.8382); transform-origin: left center; }
 .sidebar-profile .site-subtitle { height: 3rem; max-width: 14rem; margin: .25rem 0 0; color: var(--hx-text-muted); font-size: .78rem; line-height: 1.45; word-spacing: 1px; user-select: none; }
 .language-switcher, .topbar-language { position: relative; margin-top: 1rem; letter-spacing: 0; }
+.workspace-switcher { margin-top: .75rem; }
+.workspace-switcher summary { border-left: 2px solid var(--hx-steel); }
 .language-switcher summary, .topbar-language summary { display: flex; align-items: center; gap: .5rem; min-height: 2.65rem; padding: .55rem .7rem; border: 1px solid var(--hx-border); border-radius: .3rem; background: var(--hx-surface-1); color: var(--hx-text-soft); cursor: pointer; list-style: none; user-select: none; }
 .language-switcher summary::-webkit-details-marker, .topbar-language summary::-webkit-details-marker { display: none; }
 .language-switcher summary > strong { font-size: .82rem; }
@@ -155,13 +157,14 @@ h3 { font-size: 1.36rem; }
 .sidebar nav a[aria-current=page] i { color: var(--hx-ember); }
 .sidebar .external { margin: 1rem 2.75rem 0; padding: .9rem 1rem .6rem; border-top: 1px solid var(--hx-border-subtle); border-radius: 0; color: var(--hx-steel); }
 .sidebar .external span { font-size: .68rem; }
+.sidebar .external-secondary { margin-top: 0; padding-top: .55rem; border-top: 0; }
 .sidebar-bottom { display: flex; align-items: flex-start; gap: .5rem; width: 100%; min-height: 3.173828125rem; margin: 0 0 1.5rem; padding: 0 1rem 0 2rem; }
 .icon-button { display: inline-flex; align-items: center; gap: .4rem; min-height: 2.25rem; padding: .4rem .55rem; border: 1px solid var(--hx-border); border-radius: .25rem; background: transparent; color: var(--hx-text-muted); font: 600 .68rem var(--font-mono); text-decoration: none; cursor: pointer; }
 .icon-button:hover { border-color: var(--hx-steel); color: var(--hx-text); }
 .icon-button i { flex: 0 0 auto; margin: 0; }
 
 main { display: flow-root; min-height: calc(100vh - 3rem); margin-left: var(--sidebar); padding: 0 0 4rem; line-height: 1.75; }
-.shell { width: 100%; max-width: 74.625rem; margin: 0 auto; padding: 0 4.5rem 0 1.5rem; }
+.shell { width: 100%; max-width: 76.5rem; margin: 0 auto; padding: 0 1.5rem; }
 .narrow { max-width: 74.625rem; }
 .eyebrow { margin: 0; color: var(--hx-ember); font-size: .68rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
 .lead { max-width: 62ch; color: var(--hx-text-muted); font-size: 1rem; }
@@ -310,6 +313,8 @@ footer nav { display: flex; gap: 1rem; }
 
 @media (min-width: 1650px) {
   :root { --sidebar: 18.75rem; }
+  .topbar, .shell { max-width: 74.625rem; }
+  .shell { padding: 0 4.5rem 0 1.5rem; }
   .sidebar-profile { margin-top: 3.5rem; margin-bottom: 2.5rem; padding-left: 3.5rem; }
   .sidebar li { padding-right: 2.75rem; padding-left: 2.75rem; }
   .sidebar .external { margin-right: 2.75rem; margin-left: 2.75rem; }
