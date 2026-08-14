@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProfileToc from '../../components/ProfileToc.astro';
-import { publicEntries, bySlug, label, formatDate } from '../../utils/content';
+import { publicEntries, bySlug, label, formatDate, reviewStatus } from '../../utils/content';
 
 export async function getStaticPaths() {
   return (await getCollection('actors', ({ data }) => !data.draft)).map((entry) => ({
@@ -25,6 +25,7 @@ const maps = {
   updates: bySlug(updates as any)
 } as any;
 const d = entry.data;
+const freshness = reviewStatus(d.last_reviewed);
 
 const tocItems = [
   ...headings.filter((heading: any) => heading.depth === 2).map((heading: any) => ({ slug: heading.slug, text: heading.text })),
@@ -74,6 +75,8 @@ const tocItems = [
         ['Last reviewed', formatDate(d.last_reviewed)]
       ].map(([term, value]) => <div class="fact"><dt>{term}</dt><dd>{value}</dd></div>)}
     </dl>
+
+    <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a><a href="/about/methodology/">Review policy →</a></div>
 
     <div class="profile-grid">
       <div class="prose profile-body">

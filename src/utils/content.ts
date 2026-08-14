@@ -7,3 +7,10 @@ export const bySlug = <T extends { data: { slug: string } }>(entries: T[]) => ne
 export const label = (value: string) => value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
 export const formatDate = (value: Date | string) => new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: 'UTC' }).format(new Date(value));
 export const unique = <T>(values: T[]) => [...new Set(values)];
+
+export const reviewStatus = (value: Date | string, asOf = new Date()) => {
+  const ageDays = Math.floor((asOf.getTime() - new Date(value).getTime()) / 86_400_000);
+  if (ageDays <= 180) return { key: 'current', label: 'Review current', ageDays };
+  if (ageDays <= 365) return { key: 'due', label: 'Review due', ageDays };
+  return { key: 'stale', label: 'Review stale', ageDays };
+};

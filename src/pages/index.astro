@@ -17,11 +17,12 @@ const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaig
     <header class="brand-hero">
       <p class="eyebrow">Structured threat intelligence</p>
       <h1>Threat actor intelligence,<br />structured for research.</h1>
-      <p class="lead">A source-driven knowledge base covering threat actors, aliases, campaigns, malware, targeting and attribution.</p>
+      <p class="lead">A curated collection of deeply sourced threat-actor dossiers and their related campaigns, malware, targeting and attribution.</p>
       <a class="button" href="/actors/">Browse actors →</a>
       <p class="hero-meta">APT NOTES · BY HECAVEX</p>
     </header>
     <div class="stat-grid" aria-label="Public knowledge base statistics">{stats.map(([name,count]) => <div class="stat"><strong>{count}</strong><span>{name}</span></div>)}</div>
+    <p class="scope-note"><strong>Coverage:</strong> selected deep profiles, not an exhaustive actor directory. Every public record must meet the sourcing and review requirements in the <a href="/about/methodology/">methodology</a>.</p>
     <div class="section-head"><h2>Recently reviewed profiles</h2><a href="/actors/">All actors →</a></div>
     {recent.length ? <div class="database-list">{recent.map((actor:any) => <article class="db-row"><div class="db-cell"><h3><a href={`/actors/${actor.data.slug}/`}>{actor.data.name}</a></h3><p>{actor.data.summary}</p></div><div class="db-cell"><small>Origin</small>{actor.data.suspected_origins.join(', ') || 'Unknown'}</div><div class="db-cell"><small>Status</small><span class={`badge ${actor.data.status}`}>{actor.data.status}</span></div><div class="db-cell"><small>Confidence</small><span class={`badge ${actor.data.confidence}`}>{actor.data.confidence}</span></div><div class="db-cell"><small>Reviewed</small>{formatDate(actor.data.last_reviewed)}</div></article>)}</div> : <div class="empty">No public actor profiles yet.</div>}
     <div class="section-head"><h2>Browse the knowledge base</h2></div>
