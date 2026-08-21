@@ -15,6 +15,7 @@ const active = (href: string) => href === '/' ? path === '/' : path.startsWith(h
 const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
 ---
 <aside class="sidebar" id="site-nav">
+  <button class="drawer-close" type="button" aria-label="Close navigation menu"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
   <header class="sidebar-profile">
     <a class="sidebar-mark" href="https://hecavex.com/en/" aria-label="HECAVEX home"><img src="/brand/hecavex-mark.svg" alt="" width="72" height="72" /></a>
     <a class="site-title" href="https://hecavex.com/en/">HECAVEX</a>
@@ -30,10 +31,11 @@ const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
         <a href="https://hecavex.com/en/"><span>Research</span><small>MAIN</small></a>
         <a href="/" aria-current="page"><span>APT Notes</span><small>TI</small></a>
         <a href="https://labs.hecavex.com/"><span>HECAVEX Labs</span><small>TOOLS</small></a>
+        <a href="https://radar.hecavex.com/"><span>HECAVEX Radar</span><small>PHISH</small></a>
       </div>
     </details>
     <details class="language-switcher">
-      <summary aria-label="Switch language">
+      <summary aria-label="Language: English">
         <i class="fa-solid fa-globe" aria-hidden="true"></i>
         <span class="language-label">Language</span>
         <strong>English</strong>
@@ -51,12 +53,14 @@ const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
     </ul>
     <a class="external" href="https://hecavex.com/en/"><i class="fa-solid fa-arrow-up-right-from-square fa-fw" aria-hidden="true"></i><span>HECAVEX RESEARCH</span></a>
     <a class="external external-secondary" href="https://labs.hecavex.com/"><i class="fa-solid fa-flask fa-fw" aria-hidden="true"></i><span>HECAVEX LABS</span></a>
+    <a class="external external-secondary" href="https://radar.hecavex.com/"><i class="fa-solid fa-satellite-dish fa-fw" aria-hidden="true"></i><span>HECAVEX RADAR</span></a>
   </nav>
   <div class="sidebar-bottom">
     <button class="icon-button theme-toggle" type="button" aria-label="Change colour theme" title="Theme: system"><i class="fa-regular fa-moon" aria-hidden="true"></i><span class="theme-label">Theme</span></button>
     <a class="icon-button" href="/feed.xml" aria-label="APT Notes feed"><i class="fa-solid fa-rss" aria-hidden="true"></i><span>RSS</span></a>
   </div>
 </aside>
+<button class="sidebar-backdrop" type="button" aria-label="Close navigation menu" hidden></button>
 
 <header class="topbar-wrapper">
   <div class="topbar">
@@ -67,7 +71,7 @@ const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
     <button class="topbar-button menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="site-nav" aria-expanded="false"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></button>
     <div class="topbar-title">HECAVEX</div>
     <details class="topbar-language">
-      <summary aria-label="Switch language"><i class="fa-solid fa-globe" aria-hidden="true"></i><strong>EN</strong><i class="fa-solid fa-chevron-down language-chevron" aria-hidden="true"></i></summary>
+      <summary aria-label="Language: English (EN)"><i class="fa-solid fa-globe" aria-hidden="true"></i><strong>EN</strong><i class="fa-solid fa-chevron-down language-chevron" aria-hidden="true"></i></summary>
       <div class="language-menu"><a href="/" aria-current="page"><span>English</span><small>EN</small></a><a href="https://hecavex.com/lt/"><span>Lietuvių</span><small>LT</small></a></div>
     </details>
     <button class="topbar-button search-toggle" type="button" aria-label="Search"><i class="fa-solid fa-search fa-fw" aria-hidden="true"></i></button>
@@ -99,11 +103,54 @@ const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
     button?.addEventListener('click', () => apply(modes[(modes.indexOf(mode) + 1) % modes.length]));
     const menu = document.querySelector('.menu-toggle');
     const sidebar = document.querySelector('.sidebar');
-    menu?.addEventListener('click', () => {
-      const open = menu.getAttribute('aria-expanded') === 'true';
-      menu.setAttribute('aria-expanded', String(!open));
-      sidebar?.classList.toggle('is-open', !open);
+    const backdrop = document.querySelector('.sidebar-backdrop');
+    const drawerClose = document.querySelector('.drawer-close');
+    const mobileNavigation = window.matchMedia('(max-width: 849px)');
+    const background = () => [document.querySelector('.topbar-wrapper'), document.querySelector('main'), document.querySelector('footer'), document.querySelector('.skip-link')].filter(Boolean);
+    let returnFocus = null;
+    const focusable = () => [...(sidebar?.querySelectorAll('a[href], button:not([disabled]), summary, input, select, textarea, [tabindex]:not([tabindex="-1"])') ?? [])].filter((element) => !element.hidden);
+    const setDrawer = (open, restoreFocus = true) => {
+      const mobile = mobileNavigation.matches;
+      const expanded = mobile && open;
+      sidebar?.classList.toggle('is-open', expanded);
+      menu?.setAttribute('aria-expanded', String(expanded));
+      menu?.setAttribute('aria-label', expanded ? 'Close navigation menu' : 'Open navigation menu');
+      if (sidebar) {
+        sidebar.inert = mobile && !expanded;
+        if (mobile && !expanded) sidebar.setAttribute('aria-hidden', 'true');
+        else sidebar.removeAttribute('aria-hidden');
+      }
+      if (backdrop) backdrop.hidden = !expanded;
+      background().forEach((element) => { element.inert = expanded; });
+      document.body.classList.toggle('drawer-open', expanded);
+      if (expanded) {
+        returnFocus = document.activeElement;
+        requestAnimationFrame(() => focusable()[0]?.focus());
+      } else if (restoreFocus && returnFocus instanceof HTMLElement) {
+        returnFocus.focus();
+        returnFocus = null;
+      }
+    };
+    menu?.addEventListener('click', () => setDrawer(menu.getAttribute('aria-expanded') !== 'true'));
+    drawerClose?.addEventListener('click', () => setDrawer(false));
+    backdrop?.addEventListener('click', () => setDrawer(false));
+    document.addEventListener('keydown', (event) => {
+      if (!mobileNavigation.matches || menu?.getAttribute('aria-expanded') !== 'true') return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setDrawer(false);
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const items = focusable();
+      const first = items[0];
+      const last = items.at(-1);
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     });
+    mobileNavigation.addEventListener('change', () => setDrawer(false, false));
+    setDrawer(false, false);
     const searchToggle = document.querySelector('.search-toggle');
     const searchCancel = document.querySelector('.search-cancel');
     const topbar = document.querySelector('.topbar');

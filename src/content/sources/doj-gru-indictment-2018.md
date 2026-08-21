@@ -7,7 +7,7 @@ publisher: United States Department of Justice
 authors: [United States Department of Justice]
 published_at: 2018-10-04
 accessed_at: 2026-08-09
-url: https://www.justice.gov/usao-wdpa/pr/us-charges-russian-gru-officers-international-hacking-and-related-influence-and
+url: https://www.justice.gov/archives/opa/pr/us-charges-russian-gru-officers-international-hacking-and-related-influence-and
 source_type: legal
 language: en
 notes: Legal record covering remote and close-access operations against anti-doping, sporting and chemical-analysis organisations.

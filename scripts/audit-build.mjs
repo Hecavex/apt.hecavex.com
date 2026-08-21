@@ -28,7 +28,7 @@ for (const file of files) {
       try {
         const data = JSON.parse(script[1]); const graph = data['@graph']; const ids = Array.isArray(graph) ? graph.map(node => node['@id']) : [];
         if (!Array.isArray(graph)) errors.push(`${relative}: JSON-LD is not an @graph`);
-        const expectedIds = ['https://hecavex.com/#organization', 'https://hecavex.com/#deividas-lis', 'https://hecavex.com/#website', 'https://apt.hecavex.com/#website', 'https://labs.hecavex.com/#website'];
+        const expectedIds = ['https://hecavex.com/#organization', 'https://hecavex.com/#deividas-lis', 'https://hecavex.com/#website', 'https://apt.hecavex.com/#website', 'https://labs.hecavex.com/#website', 'https://radar.hecavex.com/#website'];
         const missingIds = expectedIds.filter(id => !ids.includes(id));
         if (missingIds.length) errors.push(`${relative}: missing shared HECAVEX identities: ${missingIds.join(', ')}`);
       } catch (error) { errors.push(`${relative}: invalid JSON-LD (${error.message})`); }
