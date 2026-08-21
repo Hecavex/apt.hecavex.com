@@ -88,6 +88,7 @@ thread = threading.Thread(target=server.serve_forever, daemon=True)
 thread.start()
 base_url = f"http://127.0.0.1:{server.server_port}"
 results = []
+no_javascript_results = []
 
 try:
     with sync_playwright() as playwright:
@@ -124,6 +125,57 @@ try:
                 page.locator(".skip-link").evaluate("element => element.blur()")
                 unnamed = page.locator("a[href], button, summary, input:not([type=hidden]), select, textarea").evaluate_all(ACCESSIBLE_NAME_AUDIT)
                 assert not unnamed, f"visible controls without accessible names: {route} at {width}px: {unnamed}"
+
+                if route == "/actors/" and width <= 650:
+                    advanced = page.locator("#advanced-actor-filters")
+                    assert advanced.is_visible(), f"compact filter disclosure missing: {route} at {width}px"
+                    assert not advanced.evaluate("element => element.open"), f"advanced filters should start collapsed: {route} at {width}px"
+                    first_row = page.locator(".actor-row:not([hidden])").first.bounding_box()
+                    assert first_row and first_row["y"] < HEIGHT, f"first actor result is still below the first viewport: {route} at {width}px: {first_row}"
+                    summary = advanced.locator("summary")
+                    assert_focus_visible(summary, f"advanced filter disclosure on {route} at {width}px")
+                    page.keyboard.press("Enter")
+                    assert advanced.evaluate("element => element.open"), f"advanced filters did not open: {route} at {width}px"
+                    origin = advanced.locator('select[name="origin"]')
+                    assert origin.is_visible(), f"advanced origin filter is hidden after opening: {route} at {width}px"
+                    option = origin.locator("option").nth(1).get_attribute("value")
+                    origin.select_option(option)
+                    assert page.locator("[data-active-filter-count]").inner_text() == "1", f"active filter count did not update: {route} at {width}px"
+                    page.locator(".filter-reset").focus()
+                    page.keyboard.press("Enter")
+                    page.wait_for_timeout(50)
+                    assert page.locator("[data-active-filter-count]").inner_text() == "0", f"filter reset did not clear state: {route} at {width}px"
+                    assert not advanced.evaluate("element => element.open"), f"filter reset did not collapse disclosure: {route} at {width}px"
+                    assert page.locator(".actor-row:not([hidden])").count() == 4, f"filter reset did not restore actor rows: {route} at {width}px"
+
+                if route == "/actors/" and width > 650:
+                    advanced = page.locator("#advanced-actor-filters")
+                    summary = advanced.locator("summary")
+                    assert summary.is_visible(), f"advanced filter disclosure missing: {route} at {width}px"
+                    assert not advanced.locator('select[name="origin"]').is_visible(), f"advanced filters should start collapsed: {route} at {width}px"
+                    assert_focus_visible(summary, f"advanced filter disclosure on {route} at {width}px")
+                    page.keyboard.press("Enter")
+                    assert advanced.locator('select[name="origin"]').is_visible(), f"advanced filters did not open: {route} at {width}px"
+                    page.keyboard.press("Enter")
+
+                if route == "/actors/apt28/" and width <= 849:
+                    mobile_toc = page.locator(".profile-toc-mobile")
+                    assert mobile_toc.is_visible(), f"mobile profile contents missing: {route} at {width}px"
+                    assert not page.locator(".profile-toc").is_visible(), f"desktop profile contents should be hidden on mobile: {route} at {width}px"
+                    summary = mobile_toc.locator("summary")
+                    assert_focus_visible(summary, f"mobile profile contents on {route} at {width}px")
+                    page.keyboard.press("Enter")
+                    assert mobile_toc.evaluate("element => element.open"), f"mobile profile contents did not open: {route} at {width}px"
+                    sources_link = mobile_toc.locator('a[href="#sources"]')
+                    assert sources_link.is_visible(), f"mobile profile contents omit Sources: {route} at {width}px"
+                    sources_link.focus()
+                    page.keyboard.press("Enter")
+                    assert not mobile_toc.evaluate("element => element.open"), f"mobile profile contents did not close after navigation: {route} at {width}px"
+                    assert page.evaluate("location.hash") == "#sources", f"mobile profile contents did not navigate: {route} at {width}px"
+
+                if route == "/actors/apt28/" and width > 849:
+                    assert page.locator(".profile-toc").is_visible(), f"desktop profile contents missing: {route} at {width}px"
+                    assert not page.locator(".profile-toc-mobile").is_visible(), f"mobile profile contents should be hidden on desktop: {route} at {width}px"
 
                 if width <= 849:
                     menu = page.locator(".menu-toggle")
@@ -162,11 +214,29 @@ try:
 
             assert not page_errors, f"browser errors at {width}px: {page_errors}"
             page.close()
+
+        no_javascript = browser.new_context(java_script_enabled=False, viewport={"width": 390, "height": HEIGHT})
+        page = no_javascript.new_page()
+        page.goto(base_url + "/actors/", wait_until="domcontentloaded")
+        assert page.locator(".actor-row").count() == 4, "no-JavaScript actor catalogue lost public rows"
+        assert page.locator(".actor-row").evaluate_all("rows => rows.every(row => getComputedStyle(row).display !== 'none')"), "no-JavaScript actor rows are hidden"
+        advanced = page.locator("#advanced-actor-filters")
+        advanced.locator("summary").click()
+        assert advanced.locator('select[name="origin"]').is_visible(), "no-JavaScript advanced filters cannot be disclosed"
+        no_javascript_results.append({"route": "/actors/", "rows": 4, "native_disclosure": "pass"})
+
+        page.goto(base_url + "/actors/apt28/", wait_until="domcontentloaded")
+        mobile_toc = page.locator(".profile-toc-mobile")
+        mobile_toc.locator("summary").click()
+        assert mobile_toc.locator('a[href="#sources"]').is_visible(), "no-JavaScript mobile profile contents cannot be disclosed"
+        assert mobile_toc.locator("a").count() >= 10, "no-JavaScript mobile profile contents are incomplete"
+        no_javascript_results.append({"route": "/actors/apt28/", "native_disclosure": "pass", "fragment_links": mobile_toc.locator("a").count()})
+        no_javascript.close()
         browser.close()
 finally:
     server.shutdown()
     server.server_close()
 
 RESULTS.parent.mkdir(exist_ok=True)
-RESULTS.write_text(json.dumps({"checked_widths": WIDTHS, "routes": ROUTES, "results": results}, indent=2) + "\n", encoding="utf-8")
+RESULTS.write_text(json.dumps({"checked_widths": WIDTHS, "routes": ROUTES, "results": results, "no_javascript": no_javascript_results}, indent=2) + "\n", encoding="utf-8")
 print(f"Responsive checks passed for {len(ROUTES)} routes at {len(WIDTHS)} widths; evidence: {RESULTS.relative_to(ROOT)}")

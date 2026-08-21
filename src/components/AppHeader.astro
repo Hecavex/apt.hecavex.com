@@ -126,9 +126,9 @@ const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
       document.body.classList.toggle('drawer-open', expanded);
       if (expanded) {
         returnFocus = document.activeElement;
-        requestAnimationFrame(() => focusable()[0]?.focus());
+        focusable()[0]?.focus({ preventScroll: true });
       } else if (restoreFocus && returnFocus instanceof HTMLElement) {
-        returnFocus.focus();
+        returnFocus.focus({ preventScroll: true });
         returnFocus = null;
       }
     };

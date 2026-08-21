@@ -79,6 +79,8 @@ const tocItems = [
     <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a>{['apt28', 'apt44'].includes(d.slug) && <a href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Interactive ATT&amp;CK evidence map ↗</a>}<a href="/about/methodology/">Review policy →</a></div>
 
     <div class="profile-grid">
+      <ProfileToc items={tocItems} />
+
       <div class="prose profile-body">
         <Content />
 
@@ -193,8 +195,6 @@ const tocItems = [
           </section>
         )}
       </div>
-
-      <ProfileToc items={tocItems} />
     </div>
   </article>
 </BaseLayout>

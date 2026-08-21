@@ -63,7 +63,11 @@ test('English-only document, themes and controls are accessible', () => {
   assert.match(css, /:root\[data-theme=light\]/);
   assert.match(css, /grid-template-columns: 2\.875rem minmax\(0,1fr\) max-content 2\.875rem/);
   assert.match(css, /brand-hero h1[^}]+min-width: 0; max-width: 100%/);
-  assert.match(read('actors/index.html'), /name="region"/);
+  const actors = read('actors/index.html');
+  assert.match(actors, /name="region"/);
+  assert.match(actors, /<details class="advanced-filters" id="advanced-actor-filters">/);
+  assert.match(actors, /data-active-filter-count/);
+  assert.match(actors, /type="reset">Reset all filters/);
 });
 
 test('critical colour roles meet WCAG AA contrast', () => {
@@ -96,10 +100,13 @@ test('actor profiles keep the readable layout, resilient table and scroll-aware 
     .join('\n');
 
   assert.match(html, /data-profile-toc/);
+  assert.match(html, /<details class="profile-toc-mobile" data-profile-toc>/);
+  assert.match(html, /data-profile-toc-current/);
   assert.match(html, /aria-current="location"/);
   assert.match(html, /class="table-wrap profile-table"/);
   assert.match(html, /<colgroup>/);
   assert.match(css, /profile-toc.*aria-current/);
+  assert.match(css, /profile-toc-mobile\{[^}]*position:sticky/);
   assert.match(css, /profile-table.*min-width:48rem/);
   assert.match(css, /profile-table.*white-space:nowrap/);
   assert.match(css, /Source Sans Pro/);
