@@ -12,10 +12,10 @@ export function GET({ props }: { props: { entry: any } }) {
     generated_at: new Date().toISOString(),
     publisher: 'HECAVEX',
     licence: 'CC-BY-4.0',
+    licence_url: 'https://apt.hecavex.com/licence/',
     methodology: 'https://apt.hecavex.com/about/methodology/',
     notice: 'Source-driven public research record. Preserve confidence, review date and source-specific attribution boundaries.',
     record: { ...entry.data, last_reviewed: entry.data.last_reviewed.toISOString(), url: `https://apt.hecavex.com/actors/${entry.data.slug}/` }
   };
   return new Response(JSON.stringify(body, null, 2), { headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=3600' } });
 }
-

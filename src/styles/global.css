@@ -266,6 +266,11 @@ th { background: var(--hx-surface-2); color: var(--hx-text); }
 .profile-table .alias-notes { width: 38%; }
 .profile-table td:first-child, .profile-table .badge { white-space: nowrap; }
 .callout { padding: 1rem; border-left: 3px solid var(--hx-bronze); background: var(--hx-surface-1); }
+.project-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 1.5rem 0; border: 1px solid var(--hx-border-subtle); }
+.project-facts > div { min-width: 0; padding: .9rem 1rem; border-right: 1px solid var(--hx-border-subtle); border-bottom: 1px solid var(--hx-border-subtle); background: var(--hx-surface-1); }
+.project-facts > div:nth-child(2n) { border-right: 0; }
+.project-facts dt { color: var(--hx-text-faint); font: .65rem var(--font-mono); letter-spacing: .04em; text-transform: uppercase; }
+.project-facts dd { margin: .3rem 0 0; color: var(--hx-text-soft); font-size: .9rem; line-height: 1.5; }
 .identity-chain { display: flex; align-items: stretch; gap: .45rem; margin: 1rem 0; overflow-x: auto; }
 .identity-chain span, .identity-chain strong { display: inline-flex; align-items: center; min-width: max-content; padding: .55rem .7rem; border: 1px solid var(--hx-border); background: var(--hx-surface-1); font-size: .78rem; }
 .identity-chain strong { border-color: var(--hx-ember-border); background: var(--hx-ember-soft); color: var(--hx-text); }
@@ -313,13 +318,13 @@ th { background: var(--hx-surface-2); color: var(--hx-text); }
 .source-list li > a { display: block; font-weight: 600; }
 .source-list li > span { display: block; color: var(--hx-text-faint); font-size: .76rem; }
 .prose { max-width: 75ch; font-size: 1.03rem; }
-.profile-body { min-width: 0; max-width: none; }
+.profile-body { min-width: 0; max-width: none; overflow-x: clip; }
 .profile-body > p, .profile-body > ul, .profile-body > ol, .profile-body > blockquote, .profile-body > section > p, .profile-body > section > ul, .profile-body > section > ol { max-width: 68ch; }
 .profile-body > h2, .profile-body > section { scroll-margin-top: calc(var(--topbar) + 2rem); }
 .prose p, .prose li { color: var(--hx-text-soft); }
 .prose h2 { padding-top: 1rem; border-top: 1px solid var(--hx-border-subtle); }
 footer { display: flex; justify-content: space-between; gap: 1rem; margin-left: var(--sidebar); padding: 1.2rem clamp(1rem,4vw,4rem); border-top: 1px solid var(--hx-border-subtle); color: var(--hx-text-muted); font-size: .8rem; }
-footer nav { display: flex; gap: 1rem; }
+footer nav { display: flex; flex-wrap: wrap; gap: 1rem; }
 
 @media (min-width: 1650px) {
   :root { --sidebar: 18.75rem; }
@@ -377,6 +382,10 @@ footer nav { display: flex; gap: 1rem; }
   .db-row .db-cell:first-child { grid-column: 1 / -1; }
   .page-head > .meta { display: inline-block; margin-top: .85rem; }
   .fact-grid { grid-template-columns: 1fr; }
+  .project-facts { grid-template-columns: 1fr; }
+  .project-facts > div { border-right: 0; }
+  .identity-chain { flex-wrap: wrap; overflow-x: visible; }
+  .identity-chain span, .identity-chain strong { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
   .entity-card-grid, .capability-list, .technique-grid { grid-template-columns: 1fr; }
   .capability-list a:nth-child(odd) { border-right: 0; }
   .profile-head h1 { font-size: 2.2rem; }

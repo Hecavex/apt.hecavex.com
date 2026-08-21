@@ -2,6 +2,8 @@
 
 [APT Notes](https://apt.hecavex.com) is the structured side of HECAVEX. It connects threat actors, aliases, campaigns, malware, tools, techniques and the public sources behind those relationships.
 
+Project status: **maintained on a best-effort basis** by Deividas Lis / HECAVEX for threat-intelligence analysts, defenders, investigators, journalists and researchers. The public [About page](https://apt.hecavex.com/about/) exposes the latest meaningful update, coverage boundary, ownership and security contact. The cross-project [HECAVEX data catalogue](https://labs.hecavex.com/data/) documents the actor API beside related public datasets.
+
 It is not an attribution oracle. Vendor names overlap, governments use different naming systems, and public reporting is often incomplete. The data model keeps those disagreements visible instead of flattening every name into one convenient actor.
 
 ## Run it locally
@@ -39,9 +41,19 @@ npm run verify
 
 That command validates the content model, generates social cards, checks Astro, builds the site and search index, audits metadata and accessibility, and tests production links. The same command runs before GitHub Pages deployment.
 
+Deployment also runs keyboard-navigation, focus, scroll-containment and overflow checks at 320, 360, 390, 768 and 1024 pixels. A successful run retains `test-results/responsive.json` as a 30-day workflow artifact. To reproduce the checks locally after `npm run build`:
+
+```sh
+python -m pip install -r requirements-checks.txt
+python -m playwright install chromium
+python scripts/test_responsive.py
+```
+
 ## Publishing
 
 The repository deploys through `.github/workflows/pages.yml`. GitHub Pages must use **GitHub Actions** as its source, and `public/CNAME` must remain `apt.hecavex.com`.
+
+Public API reuse is governed by the human-readable [APT Notes data licence](https://apt.hecavex.com/licence/). It licenses original HECAVEX fields under CC BY 4.0 without relicensing cited publications, trademarks or third-party framework material.
 
 Generated social cards are written to `public/og/generated/` during the build and are not committed.
 

@@ -8,3 +8,6 @@ dist/
 .env.*
 !.env.example
 public/og/generated/
+test-results/
+__pycache__/
+*.pyc

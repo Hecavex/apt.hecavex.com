@@ -17,7 +17,7 @@ walk(root);
 test('required production routes and assets exist', () => {
   for (const file of [
     'index.html', 'actors/index.html', 'actors/apt28/index.html', 'actors/apt44/index.html',
-    'about/methodology/index.html', 'sources/index.html', 'updates/index.html',
+    'about/methodology/index.html', 'licence/index.html', 'sources/index.html', 'updates/index.html',
     'feed.xml', 'robots.txt', '.well-known/security.txt', 'CNAME',
     'sitemap-index.xml', 'pagefind/pagefind.js', 'og/default.png',
     'fonts/Lato/Lato-Regular.woff2',
@@ -105,24 +105,71 @@ test('actor profiles keep the readable layout, resilient table and scroll-aware 
   assert.match(css, /Source Sans Pro/);
 });
 
-test('all root-relative links and assets resolve in the static build', () => {
+test('all local links, assets and fragments resolve in the static build', () => {
   const htmlFiles = files.filter(file => file.endsWith('.html'));
   for (const file of htmlFiles) {
     const html = fs.readFileSync(file, 'utf8');
-    for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
+    const markup = html.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+    for (const match of markup.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const raw = match[1].replaceAll('&amp;', '&');
-      if (!raw.startsWith('/') || raw.startsWith('//')) continue;
-      const clean = decodeURIComponent(raw.split(/[?#]/)[0]);
-      if (!clean) continue;
+      if (/^(?:mailto:|tel:|javascript:|data:|\/\/)/.test(raw)) continue;
+      const relativeFile = path.relative(root, file).replaceAll('\\', '/');
+      const route = relativeFile === 'index.html' ? '/' : `/${relativeFile.replace(/index\.html$/, '')}`;
+      const resolved = new URL(raw, `https://apt.hecavex.com${route}`);
+      if (resolved.hostname !== 'apt.hecavex.com') continue;
+      const clean = decodeURIComponent(resolved.pathname);
       const relative = clean.replace(/^\//, '');
-      const target = clean === '/'
+      let target = clean === '/'
         ? path.join(root, 'index.html')
         : path.extname(relative)
           ? path.join(root, relative)
           : path.join(root, relative, 'index.html');
+      if (!fs.existsSync(target) && !path.extname(relative)) target = path.join(root, `${relative.replace(/\/$/, '')}.html`);
       assert.ok(fs.existsSync(target), `${path.relative(root, file)} -> ${raw}`);
+      const fragment = decodeURIComponent(resolved.hash.slice(1));
+      if (fragment && target.endsWith('.html')) {
+        const ids = new Set([...fs.readFileSync(target, 'utf8').matchAll(/\sid="([^"]+)"/g)].map(item => item[1]));
+        assert.ok(ids.has(fragment), `${path.relative(root, file)} -> ${raw} (missing fragment)`);
+      }
     }
   }
+});
+
+test('shared project switcher and public project status remain consistent', () => {
+  const html = read('index.html');
+  const menu = html.match(/workspace-switcher[\s\S]*?<div class="language-menu">([\s\S]*?)<\/div>/)?.[1] ?? '';
+  const links = [...menu.matchAll(/href="([^"]+)"/g)].map(match => match[1] === '/' ? 'https://apt.hecavex.com/' : match[1]);
+  assert.deepEqual(links, [
+    'https://hecavex.com/en/research/',
+    'https://radar.hecavex.com/',
+    'https://apt.hecavex.com/',
+    'https://labs.hecavex.com/',
+    'https://labs.hecavex.com/data/'
+  ]);
+  assert.match(menu, /aria-current="true"><span>APT Notes<\/span>/);
+
+  const about = read('about/index.html');
+  for (const field of ['Purpose', 'Audience', 'Owner', 'Maintenance', 'Last meaningful update', 'Security and corrections']) {
+    assert.match(about, new RegExp(`>${field}<`));
+  }
+  assert.match(about, /Maintained/);
+  assert.match(about, /no monitoring or response SLA/i);
+  assert.match(about, /https:\/\/labs\.hecavex\.com\/data\//);
+  assert.match(about, /href="\/licence\/"/);
+
+  const licence = read('licence/index.html');
+  assert.match(licence, /Creative Commons Attribution 4\.0 International/);
+  assert.match(licence, /does not relicense source publications/i);
+  const actorApi = JSON.parse(read('api/actors.json'));
+  assert.equal(actorApi.licence, 'CC-BY-4.0');
+  assert.equal(actorApi.licence_url, 'https://apt.hecavex.com/licence/');
+
+  const security = read('.well-known/security.txt');
+  for (const field of ['Contact:', 'Canonical:', 'Policy:', 'Preferred-Languages:', 'Expires:']) assert.match(security, new RegExp(`^${field}`, 'm'));
+  assert.match(security, /^Canonical: https:\/\/apt\.hecavex\.com\/\.well-known\/security\.txt$/m);
+  assert.match(security, /^Policy: https:\/\/apt\.hecavex\.com\/security\/$/m);
+  const expiry = security.match(/^Expires: (.+)$/m)?.[1];
+  assert.ok(expiry && Number.isFinite(Date.parse(expiry)) && Date.parse(expiry) > Date.now(), 'security.txt expiry must be a future timestamp');
 });
 
 test('sitemap and feed contain only canonical public records', () => {

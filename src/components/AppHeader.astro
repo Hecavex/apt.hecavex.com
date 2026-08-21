@@ -21,17 +21,18 @@ const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
     <a class="site-title" href="https://hecavex.com/en/">HECAVEX</a>
     <p class="site-subtitle">Cyber Threat Intelligence &amp; Digital Investigations</p>
     <details class="language-switcher workspace-switcher">
-      <summary aria-label="Switch HECAVEX workspace">
+      <summary aria-label="Switch HECAVEX project">
         <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-        <span class="language-label">Workspace</span>
+        <span class="language-label">Project</span>
         <strong>APT Notes</strong>
         <i class="fa-solid fa-chevron-down language-chevron" aria-hidden="true"></i>
       </summary>
       <div class="language-menu">
-        <a href="https://hecavex.com/en/"><span>Research</span><small>MAIN</small></a>
-        <a href="/" aria-current="page"><span>APT Notes</span><small>TI</small></a>
-        <a href="https://labs.hecavex.com/"><span>HECAVEX Labs</span><small>TOOLS</small></a>
-        <a href="https://radar.hecavex.com/"><span>HECAVEX Radar</span><small>PHISH</small></a>
+        <a href="https://hecavex.com/en/research/"><span>Research</span><small>REPORTS</small></a>
+        <a href="https://radar.hecavex.com/"><span>Radar</span><small>PHISH</small></a>
+        <a href="/" aria-current="true"><span>APT Notes</span><small>TI</small></a>
+        <a href="https://labs.hecavex.com/"><span>Labs</span><small>TOOLS</small></a>
+        <a href="https://labs.hecavex.com/data/"><span>Data</span><small>JSON</small></a>
       </div>
     </details>
     <details class="language-switcher">
@@ -51,7 +52,7 @@ const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
     <ul>
       {navigation.map(item => <li><a href={item.href} aria-current={active(item.href) ? 'page' : undefined}><i class={`fa-solid ${item.icon} fa-fw`} aria-hidden="true"></i><span>{item.name}</span></a></li>)}
     </ul>
-    <a class="external" href="https://hecavex.com/en/"><i class="fa-solid fa-arrow-up-right-from-square fa-fw" aria-hidden="true"></i><span>HECAVEX RESEARCH</span></a>
+    <a class="external" href="https://hecavex.com/en/research/"><i class="fa-solid fa-arrow-up-right-from-square fa-fw" aria-hidden="true"></i><span>HECAVEX RESEARCH</span></a>
     <a class="external external-secondary" href="https://labs.hecavex.com/"><i class="fa-solid fa-flask fa-fw" aria-hidden="true"></i><span>HECAVEX LABS</span></a>
     <a class="external external-secondary" href="https://radar.hecavex.com/"><i class="fa-solid fa-satellite-dish fa-fw" aria-hidden="true"></i><span>HECAVEX RADAR</span></a>
   </nav>

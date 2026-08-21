@@ -1,4 +1,40 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { publicEntries, formatDate } from '../../utils/content';
+
+const updates:any[] = await publicEntries('updates');
+const latest = [...updates].sort((left:any, right:any) => {
+  const byDate = +new Date(right.data.date) - +new Date(left.data.date);
+  return byDate || left.data.slug.localeCompare(right.data.slug);
+})[0];
 ---
-<BaseLayout title="About" description="About APT Notes and its relationship to Hecavex."><article class="shell narrow prose"><p class="eyebrow">About the product</p><h1>APT Notes</h1><p class="lead">A curated collection of deeply sourced threat-actor dossiers.</p><p>APT Notes is a source-driven intelligence catalogue for searching, filtering and pivoting between selected threat actors, aliases, campaigns, malware, tools, targeting, techniques and attribution claims.</p><p>Depth is prioritised over directory size. APT Notes does not attempt to reproduce every actor record already available elsewhere. A profile is published only when HECAVEX can preserve source-specific attribution, meaningful operational context and an explicit review history.</p><p>It is a separate product from <a href="https://hecavex.com/en/">Hecavex Research ↗</a>, which remains the publication for long-form investigations, analysis and commentary.</p><h2>Coverage roadmap</h2><p>Coverage expands one dossier at a time. Priority is given to actors relevant to European and Baltic security, actors connected to current HECAVEX research, and records where public naming or attribution requires careful separation.</p><p>Published profiles are reviewed at least annually. After 180 days a record is marked review due; after 365 days it is marked stale until reassessed. A stale label describes review age, not actor inactivity.</p><h2>Machine-readable access</h2><p>Public actor metadata is available as version-neutral static JSON. Use the <a href="/api/actors.json">actor index</a> or the JSON link on an individual profile. These exports are research records, not a live blocklist or operational feed.</p><h2>What it is not</h2><p>APT Notes is not a live threat feed, detection service, SIEM, vulnerability scanner, authoritative attribution body or replacement for MITRE ATT&amp;CK.</p><h2>Editorial approach</h2><p>Source claims are separated from APT Notes assessments. Alias overlap is represented explicitly, uncertainty is retained, and corrections appear in the public change history.</p><p><a href="/about/methodology/">Read the complete methodology →</a></p></article></BaseLayout>
+<BaseLayout title="About" description="Purpose, audience, ownership, maintenance and limitations of APT Notes by HECAVEX.">
+  <article class="shell narrow prose">
+    <p class="eyebrow">About the product</p>
+    <h1>APT Notes</h1>
+    <p class="lead">A curated collection of deeply sourced threat-actor dossiers.</p>
+
+    <dl class="project-facts" aria-label="APT Notes project status">
+      <div><dt>Purpose</dt><dd>Preserve source-specific actor, campaign and capability claims as linked research records.</dd></div>
+      <div><dt>Audience</dt><dd>Threat-intelligence analysts, defenders, investigators, journalists and researchers.</dd></div>
+      <div><dt>Owner</dt><dd><a href="https://hecavex.com/en/about/">Deividas Lis / HECAVEX</a></dd></div>
+      <div><dt>Maintenance</dt><dd><span class="badge current">Maintained</span> Best effort; no monitoring or response SLA.</dd></div>
+      <div><dt>Last meaningful update</dt><dd>{latest ? <><time datetime={latest.data.date.toISOString()}>{formatDate(latest.data.date)}</time><br /><a href={`/updates/#${latest.data.slug}`}>{latest.data.title}</a></> : 'No public updates yet'}</dd></div>
+      <div><dt>Security and corrections</dt><dd><a href="/security/">Security policy</a> · <a href="https://hecavex.com/en/contact/">Editorial contact</a></dd></div>
+    </dl>
+
+    <p>APT Notes is a source-driven intelligence catalogue for searching, filtering and pivoting between selected threat actors, aliases, campaigns, malware, tools, targeting, techniques and attribution claims.</p>
+    <p>Depth is prioritised over directory size. APT Notes does not attempt to reproduce every actor record already available elsewhere. A profile is published only when HECAVEX can preserve source-specific attribution, meaningful operational context and an explicit review history.</p>
+    <p>It is a separate product from <a href="https://hecavex.com/en/research/">HECAVEX Research ↗</a>, which remains the publication for long-form investigations, analysis and commentary.</p>
+    <h2>Coverage roadmap</h2>
+    <p>Coverage expands one dossier at a time. Priority is given to actors relevant to European and Baltic security, actors connected to current HECAVEX research, and records where public naming or attribution requires careful separation.</p>
+    <p>Published profiles are reviewed at least annually. After 180 days a record is marked review due; after 365 days it is marked stale until reassessed. A stale label describes review age, not actor inactivity.</p>
+    <h2>Machine-readable access</h2>
+    <p>Public actor metadata is available as versioned static JSON. Use the <a href="/api/actors.json">actor index</a>, the JSON link on an individual profile, or the cross-project <a href="https://labs.hecavex.com/data/">HECAVEX data catalogue</a>. The <a href="/licence/">data licence and attribution boundary</a> applies to reuse. These exports are research records, not a live blocklist or operational feed.</p>
+    <h2>What it is not</h2>
+    <p>APT Notes is not a live threat feed, detection service, SIEM, vulnerability scanner, authoritative attribution body or replacement for MITRE ATT&amp;CK. Its public-source coverage is selective, reporting can be incomplete and actor boundaries can change.</p>
+    <h2>Editorial approach</h2>
+    <p>Source claims are separated from APT Notes assessments. Alias overlap is represented explicitly, uncertainty is retained, and corrections appear in the public change history.</p>
+    <p><a href="/about/methodology/">Read the complete methodology →</a></p>
+  </article>
+</BaseLayout>

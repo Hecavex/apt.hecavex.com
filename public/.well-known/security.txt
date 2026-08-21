@@ -1,5 +1,5 @@
-Contact: https://hecavex.com/.well-known/security.txt
+Contact: mailto:info@hecavex.com
 Canonical: https://apt.hecavex.com/.well-known/security.txt
 Policy: https://apt.hecavex.com/security/
-Preferred-Languages: en
-Expires: 2027-08-05T00:00:00.000Z
+Preferred-Languages: en, lt
+Expires: 2027-08-21T23:59:59Z
