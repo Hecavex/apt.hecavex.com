@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "latest",
+    "fontkit": "2.0.4",
     "pagefind": "1.5.2",
     "sharp": "^0.35.3",
     "typescript": "latest",

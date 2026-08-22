@@ -13,7 +13,7 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parent.parent
 PUBLIC_ROOT = ROOT / "dist"
 RESULTS = ROOT / "test-results" / "responsive.json"
-WIDTHS = (320, 360, 390, 768, 1024)
+WIDTHS = (320, 360, 390, 768, 1024, 1440)
 HEIGHT = 900
 ROUTES = ("/", "/about/", "/about/methodology/", "/actors/", "/actors/apt28/", "/search/", "/licence/", "/security/")
 PROJECT_LINKS = (
@@ -89,6 +89,7 @@ thread.start()
 base_url = f"http://127.0.0.1:{server.server_port}"
 results = []
 no_javascript_results = []
+print_results = []
 
 try:
     with sync_playwright() as playwright:
@@ -177,38 +178,36 @@ try:
                     assert page.locator(".profile-toc").is_visible(), f"desktop profile contents missing: {route} at {width}px"
                     assert not page.locator(".profile-toc-mobile").is_visible(), f"mobile profile contents should be hidden on desktop: {route} at {width}px"
 
-                if width <= 849:
-                    menu = page.locator(".menu-toggle")
+                if width <= 1160:
+                    navigation = page.locator(".mobile-navigation")
+                    menu = navigation.locator("summary")
                     assert menu.is_visible(), f"mobile menu missing: {route} at {width}px"
                     assert_focus_visible(menu, f"menu control on {route} at {width}px")
                     page.keyboard.press("Enter")
-                    assert menu.get_attribute("aria-expanded") == "true", f"mobile menu did not open: {route} at {width}px"
-                    assert page.locator("#site-nav").is_visible(), f"navigation hidden after opening: {route} at {width}px"
-                    page.wait_for_timeout(50)
-                    close_button = page.locator(".drawer-close")
-                    assert close_button.evaluate("element => document.activeElement === element"), f"drawer did not receive focus: {route} at {width}px"
-                    assert close_button.evaluate(FOCUS_INDICATOR_AUDIT), f"drawer close focus is invisible: {route} at {width}px"
-                    page.keyboard.press("Shift+Tab")
-                    assert page.evaluate("document.querySelector('#site-nav').contains(document.activeElement)"), f"drawer focus trap failed: {route} at {width}px"
-
-                project_summary = page.locator(".workspace-switcher summary")
-                assert_focus_visible(project_summary, f"project switcher on {route} at {width}px")
-                page.keyboard.press("Enter")
-                assert page.locator(".workspace-switcher").evaluate("element => element.open"), f"project switcher did not open by keyboard: {route} at {width}px"
-                links = page.locator(".workspace-switcher .language-menu a").evaluate_all("links => links.map(link => link.href)")
-                links = tuple(normalise_project_link(value) for value in links)
-                assert links == PROJECT_LINKS, f"project navigation differs: {route} at {width}px: {links}"
-                current = page.locator('.workspace-switcher .language-menu a[aria-current="true"]')
-                assert current.count() == 1, f"project switcher must identify one current project: {route} at {width}px"
-                assert_focus_visible(page.locator(".workspace-switcher .language-menu a").first, f"project link on {route} at {width}px")
-                unnamed = page.locator("#site-nav a[href], #site-nav button, #site-nav summary").evaluate_all(ACCESSIBLE_NAME_AUDIT)
-                assert not unnamed, f"open navigation controls without accessible names: {route} at {width}px: {unnamed}"
-
-                if width <= 849:
+                    assert navigation.evaluate("element => element.open"), f"mobile menu did not open: {route} at {width}px"
+                    panel = navigation.locator(".mobile-navigation-panel")
+                    assert panel.is_visible(), f"navigation panel hidden after opening: {route} at {width}px"
+                    links = navigation.locator(".mobile-portfolio-navigation a").evaluate_all("links => links.map(link => link.href)")
+                    links = tuple(normalise_project_link(value) for value in links)
+                    assert links == PROJECT_LINKS, f"project navigation differs: {route} at {width}px: {links}"
+                    current = navigation.locator('.mobile-portfolio-navigation a[aria-current="page"]')
+                    assert current.count() == 1, f"project navigation must identify one current project: {route} at {width}px"
+                    assert_focus_visible(navigation.locator(".mobile-product-navigation a").first, f"product link on {route} at {width}px")
+                    unnamed = panel.locator("a[href], button, summary").evaluate_all(ACCESSIBLE_NAME_AUDIT)
+                    assert not unnamed, f"open navigation controls without accessible names: {route} at {width}px: {unnamed}"
+                    menu.focus()
                     page.keyboard.press("Escape")
-                    assert page.locator(".menu-toggle").get_attribute("aria-expanded") == "false", f"Escape did not close navigation: {route} at {width}px"
-                    assert page.locator(".menu-toggle").evaluate("element => document.activeElement === element"), f"menu focus was not restored: {route} at {width}px"
-                    assert page.locator(".menu-toggle").evaluate(FOCUS_INDICATOR_AUDIT), f"restored menu focus is invisible: {route} at {width}px"
+                    assert not navigation.evaluate("element => element.open"), f"Escape did not close navigation: {route} at {width}px"
+                    assert menu.evaluate("element => document.activeElement === element"), f"menu focus was not restored: {route} at {width}px"
+                    assert menu.evaluate(FOCUS_INDICATOR_AUDIT), f"restored menu focus is invisible: {route} at {width}px"
+                else:
+                    project_navigation = page.locator(".portfolio-navigation")
+                    assert project_navigation.is_visible(), f"desktop portfolio navigation missing: {route} at {width}px"
+                    links = project_navigation.locator("a").evaluate_all("links => links.map(link => link.href)")
+                    links = tuple(normalise_project_link(value) for value in links)
+                    assert links == PROJECT_LINKS, f"desktop project navigation differs: {route} at {width}px: {links}"
+                    assert project_navigation.locator('a[aria-current="page"]').count() == 1, f"desktop project navigation must identify one current project: {route} at {width}px"
+                    assert_focus_visible(project_navigation.locator("a").first, f"desktop project link on {route} at {width}px")
 
                 results.append({"route": route, "width": width, "overflow": False, "scroll_containment": "pass", "keyboard_navigation": "pass", "accessibility_names": "pass", "focus": "pass"})
 
@@ -218,12 +217,17 @@ try:
         no_javascript = browser.new_context(java_script_enabled=False, viewport={"width": 390, "height": HEIGHT})
         page = no_javascript.new_page()
         page.goto(base_url + "/actors/", wait_until="domcontentloaded")
+        navigation = page.locator(".mobile-navigation")
+        navigation.locator("summary").click()
+        assert navigation.locator(".mobile-navigation-panel").is_visible(), "no-JavaScript portfolio navigation cannot be disclosed"
+        assert navigation.locator(".mobile-product-navigation a").count() == 10, "no-JavaScript product navigation is incomplete"
+        navigation.locator("summary").click()
         assert page.locator(".actor-row").count() == 4, "no-JavaScript actor catalogue lost public rows"
         assert page.locator(".actor-row").evaluate_all("rows => rows.every(row => getComputedStyle(row).display !== 'none')"), "no-JavaScript actor rows are hidden"
         advanced = page.locator("#advanced-actor-filters")
         advanced.locator("summary").click()
         assert advanced.locator('select[name="origin"]').is_visible(), "no-JavaScript advanced filters cannot be disclosed"
-        no_javascript_results.append({"route": "/actors/", "rows": 4, "native_disclosure": "pass"})
+        no_javascript_results.append({"route": "/actors/", "rows": 4, "native_navigation": "pass", "native_disclosure": "pass"})
 
         page.goto(base_url + "/actors/apt28/", wait_until="domcontentloaded")
         mobile_toc = page.locator(".profile-toc-mobile")
@@ -232,11 +236,33 @@ try:
         assert mobile_toc.locator("a").count() >= 10, "no-JavaScript mobile profile contents are incomplete"
         no_javascript_results.append({"route": "/actors/apt28/", "native_disclosure": "pass", "fragment_links": mobile_toc.locator("a").count()})
         no_javascript.close()
+
+        print_context = browser.new_context(viewport={"width": 1280, "height": HEIGHT})
+        page = print_context.new_page()
+        page.emulate_media(media="print")
+        for route in ("/", "/actors/", "/actors/apt28/"):
+            page.goto(base_url + route, wait_until="domcontentloaded")
+            styles = page.evaluate("""() => Object.fromEntries(['body', 'h1', '.lead', '.fact', '.fact dd', '.assessment-strip', '.panel', 'th', 'td'].map(selector => {
+              const element = document.querySelector(selector);
+              if (!element) return [selector, null];
+              const style = getComputedStyle(element);
+              return [selector, { color: style.color, background: style.backgroundColor }];
+            }))""")
+            assert styles["body"]["background"] == "rgb(255, 255, 255)", f"print body is not white: {route}: {styles}"
+            assert styles["body"]["color"] == "rgb(17, 17, 17)", f"print body text is not readable: {route}: {styles}"
+            assert styles["h1"]["color"] == "rgb(0, 0, 0)", f"print heading is not black: {route}: {styles}"
+            for selector in (".fact", ".assessment-strip", ".panel", "th", "td"):
+                if not styles[selector]:
+                    continue
+                assert styles[selector]["background"] == "rgb(255, 255, 255)", f"print surface is not white: {route}: {selector}: {styles[selector]}"
+                assert styles[selector]["color"] in ("rgb(0, 0, 0)", "rgb(17, 17, 17)"), f"print surface text is not readable: {route}: {selector}: {styles[selector]}"
+            print_results.append({"route": route, "paper_background": "pass", "core_text": "pass", "surfaces": "pass"})
+        print_context.close()
         browser.close()
 finally:
     server.shutdown()
     server.server_close()
 
 RESULTS.parent.mkdir(exist_ok=True)
-RESULTS.write_text(json.dumps({"checked_widths": WIDTHS, "routes": ROUTES, "results": results, "no_javascript": no_javascript_results}, indent=2) + "\n", encoding="utf-8")
+RESULTS.write_text(json.dumps({"checked_widths": WIDTHS, "routes": ROUTES, "results": results, "no_javascript": no_javascript_results, "print": print_results}, indent=2) + "\n", encoding="utf-8")
 print(f"Responsive checks passed for {len(ROUTES)} routes at {len(WIDTHS)} widths; evidence: {RESULTS.relative_to(ROOT)}")

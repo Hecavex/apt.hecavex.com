@@ -61,8 +61,8 @@ const { items } = Astro.props;
       }));
 
       const update = () => {
-        const topbar = document.querySelector<HTMLElement>('.topbar');
-        const readingLine = (topbar?.offsetHeight ?? 64) + 56;
+        const header = document.querySelector<HTMLElement>('.site-header');
+        const readingLine = (header?.offsetHeight ?? 72) + 40;
         let current = entries[0]!;
 
         for (const entry of entries) {

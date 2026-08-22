@@ -30,15 +30,11 @@ const measurementToken = import.meta.env.PUBLIC_HECAVEX_ANALYTICS_TOKEN?.trim() 
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicons/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/lib/fontawesome-free/css/all.min.css" />
     <link rel="alternate" type="application/atom+xml" title="APT Notes updates" href="/feed.xml" />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
     <meta property="og:type" content="website" /><meta property="og:site_name" content="APT Notes by HECAVEX" /><meta property="og:locale" content="en_US" /><meta property="og:title" content={fullTitle} /><meta property="og:description" content={description} /><meta property="og:url" content={canonical} /><meta property="og:image" content={new URL(image, Astro.site)} /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={fullTitle} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={new URL(image, Astro.site)} /><meta name="twitter:image:alt" content={imageAlt} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <script is:inline>
-      (() => { try { const mode = localStorage.getItem('apt-notes-theme'); if (mode === 'dark' || mode === 'light') document.documentElement.dataset.theme = mode; } catch {} })();
-    </script>
     {measurementToken && <script is:inline define:vars={{ measurementToken }}>
       (() => {
         if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
@@ -54,6 +50,11 @@ const measurementToken = import.meta.env.PUBLIC_HECAVEX_ANALYTICS_TOKEN?.trim() 
     <a class="skip-link" href="#main-content">Skip to content</a>
     <AppHeader />
     <main id="main-content"><slot /></main>
-    <footer><span>Part of <a href="https://hecavex.com/en/">HECAVEX</a></span><nav aria-label="Footer"><a href="https://hecavex.com/en/research/">Research</a><a href="https://radar.hecavex.com/">Radar</a><a href="/">APT Notes</a><a href="https://labs.hecavex.com/">Labs</a><a href="https://labs.hecavex.com/data/">Data</a><a href="/about/methodology/">Methodology</a><a href="/licence/">Licence</a><a href="/feed.xml">Feed</a><a href="https://hecavex.com/en/privacy/">Privacy</a><a href="/security/">Security</a></nav></footer>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand"><strong>APT NOTES</strong><span>Source-backed public threat intelligence by <a href="https://hecavex.com/en/">HECAVEX</a>.</span></div>
+        <nav aria-label="Footer"><a href="https://hecavex.com/en/research/">Research</a><a href="https://radar.hecavex.com/">Radar</a><a href="/">APT Notes</a><a href="https://labs.hecavex.com/">Labs</a><a href="https://labs.hecavex.com/data/">Data</a><a href="/about/methodology/">Methodology</a><a href="/licence/">Licence</a><a href="/feed.xml">Feed</a><a href="https://hecavex.com/en/privacy/">Privacy</a><a href="/security/">Security</a></nav>
+      </div>
+    </footer>
   </body>
 </html>

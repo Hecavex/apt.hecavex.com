@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import sharp from 'sharp';
 
 const root = 'dist';
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
@@ -18,13 +19,12 @@ test('required production routes and assets exist', () => {
   for (const file of [
     'index.html', 'actors/index.html', 'actors/apt28/index.html', 'actors/apt44/index.html',
     'about/methodology/index.html', 'licence/index.html', 'sources/index.html', 'updates/index.html',
-    'feed.xml', 'robots.txt', '.well-known/security.txt', 'CNAME',
-    'sitemap-index.xml', 'pagefind/pagefind.js', 'og/default.png',
-    'fonts/Lato/Lato-Regular.woff2',
-    'fonts/Source_Sans_Pro/SourceSansPro-Regular.woff2',
-    'fonts/Source_Sans_Pro/SourceSansPro-SemiBold.woff2',
-    'fonts/Source_Sans_Pro/SourceSansPro-Bold.woff2',
-    'fonts/Source_Sans_Pro/SourceSansPro-Black.woff2'
+    'feed.xml', 'robots.txt', '.well-known/security.txt', 'THIRD_PARTY_NOTICES.txt', 'CNAME',
+    'sitemap-index.xml', 'pagefind/pagefind.js', 'og/default.svg', 'og/default.png',
+    'fonts/inter/inter-latin-400-normal.woff2',
+    'fonts/inter/inter-latin-600-normal.woff2',
+    'fonts/ibm-plex-mono/ibm-plex-mono-latin-400-normal.woff2',
+    'fonts/ibm-plex-mono/ibm-plex-mono-latin-600-normal.woff2'
   ]) assert.ok(fs.existsSync(path.join(root, file)), file);
 });
 
@@ -46,23 +46,24 @@ test('production metadata is canonical', () => {
   assert.match(html, /og:image:alt/);
 });
 
-test('English-only document, themes and controls are accessible', () => {
+test('English-only Cold Signal document and controls are accessible', () => {
   const html = read('index.html');
   const css = fs.readFileSync('src/styles/global.css', 'utf8');
   assert.match(html, /<html lang="en"/);
   assert.match(html, /Skip to content/);
-  assert.match(html, /aria-label="Change colour theme"/);
   assert.match(html, /aria-label="Open navigation menu"/);
-  assert.match(html, /aria-label="Language: English \(EN\)"/);
-  assert.match(html, /class="sidebar-backdrop"/);
-  assert.match(html, /sidebar\.inert/);
-  assert.match(html, /event\.key === 'Escape'/);
+  assert.match(html, /class="site-header"/);
+  assert.match(html, /class="portfolio-navigation"/);
+  assert.match(html, /class="product-navigation"/);
+  assert.match(html, /data-mobile-navigation/);
+  assert.match(html, /Escape/);
   assert.match(html, /https:\/\/radar\.hecavex\.com\//);
-  assert.match(html, /\['system', 'dark', 'light'\]/);
-  assert.match(css, /:root\[data-theme=dark\]/);
-  assert.match(css, /:root\[data-theme=light\]/);
-  assert.match(css, /grid-template-columns: 2\.875rem minmax\(0,1fr\) max-content 2\.875rem/);
-  assert.match(css, /brand-hero h1[^}]+min-width: 0; max-width: 100%/);
+  assert.match(css, /font-family: Inter/);
+  assert.match(css, /font-family: "IBM Plex Mono"/);
+  assert.match(css, /--cyan: #44c7dc/);
+  assert.match(css, /--green: #a2da68/);
+  assert.match(css, /--danger: #ff6b6b/);
+  assert.doesNotMatch(`${html}\n${css}`, /data-theme=/i);
   const actors = read('actors/index.html');
   assert.match(actors, /name="region"/);
   assert.match(actors, /<details class="advanced-filters" id="advanced-actor-filters">/);
@@ -72,9 +73,8 @@ test('English-only document, themes and controls are accessible', () => {
 
 test('critical colour roles meet WCAG AA contrast', () => {
   const css = fs.readFileSync('src/styles/global.css', 'utf8');
-  const dark = css.match(/:root \{([\s\S]*?)\n\}/)?.[1] ?? '';
-  const light = css.match(/:root\[data-theme=light\] \{([\s\S]*?)\n\}/)?.[1] ?? '';
-  const token = (block, name) => block.match(new RegExp(`--hx-${name}:\\s*(#[0-9a-f]{6})`, 'i'))?.[1] ?? '';
+  const cold = css.match(/:root \{([\s\S]*?)\n\}/)?.[1] ?? '';
+  const token = name => cold.match(new RegExp(`--${name}:\\s*(#[0-9a-f]{6})`, 'i'))?.[1] ?? '';
   const luminance = hex => {
     const channels = hex.slice(1).match(/../g).map(value => Number.parseInt(value, 16) / 255)
       .map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
@@ -85,19 +85,57 @@ test('critical colour roles meet WCAG AA contrast', () => {
     return (values[0] + 0.05) / (values[1] + 0.05);
   };
 
-  assert.ok(contrast(token(dark, 'text-faint'), token(dark, 'surface-3')) >= 4.5);
-  assert.ok(contrast(token(light, 'text-faint'), token(light, 'sidebar')) >= 4.5);
-  assert.ok(contrast('#ffffff', token(dark, 'action')) >= 4.5);
-  assert.ok(contrast('#ffffff', token(dark, 'action-hover')) >= 4.5);
-  assert.match(css, /background: var\(--hx-action\)/);
+  assert.ok(contrast(token('muted'), token('bg')) >= 4.5);
+  assert.ok(contrast(token('faint'), token('bg')) >= 4.5);
+  assert.ok(contrast(token('cyan'), token('bg')) >= 4.5);
+  assert.ok(contrast(token('green'), token('bg')) >= 4.5);
+  assert.ok(contrast(token('bg'), token('cyan')) >= 4.5);
+  assert.match(css, /background: var\(--cyan\)/);
+});
+
+test('print output replaces dark surfaces with a paper-safe palette', () => {
+  const css = fs.readFileSync('src/styles/global.css', 'utf8');
+  const print = css.match(/@media print\s*\{([\s\S]+)\n\}\s*$/)?.[1] ?? '';
+
+  assert.match(print, /color-scheme:\s*light/);
+  for (const token of ['page', 'panel', 'bg', 'surface']) {
+    assert.match(print, new RegExp(`--${token}:\\s*#fff`));
+  }
+  for (const token of ['ink', 'text', 'cyan', 'green', 'danger', 'amber']) {
+    assert.match(print, new RegExp(`--${token}:\\s*#000`));
+  }
+  assert.match(print, /\.panel,[\s\S]+\.fact,[\s\S]+table,[\s\S]+background:\s*#fff\s*!important/);
+  assert.match(print, /h1,[\s\S]+\.fact dd,[\s\S]+color:\s*#000\s*!important/);
+  assert.match(print, /border-color:\s*#777\s*!important/);
+});
+
+test('social previews use deterministic vector outlines from repository fonts', async () => {
+  const svg = fs.readFileSync('public/og/default.svg', 'utf8');
+  const generator = fs.readFileSync('scripts/generate-og.mjs', 'utf8');
+  const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+  assert.match(svg, /Text converted to vector outlines from repository-pinned Inter and IBM Plex Mono WOFF2 assets/);
+  assert.ok([...svg.matchAll(/<path\b/g)].length >= 100);
+  assert.doesNotMatch(svg, /<text\b|font-family|data:font/);
+  assert.match(generator, /fontkit\.openSync/);
+  assert.match(generator, /glyph\.path\.toSVG\(\)/);
+  assert.equal(packageJson.devDependencies.fontkit, '2.0.4');
+  for (const font of [
+    'inter-latin-400-normal.woff2',
+    'inter-latin-700-normal.woff2',
+    'ibm-plex-mono-latin-400-normal.woff2',
+    'ibm-plex-mono-latin-700-normal.woff2'
+  ]) assert.match(generator, new RegExp(font.replaceAll('.', '\\.')));
+
+  const first = await sharp(Buffer.from(svg)).png({ quality: 92 }).toBuffer();
+  const second = await sharp(Buffer.from(svg)).png({ quality: 92 }).toBuffer();
+  assert.deepEqual(first, second);
+  assert.deepEqual(first, fs.readFileSync('public/og/default.png'));
 });
 
 test('actor profiles keep the readable layout, resilient table and scroll-aware contents rail', () => {
   const html = read('actors/apt28/index.html');
-  const css = files
-    .filter(file => file.endsWith('.css'))
-    .map(file => fs.readFileSync(file, 'utf8'))
-    .join('\n');
+  const css = fs.readFileSync('src/styles/global.css', 'utf8');
 
   assert.match(html, /data-profile-toc/);
   assert.match(html, /<details class="profile-toc-mobile" data-profile-toc>/);
@@ -106,10 +144,11 @@ test('actor profiles keep the readable layout, resilient table and scroll-aware 
   assert.match(html, /class="table-wrap profile-table"/);
   assert.match(html, /<colgroup>/);
   assert.match(css, /profile-toc.*aria-current/);
-  assert.match(css, /profile-toc-mobile\{[^}]*position:sticky/);
-  assert.match(css, /profile-table.*min-width:48rem/);
-  assert.match(css, /profile-table.*white-space:nowrap/);
-  assert.match(css, /Source Sans Pro/);
+  assert.match(css, /profile-toc-mobile\s*\{[^}]*position:\s*sticky/);
+  assert.match(css, /profile-table table\s*\{[^}]*min-width:\s*48rem/);
+  assert.match(css, /profile-table[\s\S]*white-space:\s*nowrap/);
+  assert.match(css, /font-family: Inter/);
+  assert.match(css, /font-family: "IBM Plex Mono"/);
 });
 
 test('all local links, assets and fragments resolve in the static build', () => {
@@ -142,9 +181,9 @@ test('all local links, assets and fragments resolve in the static build', () => 
   }
 });
 
-test('shared project switcher and public project status remain consistent', () => {
+test('shared portfolio navigation and public project status remain consistent', () => {
   const html = read('index.html');
-  const menu = html.match(/workspace-switcher[\s\S]*?<div class="language-menu">([\s\S]*?)<\/div>/)?.[1] ?? '';
+  const menu = html.match(/<nav class="portfolio-navigation"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? '';
   const links = [...menu.matchAll(/href="([^"]+)"/g)].map(match => match[1] === '/' ? 'https://apt.hecavex.com/' : match[1]);
   assert.deepEqual(links, [
     'https://hecavex.com/en/research/',
@@ -153,7 +192,7 @@ test('shared project switcher and public project status remain consistent', () =
     'https://labs.hecavex.com/',
     'https://labs.hecavex.com/data/'
   ]);
-  assert.match(menu, /aria-current="true"><span>APT Notes<\/span>/);
+  assert.match(menu, /aria-current="page"[^>]*>APT Notes<\/a>/);
 
   const about = read('about/index.html');
   for (const field of ['Purpose', 'Audience', 'Owner', 'Maintenance', 'Last meaningful update', 'Security and corrections']) {
@@ -167,6 +206,11 @@ test('shared project switcher and public project status remain consistent', () =
   const licence = read('licence/index.html');
   assert.match(licence, /Creative Commons Attribution 4\.0 International/);
   assert.match(licence, /does not relicense source publications/i);
+  assert.match(licence, /href="\/THIRD_PARTY_NOTICES\.txt"/);
+  const thirdPartyNotices = read('THIRD_PARTY_NOTICES.txt');
+  assert.match(thirdPartyNotices, /Copyright \(c\) Pagefind/);
+  assert.match(thirdPartyNotices, /Copyright \(c\) Microsoft Corporation/);
+  assert.match(thirdPartyNotices, /MIT License/g);
   const actorApi = JSON.parse(read('api/actors.json'));
   assert.equal(actorApi.licence, 'CC-BY-4.0');
   assert.equal(actorApi.licence_url, 'https://apt.hecavex.com/licence/');

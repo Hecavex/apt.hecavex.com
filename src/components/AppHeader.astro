@@ -1,161 +1,111 @@
 ---
 const path = Astro.url.pathname;
-const navigation = [
-  { name: 'Overview', href: '/', icon: 'fa-house' },
-  { name: 'Actors', href: '/actors/', icon: 'fa-user-group' },
-  { name: 'Campaigns', href: '/campaigns/', icon: 'fa-bullseye' },
-  { name: 'Malware', href: '/malware/', icon: 'fa-bug' },
-  { name: 'Tools', href: '/tools/', icon: 'fa-hammer' },
-  { name: 'Techniques', href: '/techniques/', icon: 'fa-diagram-project' },
-  { name: 'Sources', href: '/sources/', icon: 'fa-book' },
-  { name: 'Updates', href: '/updates/', icon: 'fa-clock-rotate-left' },
-  { name: 'About', href: '/about/', icon: 'fa-circle-info' }
-];
-const active = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
-const current = navigation.find(item => active(item.href))?.name ?? 'APT Notes';
----
-<aside class="sidebar" id="site-nav">
-  <button class="drawer-close" type="button" aria-label="Close navigation menu"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-  <header class="sidebar-profile">
-    <a class="sidebar-mark" href="https://hecavex.com/en/" aria-label="HECAVEX home"><img src="/brand/hecavex-mark.svg" alt="" width="72" height="72" /></a>
-    <a class="site-title" href="https://hecavex.com/en/">HECAVEX</a>
-    <p class="site-subtitle">Cyber Threat Intelligence &amp; Digital Investigations</p>
-    <details class="language-switcher workspace-switcher">
-      <summary aria-label="Switch HECAVEX project">
-        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-        <span class="language-label">Project</span>
-        <strong>APT Notes</strong>
-        <i class="fa-solid fa-chevron-down language-chevron" aria-hidden="true"></i>
-      </summary>
-      <div class="language-menu">
-        <a href="https://hecavex.com/en/research/"><span>Research</span><small>REPORTS</small></a>
-        <a href="https://radar.hecavex.com/"><span>Radar</span><small>PHISH</small></a>
-        <a href="/" aria-current="true"><span>APT Notes</span><small>TI</small></a>
-        <a href="https://labs.hecavex.com/"><span>Labs</span><small>TOOLS</small></a>
-        <a href="https://labs.hecavex.com/data/"><span>Data</span><small>JSON</small></a>
-      </div>
-    </details>
-    <details class="language-switcher">
-      <summary aria-label="Language: English">
-        <i class="fa-solid fa-globe" aria-hidden="true"></i>
-        <span class="language-label">Language</span>
-        <strong>English</strong>
-        <i class="fa-solid fa-chevron-down language-chevron" aria-hidden="true"></i>
-      </summary>
-      <div class="language-menu">
-        <a href="/" lang="en" hreflang="en" aria-current="page"><span>English</span><small>EN</small></a>
-        <a href="https://hecavex.com/lt/" lang="lt" hreflang="lt"><span>Lietuvių</span><small>LT</small></a>
-      </div>
-    </details>
-  </header>
-  <nav aria-label="Primary navigation">
-    <ul>
-      {navigation.map(item => <li><a href={item.href} aria-current={active(item.href) ? 'page' : undefined}><i class={`fa-solid ${item.icon} fa-fw`} aria-hidden="true"></i><span>{item.name}</span></a></li>)}
-    </ul>
-    <a class="external" href="https://hecavex.com/en/research/"><i class="fa-solid fa-arrow-up-right-from-square fa-fw" aria-hidden="true"></i><span>HECAVEX RESEARCH</span></a>
-    <a class="external external-secondary" href="https://labs.hecavex.com/"><i class="fa-solid fa-flask fa-fw" aria-hidden="true"></i><span>HECAVEX LABS</span></a>
-    <a class="external external-secondary" href="https://radar.hecavex.com/"><i class="fa-solid fa-satellite-dish fa-fw" aria-hidden="true"></i><span>HECAVEX RADAR</span></a>
-  </nav>
-  <div class="sidebar-bottom">
-    <button class="icon-button theme-toggle" type="button" aria-label="Change colour theme" title="Theme: system"><i class="fa-regular fa-moon" aria-hidden="true"></i><span class="theme-label">Theme</span></button>
-    <a class="icon-button" href="/feed.xml" aria-label="APT Notes feed"><i class="fa-solid fa-rss" aria-hidden="true"></i><span>RSS</span></a>
-  </div>
-</aside>
-<button class="sidebar-backdrop" type="button" aria-label="Close navigation menu" hidden></button>
 
-<header class="topbar-wrapper">
-  <div class="topbar">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <span><a href="/">Home</a></span>
-      {path !== '/' && <span>{current}</span>}
+const productNavigation = [
+  { name: 'Overview', href: '/' },
+  { name: 'Actors', href: '/actors/' },
+  { name: 'Campaigns', href: '/campaigns/' },
+  { name: 'Malware', href: '/malware/' },
+  { name: 'Tools', href: '/tools/' },
+  { name: 'Techniques', href: '/techniques/' },
+  { name: 'Sources', href: '/sources/' },
+  { name: 'Updates', href: '/updates/' },
+  { name: 'About', href: '/about/' }
+];
+
+const portfolioNavigation = [
+  { name: 'Research', href: 'https://hecavex.com/en/research/' },
+  { name: 'Radar', href: 'https://radar.hecavex.com/' },
+  { name: 'APT Notes', href: '/', current: true },
+  { name: 'Labs', href: 'https://labs.hecavex.com/' },
+  { name: 'Data', href: 'https://labs.hecavex.com/data/' }
+];
+
+const active = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="network-bar">
+    <a class="brand" href="/" aria-label="APT Notes home">
+      <img src="/brand/hecavex-mark.svg" alt="" width="42" height="42" />
+      <span class="brand-copy">
+        <strong>HECAVEX</strong>
+        <small>APT Notes / intelligence catalogue</small>
+      </span>
+    </a>
+
+    <nav class="portfolio-navigation" aria-label="HECAVEX projects">
+      {portfolioNavigation.map((item) => (
+        <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.name}</a>
+      ))}
     </nav>
-    <button class="topbar-button menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="site-nav" aria-expanded="false"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></button>
-    <div class="topbar-title">HECAVEX</div>
-    <details class="topbar-language">
-      <summary aria-label="Language: English (EN)"><i class="fa-solid fa-globe" aria-hidden="true"></i><strong>EN</strong><i class="fa-solid fa-chevron-down language-chevron" aria-hidden="true"></i></summary>
-      <div class="language-menu"><a href="/" aria-current="page"><span>English</span><small>EN</small></a><a href="https://hecavex.com/lt/"><span>Lietuvių</span><small>LT</small></a></div>
+
+    <details class="mobile-navigation" data-mobile-navigation>
+      <summary aria-label="Open navigation menu">
+        <svg class="menu-open-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        <svg class="menu-close-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        <span>Menu</span>
+      </summary>
+      <div class="mobile-navigation-panel">
+        <nav class="mobile-product-navigation" aria-label="APT Notes sections">
+          <span class="navigation-label">APT Notes</span>
+          {productNavigation.map((item) => (
+            <a href={item.href} aria-current={active(item.href) ? 'page' : undefined}>{item.name}</a>
+          ))}
+          <a href="/search/">Search</a>
+        </nav>
+        <nav class="mobile-portfolio-navigation" aria-label="HECAVEX projects">
+          <span class="navigation-label">HECAVEX network</span>
+          {portfolioNavigation.map((item) => (
+            <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.name}</a>
+          ))}
+        </nav>
+      </div>
     </details>
-    <button class="topbar-button search-toggle" type="button" aria-label="Search"><i class="fa-solid fa-search fa-fw" aria-hidden="true"></i></button>
-    <form class="global-search" action="/search/" role="search">
+  </div>
+
+  <div class="product-bar">
+    <a class="product-identity" href="/">
+      <strong>APT Notes</strong>
+      <span>Source-backed threat actor research</span>
+    </a>
+    <nav class="product-navigation" aria-label="APT Notes sections">
+      {productNavigation.map((item) => (
+        <a href={item.href} aria-current={active(item.href) ? 'page' : undefined}>{item.name}</a>
+      ))}
+    </nav>
+    <form class="header-search" action="/search/" role="search">
       <label class="sr-only" for="global-q">Search APT Notes</label>
-      <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
-      <input id="global-q" name="q" type="search" placeholder="Search APT Notes" autocomplete="off" />
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
+      <input id="global-q" name="q" type="search" placeholder="Search" autocomplete="off" />
     </form>
-    <button class="search-cancel" type="button">Cancel</button>
   </div>
 </header>
 
-<script is:inline>
-  (() => {
-    const root = document.documentElement;
-    const button = document.querySelector('.theme-toggle');
-    const icon = button?.querySelector('i');
-    const modes = ['system', 'dark', 'light'];
-    let mode = 'system';
-    try { mode = localStorage.getItem('apt-notes-theme') || 'system'; } catch {}
-    const apply = (next) => {
-      mode = modes.includes(next) ? next : 'system';
-      if (mode === 'system') root.removeAttribute('data-theme'); else root.dataset.theme = mode;
-      if (button) button.title = `Theme: ${mode}`;
-      if (icon) icon.className = mode === 'light' ? 'fa-regular fa-sun' : mode === 'dark' ? 'fa-regular fa-moon' : 'fa-solid fa-display';
-      try { localStorage.setItem('apt-notes-theme', mode); } catch {}
-    };
-    apply(mode);
-    button?.addEventListener('click', () => apply(modes[(modes.indexOf(mode) + 1) % modes.length]));
-    const menu = document.querySelector('.menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    const backdrop = document.querySelector('.sidebar-backdrop');
-    const drawerClose = document.querySelector('.drawer-close');
-    const mobileNavigation = window.matchMedia('(max-width: 849px)');
-    const background = () => [document.querySelector('.topbar-wrapper'), document.querySelector('main'), document.querySelector('footer'), document.querySelector('.skip-link')].filter(Boolean);
-    let returnFocus = null;
-    const focusable = () => [...(sidebar?.querySelectorAll('a[href], button:not([disabled]), summary, input, select, textarea, [tabindex]:not([tabindex="-1"])') ?? [])].filter((element) => !element.hidden);
-    const setDrawer = (open, restoreFocus = true) => {
-      const mobile = mobileNavigation.matches;
-      const expanded = mobile && open;
-      sidebar?.classList.toggle('is-open', expanded);
-      menu?.setAttribute('aria-expanded', String(expanded));
-      menu?.setAttribute('aria-label', expanded ? 'Close navigation menu' : 'Open navigation menu');
-      if (sidebar) {
-        sidebar.inert = mobile && !expanded;
-        if (mobile && !expanded) sidebar.setAttribute('aria-hidden', 'true');
-        else sidebar.removeAttribute('aria-hidden');
-      }
-      if (backdrop) backdrop.hidden = !expanded;
-      background().forEach((element) => { element.inert = expanded; });
-      document.body.classList.toggle('drawer-open', expanded);
-      if (expanded) {
-        returnFocus = document.activeElement;
-        focusable()[0]?.focus({ preventScroll: true });
-      } else if (restoreFocus && returnFocus instanceof HTMLElement) {
-        returnFocus.focus({ preventScroll: true });
-        returnFocus = null;
-      }
-    };
-    menu?.addEventListener('click', () => setDrawer(menu.getAttribute('aria-expanded') !== 'true'));
-    drawerClose?.addEventListener('click', () => setDrawer(false));
-    backdrop?.addEventListener('click', () => setDrawer(false));
-    document.addEventListener('keydown', (event) => {
-      if (!mobileNavigation.matches || menu?.getAttribute('aria-expanded') !== 'true') return;
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        setDrawer(false);
-        return;
-      }
-      if (event.key !== 'Tab') return;
-      const items = focusable();
-      const first = items[0];
-      const last = items.at(-1);
-      if (!first || !last) return;
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+<script>
+  const initialiseNavigation = () => {
+    document.querySelectorAll<HTMLDetailsElement>('[data-mobile-navigation]').forEach((navigation) => {
+      if (navigation.dataset.ready === 'true') return;
+      navigation.dataset.ready = 'true';
+      const summary = navigation.querySelector<HTMLElement>('summary');
+      const updateLabel = () => summary?.setAttribute('aria-label', navigation.open ? 'Close navigation menu' : 'Open navigation menu');
+
+      navigation.addEventListener('toggle', updateLabel);
+      navigation.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => link.addEventListener('click', () => {
+        navigation.open = false;
+      }));
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !navigation.open) return;
+        navigation.open = false;
+        summary?.focus({ preventScroll: true });
+      });
+      updateLabel();
     });
-    mobileNavigation.addEventListener('change', () => setDrawer(false, false));
-    setDrawer(false, false);
-    const searchToggle = document.querySelector('.search-toggle');
-    const searchCancel = document.querySelector('.search-cancel');
-    const topbar = document.querySelector('.topbar');
-    searchToggle?.addEventListener('click', () => { topbar?.classList.add('search-open'); document.querySelector('#global-q')?.focus(); });
-    searchCancel?.addEventListener('click', () => topbar?.classList.remove('search-open'));
-  })();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialiseNavigation, { once: true });
+  } else {
+    initialiseNavigation();
+  }
 </script>

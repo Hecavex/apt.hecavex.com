@@ -15,7 +15,7 @@ npm ci
 npm run dev
 ```
 
-The site is built with Astro. Pagefind creates the local search index, so search queries are not sent to a hosted search provider.
+The site is built with Astro and an original HECAVEX interface. It has no third-party theme or UI framework dependency. The shared Cold Signal system uses self-hosted Inter and IBM Plex Mono files, and Pagefind creates the local search index so search queries are not sent to a hosted provider.
 
 ## Editing records
 
@@ -53,7 +53,7 @@ python scripts/test_responsive.py
 
 The repository deploys through `.github/workflows/pages.yml`. GitHub Pages must use **GitHub Actions** as its source, and `public/CNAME` must remain `apt.hecavex.com`.
 
-Public API reuse is governed by the human-readable [APT Notes data licence](https://apt.hecavex.com/licence/). It licenses original HECAVEX fields under CC BY 4.0 without relicensing cited publications, trademarks or third-party framework material.
+Public API reuse is governed by the human-readable [APT Notes data licence](https://apt.hecavex.com/licence/). It licenses original HECAVEX fields under CC BY 4.0 without relicensing cited publications, trademarks or third-party framework material. Original website software is MIT-licensed in [LICENSE](LICENSE); the deployed Pagefind runtime is accompanied by [third-party notices](public/THIRD_PARTY_NOTICES.txt).
 
 Generated social cards are written to `public/og/generated/` during the build and are not committed.
 
