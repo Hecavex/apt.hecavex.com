@@ -67,7 +67,7 @@ const wrap = (value, width = 28, lines = 3) => {
 };
 
 const grid = '<path d="M760 86h440M760 166h440M760 246h440M760 326h440M760 406h440M840 0v630M920 0v630M1000 0v630M1080 0v630M1160 0v630" stroke="#1e3440"/>';
-const mark = '<path d="M94 82V138M146 82V138M94 82L120 110L146 82M94 138L120 110L146 138" stroke="#ff6b6b" stroke-width="7" fill="none"/><circle cx="120" cy="110" r="5" fill="#f2f8fb"/>';
+const mark = '<path d="M94 82V138M146 82V138M94 82L120 110L146 82M94 138L120 110L146 138" stroke="#44c7dc" stroke-width="7" fill="none"/><circle cx="120" cy="110" r="5" fill="#f2f8fb"/>';
 
 const defaultSvg = svgDocument([
   '<rect width="1200" height="630" fill="#05080b"/>',

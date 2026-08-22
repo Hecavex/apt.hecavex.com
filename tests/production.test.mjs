@@ -110,6 +110,20 @@ test('critical colour roles meet WCAG AA contrast', () => {
   assert.match(css, /background: var\(--cyan\)/);
 });
 
+test('identity assets use the shared Cold Signal mark colours', () => {
+  const files = [
+    'public/brand/hecavex-mark.svg',
+    'public/favicons/favicon.svg',
+    'public/og/default.svg'
+  ];
+  for (const file of files) {
+    const svg = fs.readFileSync(file, 'utf8').toLowerCase();
+    assert.match(svg, /#44c7dc/, `${file} must use the shared cyan identity role`);
+    assert.match(svg, /#f2f8fb/, `${file} must use the shared white centre role`);
+    assert.doesNotMatch(svg, /#ff6b6b/, `${file} must reserve danger red for status UI`);
+  }
+});
+
 test('print output replaces dark surfaces with a paper-safe palette', () => {
   const css = fs.readFileSync('src/styles/global.css', 'utf8');
   const print = css.match(/@media print\s*\{([\s\S]+)\n\}\s*$/)?.[1] ?? '';

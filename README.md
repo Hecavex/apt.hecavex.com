@@ -39,7 +39,7 @@ Drafts do not appear in routes, counts, search, feeds or sitemaps.
 npm run verify
 ```
 
-That command validates the content model, generates social cards, checks Astro, builds the site and search index, audits metadata and accessibility, and tests production links. The same command runs before GitHub Pages deployment.
+That command validates the content model, generates social cards, checks Astro, builds the site and search index, audits metadata, accessibility and output-size budgets, and tests production links. The same command runs before GitHub Pages deployment. Performance limits are defined in `scripts/audit-performance.mjs`; they cover individual HTML, CSS, JavaScript, JSON, font and image files plus each document's directly referenced CSS/JavaScript shell. The check uses deterministic raw and gzip sizes rather than a network-dependent score, and a limit should only be raised after reviewing the affected asset.
 
 Deployment also runs keyboard-navigation, focus, scroll-containment and overflow checks at 320, 360, 390, 768 and 1024 pixels. A successful run retains `test-results/responsive.json` as a 30-day workflow artifact. To reproduce the checks locally after `npm run build`:
 
