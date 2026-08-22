@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "packageManager": "npm@10.9.2",
   "scripts": {
     "dev": "astro dev",
     "build": "npm run validate && npm run build:og && astro check && astro build && pagefind --site dist",

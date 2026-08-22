@@ -8,14 +8,14 @@ It is not an attribution oracle. Vendor names overlap, governments use different
 
 ## Run it locally
 
-Node.js 22 or newer is required.
+Node.js 22.13 or newer and npm 10 are required.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-The site is built with Astro and an original HECAVEX interface. It has no third-party theme or UI framework dependency. The shared Cold Signal system uses self-hosted Inter and IBM Plex Mono files, and Pagefind creates the local search index so search queries are not sent to a hosted provider.
+The site is built with Astro and an original HECAVEX interface. It has no third-party theme or UI framework dependency. Its two-row masthead, compact type scale, 94 rem content frame, responsive menu and portfolio footer implement the same rendered shell as HECAVEX Research, Radar and Labs. The shared Cold Signal system uses self-hosted Inter and IBM Plex Mono files, and Pagefind creates the local search index so search queries are not sent to a hosted provider.
 
 ## Editing records
 

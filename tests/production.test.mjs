@@ -70,6 +70,8 @@ test('English-only Cold Signal document and controls are accessible', () => {
   assert.match(html, /Skip to content/);
   assert.match(html, /aria-label="Open navigation menu"/);
   assert.match(html, /class="site-header"/);
+  assert.match(html, /data-portfolio-shell="v1"/);
+  assert.match(html, /class="brand" href="https:\/\/hecavex\.com\/en\/"/);
   assert.match(html, /class="portfolio-navigation"/);
   assert.match(html, /class="product-navigation"/);
   assert.match(html, /data-mobile-navigation/);
@@ -80,6 +82,8 @@ test('English-only Cold Signal document and controls are accessible', () => {
   assert.match(css, /--cyan: #44c7dc/);
   assert.match(css, /--green: #a2da68/);
   assert.match(css, /--danger: #ff6b6b/);
+  assert.match(css, /--header-offset: 7\.25rem/);
+  assert.match(css, /font-size: clamp\(2\.5rem, 5vw, 4rem\)/);
   assert.doesNotMatch(`${html}\n${css}`, /data-theme=/i);
   const actors = read('actors/index.html');
   assert.match(actors, /name="region"/);

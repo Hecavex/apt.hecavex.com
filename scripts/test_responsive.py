@@ -187,6 +187,9 @@ try:
                     assert navigation.evaluate("element => element.open"), f"mobile menu did not open: {route} at {width}px"
                     panel = navigation.locator(".mobile-navigation-panel")
                     assert panel.is_visible(), f"navigation panel hidden after opening: {route} at {width}px"
+                    assert abs(menu.bounding_box()["height"] - 44) <= 1, f"mobile menu trigger height drifted: {route} at {width}px"
+                    if width == 320:
+                        assert abs(panel.bounding_box()["width"] - 288) <= 1, f"mobile menu panel width drifted: {route} at {width}px"
                     links = navigation.locator(".mobile-portfolio-navigation a").evaluate_all("links => links.map(link => link.href)")
                     links = tuple(normalise_project_link(value) for value in links)
                     assert links == PROJECT_LINKS, f"project navigation differs: {route} at {width}px: {links}"
@@ -201,6 +204,10 @@ try:
                     assert menu.evaluate("element => document.activeElement === element"), f"menu focus was not restored: {route} at {width}px"
                     assert menu.evaluate(FOCUS_INDICATOR_AUDIT), f"restored menu focus is invisible: {route} at {width}px"
                 else:
+                    header = page.locator('.site-header[data-portfolio-shell="v1"]')
+                    assert abs(header.locator(".network-bar").bounding_box()["height"] - 64) <= 1, f"network row height drifted: {route} at {width}px"
+                    assert abs(header.locator(".product-bar").bounding_box()["height"] - 52) <= 1, f"product row height drifted: {route} at {width}px"
+                    assert abs(header.bounding_box()["height"] - 116) <= 1, f"masthead height drifted: {route} at {width}px"
                     project_navigation = page.locator(".portfolio-navigation")
                     assert project_navigation.is_visible(), f"desktop portfolio navigation missing: {route} at {width}px"
                     links = project_navigation.locator("a").evaluate_all("links => links.map(link => link.href)")
@@ -208,6 +215,8 @@ try:
                     assert links == PROJECT_LINKS, f"desktop project navigation differs: {route} at {width}px: {links}"
                     assert project_navigation.locator('a[aria-current="page"]').count() == 1, f"desktop project navigation must identify one current project: {route} at {width}px"
                     assert_focus_visible(project_navigation.locator("a").first, f"desktop project link on {route} at {width}px")
+                    if route == "/":
+                        assert page.locator(".brand-hero").bounding_box()["height"] <= 430, f"home hero exceeds 430px at {width}px"
 
                 results.append({"route": route, "width": width, "overflow": False, "scroll_containment": "pass", "keyboard_navigation": "pass", "accessibility_names": "pass", "focus": "pass"})
 
