@@ -4,7 +4,15 @@ import * as fontkit from 'fontkit';
 import sharp from 'sharp';
 import YAML from 'yaml';
 
-const collections = ['actors', 'campaigns', 'malware', 'tools', 'techniques', 'sources'];
+const collectionMetadata = {
+  actors: { singular: 'actor', label: 'THREAT ACTOR PROFILE' },
+  campaigns: { singular: 'campaign', label: 'CAMPAIGN' },
+  malware: { singular: 'malware', label: 'MALWARE' },
+  tools: { singular: 'tool', label: 'TOOL' },
+  techniques: { singular: 'technique', label: 'TECHNIQUE' },
+  sources: { singular: 'source', label: 'SOURCE' }
+};
+const collections = Object.keys(collectionMetadata);
 const output = path.resolve('public/og/generated');
 const defaultSvgPath = path.resolve('public/og/default.svg');
 const defaultPngPath = path.resolve('public/og/default.png');
@@ -78,14 +86,14 @@ fs.writeFileSync(defaultSvgPath, `${defaultSvg}\n`, 'utf8');
 await sharp(Buffer.from(defaultSvg)).png({ quality: 92 }).toFile(defaultPngPath);
 
 for (const collection of collections) {
+  const { singular, label } = collectionMetadata[collection];
   const directory = path.resolve('src/content', collection);
   for (const name of fs.readdirSync(directory).filter(file => /\.mdx?$/.test(file))) {
     const data = frontMatter(path.join(directory, name));
     if (!data || data.draft) continue;
     const title = data.name || data.title;
-    const label = collection === 'actors' ? 'THREAT ACTOR PROFILE' : collection.slice(0, -1).replace('-', ' ').toUpperCase();
     const titleLines = wrap(title).map((line, index) => vectorText(line, { x: 92, y: 302 + index * 72, font: fonts.interBold, size: 62, fill: '#f2f8fb' })).join('');
-    const summary = wrap(data.summary || `${collection.slice(0, -1)} intelligence record`, 66, 2).map((line, index) => vectorText(line, { x: 92, y: 510 + index * 32, font: fonts.interRegular, size: 23, fill: '#b6c6cf' })).join('');
+    const summary = wrap(data.summary || `${singular} intelligence record`, 66, 2).map((line, index) => vectorText(line, { x: 92, y: 510 + index * 32, font: fonts.interRegular, size: 23, fill: '#b6c6cf' })).join('');
     const svg = svgDocument([
       '<rect width="1200" height="630" fill="#05080b"/>',
       '<path d="M760 0H1200V630H910L760 470Z" fill="#0b1117"/>',
@@ -99,7 +107,7 @@ for (const collection of collections) {
       summary,
       vectorText('apt.hecavex.com', { x: 1008, y: 556, font: fonts.monoRegular, size: 16, fill: '#a2da68' })
     ].join(''));
-    await sharp(Buffer.from(svg)).png({ quality: 92 }).toFile(path.join(output, `${collection.slice(0, -1)}-${data.slug}.png`));
+    await sharp(Buffer.from(svg)).png({ quality: 92 }).toFile(path.join(output, `${singular}-${data.slug}.png`));
   }
 }
 

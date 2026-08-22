@@ -46,6 +46,23 @@ test('production metadata is canonical', () => {
   assert.match(html, /og:image:alt/);
 });
 
+test('every internal Open Graph image resolves in the production build', () => {
+  const htmlFiles = files.filter(file => file.endsWith('.html'));
+  for (const file of htmlFiles) {
+    const html = fs.readFileSync(file, 'utf8');
+    for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
+      const tag = match[0];
+      if (!/\bproperty=(["'])og:image\1/i.test(tag)) continue;
+      const content = tag.match(/\bcontent=(["'])(.*?)\1/i)?.[2];
+      assert.ok(content, `${path.relative(root, file)} has an og:image without content`);
+      const image = new URL(content, 'https://apt.hecavex.com/');
+      if (image.hostname !== 'apt.hecavex.com') continue;
+      const target = path.join(root, decodeURIComponent(image.pathname).replace(/^\/+/, ''));
+      assert.ok(fs.existsSync(target), `${path.relative(root, file)} -> ${content}`);
+    }
+  }
+});
+
 test('English-only Cold Signal document and controls are accessible', () => {
   const html = read('index.html');
   const css = fs.readFileSync('src/styles/global.css', 'utf8');

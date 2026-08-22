@@ -2,6 +2,7 @@ node_modules/
 dist/
 .astro/
 .codex-tmp/
+.venv/
 .DS_Store
 *.log
 .env

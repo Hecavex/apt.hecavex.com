@@ -19,7 +19,7 @@ The site is built with Astro and an original HECAVEX interface. It has no third-
 
 ## Editing records
 
-Content lives in `src/content/` and is split into actors, campaigns, malware, tools, techniques, sources and updates. Start from a file in `templates/`.
+Content lives in `src/content/` and is split into actors, campaigns, malware, tools, techniques, sources and updates. Start from a file in `templates/`, then follow the evidence and attribution rules in the [editorial guide](docs/EDITORIAL.md).
 
 Keep a new record as `draft: true` while working. Before publishing it:
 
