@@ -6,25 +6,33 @@ interface TocItem {
 
 interface Props {
   items: TocItem[];
+  contextLabel?: string;
+  title?: string;
+  ariaLabel?: string;
 }
 
-const { items } = Astro.props;
+const {
+  items,
+  contextLabel = 'On this profile',
+  title = 'Profile contents',
+  ariaLabel = contextLabel
+} = Astro.props;
 ---
 
 <details class="profile-toc-mobile" data-profile-toc>
   <summary>
-    <span>On this profile</span>
-    <strong data-profile-toc-current>{items[0]?.text ?? 'Profile contents'}</strong>
+    <span>{contextLabel}</span>
+    <strong data-profile-toc-current>{items[0]?.text ?? title}</strong>
   </summary>
-  <nav class="profile-toc-mobile-list" aria-label="On this profile">
+  <nav class="profile-toc-mobile-list" aria-label={ariaLabel}>
     {items.map((item, index) => (
       <a href={`#${item.slug}`} aria-current={index === 0 ? 'location' : undefined}>{item.text}</a>
     ))}
   </nav>
 </details>
 
-<nav class="profile-toc" aria-label="On this profile" data-profile-toc>
-  <h2 class="profile-toc-title">Profile contents</h2>
+<nav class="profile-toc" aria-label={ariaLabel} data-profile-toc>
+  <h2 class="profile-toc-title">{title}</h2>
   <div class="profile-toc-list">
     {items.map((item, index) => (
       <a href={`#${item.slug}`} aria-current={index === 0 ? 'location' : undefined}>{item.text}</a>

@@ -186,6 +186,17 @@ test('actor profiles keep the readable layout, resilient table and scroll-aware 
   assert.match(css, /font-family: "IBM Plex Mono"/);
 });
 
+test('source records fill their metadata matrix without empty grid tracks', () => {
+  const html = read('sources/aivd-mivd-laundry-bear-2025/index.html');
+  const css = fs.readFileSync('src/styles/global.css', 'utf8');
+
+  assert.match(html, /class="fact-grid source-facts" data-source-facts/);
+  assert.match(html, /class="fact fact--language"/);
+  assert.match(html, /class="fact fact--authors"/);
+  assert.match(css, /source-facts \.fact--authors\s*\{[^}]*grid-column:\s*span 3/);
+  assert.match(css, /@media \(max-width: 849px\)[\s\S]*source-facts \.fact--authors\s*\{[^}]*grid-column:\s*auto/);
+});
+
 test('all local links, assets and fragments resolve in the static build', () => {
   const htmlFiles = files.filter(file => file.endsWith('.html'));
   for (const file of htmlFiles) {
@@ -237,6 +248,14 @@ test('shared portfolio navigation and public project status remain consistent', 
   assert.match(about, /no monitoring or response SLA/i);
   assert.match(about, /https:\/\/labs\.hecavex\.com\/data\//);
   assert.match(about, /href="\/licence\/"/);
+  assert.match(about, /class="shell about-shell"/);
+  assert.match(about, /class="about-head"/);
+  assert.match(about, /class="stat-grid about-stats"/);
+  assert.match(about, /aria-label="About APT Notes sections"/);
+  for (const fragment of ['purpose', 'coverage-roadmap', 'public-records', 'boundaries', 'editorial-approach']) {
+    assert.match(about, new RegExp(`href="#${fragment}"`));
+    assert.match(about, new RegExp(`id="${fragment}"`));
+  }
 
   const licence = read('licence/index.html');
   assert.match(licence, /Creative Commons Attribution 4\.0 International/);

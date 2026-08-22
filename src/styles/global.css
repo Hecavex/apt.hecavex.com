@@ -1279,6 +1279,10 @@ a.panel:hover {
   line-height: 1.45;
 }
 
+.source-facts .fact--authors {
+  grid-column: span 3;
+}
+
 .profile-release {
   display: flex;
   flex-wrap: wrap;
@@ -1431,6 +1435,81 @@ a.panel:hover {
   color: var(--text-soft);
   font-size: 0.86rem;
   line-height: 1.5;
+}
+
+.about-shell {
+  max-width: 86rem;
+  padding-top: clamp(3rem, 6vw, 5rem);
+}
+
+.about-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(28rem, 0.95fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.about-summary h1 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2.6rem, 4.4vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.052em;
+}
+
+.about-summary .lead {
+  margin: 1.25rem 0 1.35rem;
+}
+
+.about-summary > p:not(.eyebrow, .lead) {
+  max-width: 62ch;
+  color: var(--text-soft);
+  font-size: 0.93rem;
+  line-height: 1.72;
+}
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 1.5rem;
+}
+
+.about-actions > a:not(.button) {
+  display: inline-flex;
+  min-height: 2.8rem;
+  align-items: center;
+  font: 600 0.68rem var(--mono);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.about-head .project-facts {
+  margin: 0;
+}
+
+.about-stats {
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.about-grid {
+  margin-top: clamp(2.75rem, 5vw, 4.5rem);
+}
+
+.about-body > section:first-child > h2 {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.about-body > section + section {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.about-next {
+  margin-top: clamp(3.5rem, 7vw, 6rem);
 }
 
 .table-wrap {
@@ -1842,6 +1921,11 @@ tbody tr:hover {
     display: block;
   }
 
+  .about-head {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
   .profile-toc {
     display: none;
   }
@@ -1921,6 +2005,10 @@ tbody tr:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .source-facts .fact--authors {
+    grid-column: auto;
+  }
+
   .assessment-strip {
     grid-template-columns: 1fr;
   }
@@ -1959,6 +2047,11 @@ tbody tr:hover {
     display: block;
     min-height: 0;
     padding: 2.75rem 0 2.5rem;
+  }
+
+  .about-actions {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .brand-hero::before {

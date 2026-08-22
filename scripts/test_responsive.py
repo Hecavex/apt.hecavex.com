@@ -15,7 +15,7 @@ PUBLIC_ROOT = ROOT / "dist"
 RESULTS = ROOT / "test-results" / "responsive.json"
 WIDTHS = (320, 360, 390, 768, 1024, 1440)
 HEIGHT = 900
-ROUTES = ("/", "/about/", "/about/methodology/", "/actors/", "/actors/apt28/", "/search/", "/licence/", "/security/")
+ROUTES = ("/", "/about/", "/about/methodology/", "/actors/", "/actors/apt28/", "/sources/aivd-mivd-laundry-bear-2025/", "/search/", "/licence/", "/security/")
 PROJECT_LINKS = (
     "https://hecavex.com/en/research/",
     "https://radar.hecavex.com/",
@@ -178,6 +178,34 @@ try:
                     assert page.locator(".profile-toc").is_visible(), f"desktop profile contents missing: {route} at {width}px"
                     assert not page.locator(".profile-toc-mobile").is_visible(), f"mobile profile contents should be hidden on desktop: {route} at {width}px"
 
+                if route == "/about/":
+                    summary_box = page.locator(".about-summary").bounding_box()
+                    facts_box = page.locator(".about-head .project-facts").bounding_box()
+                    assert summary_box and facts_box, f"about introduction or status context is missing: {route} at {width}px"
+                    assert page.locator(".about-stats .stat").count() == 6, f"about catalogue statistics are incomplete: {route} at {width}px"
+                    assert page.locator('.profile-toc a[href="#purpose"]').count() == 1, f"about contents omit Purpose: {route} at {width}px"
+                    if width <= 849:
+                        assert page.locator(".profile-toc-mobile").is_visible(), f"mobile about contents missing: {route} at {width}px"
+                        assert not page.locator(".profile-toc").is_visible(), f"desktop about rail should be hidden on mobile: {route} at {width}px"
+                        assert facts_box["y"] > summary_box["y"], f"about context does not stack below its introduction: {route} at {width}px"
+                    else:
+                        assert page.locator(".profile-toc").is_visible(), f"desktop about rail missing: {route} at {width}px"
+                        assert not page.locator(".profile-toc-mobile").is_visible(), f"mobile about contents should be hidden on desktop: {route} at {width}px"
+                        assert facts_box["x"] > summary_box["x"], f"about context does not occupy the right column: {route} at {width}px"
+
+                if route.startswith("/sources/"):
+                    facts = page.locator("[data-source-facts]")
+                    assert facts.locator(".fact").count() == 6, f"source metadata is incomplete: {route} at {width}px"
+                    language_box = facts.locator(".fact--language").bounding_box()
+                    authors_box = facts.locator(".fact--authors").bounding_box()
+                    grid_box = facts.bounding_box()
+                    assert language_box and authors_box and grid_box, f"source metadata is not rendered: {route} at {width}px"
+                    assert abs((authors_box["x"] + authors_box["width"]) - (grid_box["x"] + grid_box["width"] - 1)) <= 2, f"source metadata leaves a blank trailing track: {route} at {width}px"
+                    if width > 849:
+                        assert authors_box["width"] > language_box["width"] * 2.8, f"authors field does not span the remaining source tracks: {route} at {width}px"
+                    else:
+                        assert abs(authors_box["width"] - language_box["width"]) <= 2, f"source facts do not follow the responsive column count: {route} at {width}px"
+
                 if width <= 1160:
                     navigation = page.locator(".mobile-navigation")
                     menu = navigation.locator("summary")
@@ -244,6 +272,16 @@ try:
         assert mobile_toc.locator('a[href="#sources"]').is_visible(), "no-JavaScript mobile profile contents cannot be disclosed"
         assert mobile_toc.locator("a").count() >= 10, "no-JavaScript mobile profile contents are incomplete"
         no_javascript_results.append({"route": "/actors/apt28/", "native_disclosure": "pass", "fragment_links": mobile_toc.locator("a").count()})
+
+        page.goto(base_url + "/about/", wait_until="domcontentloaded")
+        mobile_toc = page.locator(".profile-toc-mobile")
+        mobile_toc.locator("summary").click()
+        assert mobile_toc.locator("a").count() == 5, "no-JavaScript About contents are incomplete"
+        purpose_link = mobile_toc.locator('a[href="#purpose"]')
+        assert purpose_link.is_visible(), "no-JavaScript About contents omit Purpose"
+        purpose_link.click()
+        assert page.evaluate("location.hash") == "#purpose", "no-JavaScript About contents did not navigate"
+        no_javascript_results.append({"route": "/about/", "native_disclosure": "pass", "fragment_links": mobile_toc.locator("a").count()})
         no_javascript.close()
 
         print_context = browser.new_context(viewport={"width": 1280, "height": HEIGHT})

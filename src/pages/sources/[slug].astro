@@ -15,7 +15,7 @@ const d = entry.data;
   <article class="shell narrow prose" data-pagefind-body data-pagefind-meta="type:Source">
     <p class="eyebrow">Normalized source record</p>
     <h1>{d.title}</h1>
-    <dl class="fact-grid"><div class="fact"><dt>Publisher</dt><dd>{d.publisher}</dd></div><div class="fact"><dt>Source type</dt><dd>{label(d.source_type)}</dd></div><div class="fact"><dt>Published</dt><dd>{formatDate(d.published_at)}</dd></div><div class="fact"><dt>Accessed</dt><dd>{formatDate(d.accessed_at)}</dd></div><div class="fact"><dt>Language</dt><dd>{d.language.toUpperCase()}</dd></div><div class="fact"><dt>Authors</dt><dd>{d.authors.join(', ') || 'Not stated'}</dd></div></dl>
+    <dl class="fact-grid source-facts" data-source-facts><div class="fact"><dt>Publisher</dt><dd>{d.publisher}</dd></div><div class="fact"><dt>Source type</dt><dd>{label(d.source_type)}</dd></div><div class="fact"><dt>Published</dt><dd>{formatDate(d.published_at)}</dd></div><div class="fact"><dt>Accessed</dt><dd>{formatDate(d.accessed_at)}</dd></div><div class="fact fact--language"><dt>Language</dt><dd>{d.language.toUpperCase()}</dd></div><div class="fact fact--authors"><dt>Authors</dt><dd>{d.authors.join(', ') || 'Not stated'}</dd></div></dl>
     <p><a class="button" href={d.url}>Open primary URL ↗</a></p>
     {d.archived_url && <p><a href={d.archived_url}>Archived copy ↗</a></p>}
     <Content />
