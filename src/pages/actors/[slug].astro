@@ -1,0 +1,200 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProfileToc from '../../components/ProfileToc.astro';
+import { publicEntries, bySlug, label, formatDate, reviewStatus } from '../../utils/content';
+
+export async function getStaticPaths() {
+  return (await getCollection('actors', ({ data }) => !data.draft)).map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const [sources, campaigns, malware, tools, techniques, updates] = await Promise.all(
+  ['sources', 'campaigns', 'malware', 'tools', 'techniques', 'updates'].map((name) => publicEntries(name as any))
+);
+const maps = {
+  sources: bySlug(sources as any),
+  campaigns: bySlug(campaigns as any),
+  malware: bySlug(malware as any),
+  tools: bySlug(tools as any),
+  techniques: bySlug(techniques as any),
+  updates: bySlug(updates as any)
+} as any;
+const d = entry.data;
+const freshness = reviewStatus(d.last_reviewed);
+
+const tocItems = [
+  ...headings.filter((heading: any) => heading.depth === 2).map((heading: any) => ({ slug: heading.slug, text: heading.text })),
+  ...(d.aliases.length > 0 ? [{ slug: 'naming-and-aliases', text: 'Naming and aliases' }] : []),
+  ...(d.operational_timeline.length > 0 ? [{ slug: 'operational-timeline', text: 'Operational timeline' }] : []),
+  ...(d.campaigns.length > 0 ? [{ slug: 'campaigns', text: 'Campaigns' }] : []),
+  ...(d.malware.length > 0 || d.tools.length > 0 ? [{ slug: 'capabilities', text: 'Malware and tooling' }] : []),
+  ...(d.attribution.length > 0 ? [{ slug: 'attribution-statements', text: 'Attribution statements' }] : []),
+  ...(d.techniques.length > 0 ? [{ slug: 'techniques', text: 'MITRE ATT&CK techniques' }] : []),
+  ...(d.vulnerabilities.length > 0 ? [{ slug: 'vulnerabilities', text: 'Vulnerabilities' }] : []),
+  ...(d.related_research.length > 0 ? [{ slug: 'related-research', text: 'Related research' }] : []),
+  { slug: 'sources', text: 'Sources' },
+  ...(d.updates.length > 0 ? [{ slug: 'change-history', text: 'Change history' }] : [])
+];
+---
+
+<BaseLayout title={`${d.name} | Actor Profile`} description={d.summary} type="ProfilePage" image={`/og/generated/actor-${d.slug}.png`} imageAlt={`${d.name} threat actor profile by APT Notes`}>
+  <article class="shell profile-shell" data-pagefind-body data-pagefind-meta="type:Actor">
+    <header class="profile-head">
+      <p class="eyebrow">Actor profile · <span class="mono">{d.external_identifiers.mitre_attack || d.id}</span></p>
+      <h1>{d.name}</h1>
+      <p class="lead">{d.summary}</p>
+      <p class="alias-line">Also tracked as: {d.aliases.slice(0, 6).map((alias: any) => alias.name).join(' · ') || 'No public aliases recorded'}</p>
+    </header>
+
+    <section class="assessment-strip" aria-labelledby="current-assessment-title">
+      <div>
+        <p class="eyebrow">Current assessment</p>
+        <h2 id="current-assessment-title">Active threat through {d.last_observed}</h2>
+        <p>{d.current_assessment}</p>
+      </div>
+      <dl>
+        <div><dt>Attributed operator</dt><dd>{d.parent_entities[0]?.name ?? 'Not recorded'}</dd></div>
+        <div><dt>Primary mission</dt><dd>{d.mission}</dd></div>
+      </dl>
+    </section>
+
+    <dl class="fact-grid">
+      {[
+        ['Actor type', d.actor_types.map(label).join(', ')],
+        ['Status', label(d.status)],
+        ['Suspected origin', d.suspected_origins.join(', ') || 'Unknown'],
+        ['Motivation', d.motivations.map(label).join(', ')],
+        ['Active since', d.active_since],
+        ['Last observed', d.last_observed || 'Not stated'],
+        ['Confidence', label(d.confidence)],
+        ['Last reviewed', formatDate(d.last_reviewed)]
+      ].map(([term, value]) => <div class="fact"><dt>{term}</dt><dd>{value}</dd></div>)}
+    </dl>
+
+    <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a>{['apt28', 'apt44'].includes(d.slug) && <a href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Interactive ATT&amp;CK evidence map ↗</a>}<a href="/about/methodology/">Review policy →</a></div>
+
+    <div class="profile-grid">
+      <ProfileToc items={tocItems} />
+
+      <div class="prose profile-body">
+        <Content />
+
+        {d.aliases.length > 0 && (
+          <section id="naming-and-aliases">
+            <h2>Naming and aliases</h2>
+            <p class="callout">{d.parent_entities[0]?.name ?? 'The attributed operator'} is an attributed entity, not another vendor alias. Tracking clusters may overlap without being exact one-to-one equivalents.</p>
+            <div class="identity-chain" aria-label={`${d.name} attribution hierarchy`}>
+              <span>{d.parent_entities[0]?.name ?? 'Attributed operator not recorded'}</span><i aria-hidden="true">→</i><strong>{d.name} analytic record</strong>
+            </div>
+            <div class="table-wrap profile-table" role="region" aria-label="Actor aliases" tabindex="0">
+              <table>
+                <colgroup><col class="alias-name" /><col class="alias-source" /><col class="alias-relationship" /><col class="alias-confidence" /><col class="alias-notes" /></colgroup>
+                <thead><tr><th>Alias</th><th>Publisher</th><th>Relationship</th><th>Confidence</th><th>Scope and notes</th></tr></thead>
+                <tbody>
+                  {d.aliases.map((alias: any) => (
+                    <tr>
+                      <td>{alias.name}</td>
+                      <td>{alias.source}</td>
+                      <td>{label(alias.relationship)}</td>
+                      <td><span class={`badge ${alias.confidence}`}>{label(alias.confidence)}</span></td>
+                      <td>{alias.scope}{alias.notes ? ` ${alias.notes}` : ''}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {d.subclusters.length > 0 && <div class="subcluster-note"><span class="eyebrow">Related sub-cluster</span>{d.subclusters.map((cluster: any) => <p><strong>{cluster.name}</strong> · {cluster.source} · {cluster.notes}</p>)}</div>}
+          </section>
+        )}
+
+        {d.operational_timeline.length > 0 && (
+          <section id="operational-timeline">
+            <h2>Operational evolution</h2>
+            <ol class="timeline evidence-timeline">
+              {d.operational_timeline.map((event: any) => <li><time>{event.date}</time><h3>{event.title}</h3><p>{event.summary}</p><p class="evidence-line"><span class={`badge ${event.confidence}`}>{label(event.confidence)}</span>{event.sources.map((id: string) => <a href={`/sources/${id}/`}>{maps.sources.get(id)?.data.publisher ?? id}</a>)}</p></li>)}
+            </ol>
+          </section>
+        )}
+
+        {d.campaigns.length > 0 && (
+          <section id="campaigns">
+            <h2>Campaigns and operational clusters</h2>
+            <p>Campaign confidence is evaluated separately from the actor-level attribution.</p>
+            <div class="entity-card-grid">
+              {d.campaigns.map((id: string) => { const campaign = maps.campaigns.get(id); return campaign ? <a class="entity-card" href={`/campaigns/${id}/`}><span class="entity-card-meta">{campaign.data.start_date}{campaign.data.end_date ? `–${campaign.data.end_date}` : ''} · {label(campaign.data.confidence)} confidence</span><h3>{campaign.data.name}</h3><p>{campaign.data.summary}</p><strong>Open campaign →</strong></a> : null; })}
+            </div>
+          </section>
+        )}
+
+        {(d.malware.length > 0 || d.tools.length > 0) && (
+          <section id="capabilities">
+            <h2>Malware and tooling</h2>
+            <p>The inventory prioritises publicly documented capabilities relevant to current operations. It is not intended to be a complete historical malware catalogue.</p>
+            <div class="capability-list">
+              {d.malware.map((id: string) => { const item = maps.malware.get(id); return item ? <a href={`/malware/${id}/`}><span><strong>{item.data.name}</strong><small>{item.data.family_type} · {item.data.platforms.join(', ')}</small></span><i aria-hidden="true">→</i></a> : null; })}
+              {d.tools.map((id: string) => { const item = maps.tools.get(id); return item ? <a href={`/tools/${id}/`}><span><strong>{item.data.name}</strong><small>{label(item.data.tool_type)} tool · {item.data.platforms.join(', ')}</small></span><i aria-hidden="true">→</i></a> : null; })}
+            </div>
+          </section>
+        )}
+
+        {d.attribution.length > 0 && (
+          <section id="attribution-statements">
+            <h2>Source-specific attribution statements</h2>
+            {d.attribution.map((attribution: any) => (
+              <div class="panel attribution-panel">
+                <span class={`badge ${attribution.confidence}`}>{label(attribution.status)}</span>
+                <h3>{attribution.attributed_entity}</h3>
+                <p>{attribution.claim}</p>
+                <p class="meta">Source: <a href={`/sources/${attribution.source}/`}>{maps.sources.get(attribution.source)?.data.name ?? attribution.source}</a> · {formatDate(attribution.published_at)} · {label(attribution.confidence)} confidence</p>
+                <p>{attribution.notes}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {d.techniques.length > 0 && (
+          <section id="techniques">
+            <h2>High-confidence ATT&amp;CK evidence</h2>
+            <p>This is a curated evidence set, not a dump of every technique ever associated with {d.name}.</p>
+            {['apt28', 'apt44'].includes(d.slug) && <p><a class="button" href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Explore the interactive evidence matrix ↗</a></p>}
+            <div class="technique-grid">
+              {d.techniques.map((id: string) => { const technique = maps.techniques.get(id); const evidence = d.technique_evidence.find((item: any) => item.technique === id); return technique ? <a href={`/techniques/${id}/`}><span class="mono">{technique.data.mitre_id}</span><strong>{technique.data.name}</strong><small>{technique.data.tactic}{evidence ? ` · ${label(evidence.confidence)} confidence` : ''}</small></a> : null; })}
+            </div>
+          </section>
+        )}
+
+        {d.vulnerabilities.length > 0 && (
+          <section id="vulnerabilities">
+            <h2>Observed vulnerability use</h2>
+            <p>Each entry records the vulnerability's operational role and source-specific confidence.</p>
+            <div class="table-wrap vulnerability-table" role="region" aria-label={`Observed ${d.name} vulnerability use`} tabindex="0">
+              <table>
+                <thead><tr><th>CVE and product</th><th>Operational role</th><th>First observed</th><th>Confidence</th></tr></thead>
+                <tbody>{d.vulnerabilities.map((vulnerability: any) => <tr><td><a class="mono" href={`https://www.cve.org/CVERecord?id=${vulnerability.cve}`}>{vulnerability.cve}</a><small>{vulnerability.product}</small></td><td>{vulnerability.role}{vulnerability.campaign && <small><a href={`/campaigns/${vulnerability.campaign}/`}>{maps.campaigns.get(vulnerability.campaign)?.data.name ?? vulnerability.campaign}</a></small>}</td><td>{vulnerability.first_observed || 'Not stated'}</td><td><span class={`badge ${vulnerability.confidence}`}>{label(vulnerability.confidence)}</span><small><a href={`/sources/${vulnerability.source}/`}>Evidence</a></small></td></tr>)}</tbody>
+              </table>
+            </div>
+          </section>
+        )}
+
+        {d.related_research.length > 0 && <section id="related-research"><h2>Related Hecavex research</h2><ul>{d.related_research.map((research: any) => <li><a href={research.url}>{research.title} ↗</a></li>)}</ul></section>}
+
+        <section id="sources">
+          <h2>Sources</h2>
+          <ol class="source-list">{d.sources.map((id: string) => { const source = maps.sources.get(id); return <li>{source ? <><a href={source.data.url}>{source.data.title}</a><span>{source.data.publisher} · {formatDate(source.data.published_at)} · <a href={`/sources/${source.data.slug}/`}>Source record</a></span></> : <span>{id} · source record pending</span>}</li>; })}</ol>
+        </section>
+
+        {d.updates.length > 0 && (
+          <section id="change-history">
+            <h2>Change history</h2>
+            <ol class="timeline">{d.updates.map((id: string) => { const update = maps.updates.get(id); return update ? <li><time>{formatDate(update.data.date)}</time><h3>{update.data.title}</h3><p>{update.data.summary}</p></li> : null; })}</ol>
+          </section>
+        )}
+      </div>
+    </div>
+  </article>
+</BaseLayout>

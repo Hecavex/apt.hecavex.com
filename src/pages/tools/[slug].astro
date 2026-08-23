@@ -1,0 +1,4 @@
+---
+import{getCollection}from'astro:content';import BaseLayout from'../../layouts/BaseLayout.astro';import EntityProfile from'../../components/EntityProfile.astro';export async function getStaticPaths(){return(await getCollection('tools',({data})=>!data.draft)).map(entry=>({params:{slug:entry.data.slug},props:{entry}}))}const{entry}=Astro.props;
+---
+<BaseLayout title={`${entry.data.name} | Tool`} description={entry.data.summary} type="ProfilePage" image={`/og/generated/tool-${entry.data.slug}.png`} imageAlt={`${entry.data.name} tool record by APT Notes`}><EntityProfile entry={entry} type="Tool"/></BaseLayout>

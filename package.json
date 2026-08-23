@@ -1,0 +1,35 @@
+{
+  "name": "apt-notes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "packageManager": "npm@10.9.2",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run validate && npm run build:og && astro check && astro build && pagefind --site dist",
+    "build:og": "node scripts/generate-og.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "audit": "node scripts/audit-build.mjs && npm run audit:performance",
+    "audit:performance": "node scripts/audit-performance.mjs",
+    "lint": "node scripts/lint.mjs",
+    "validate": "node scripts/validate-content.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "npm run lint && npm run build && npm run audit && npm test"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.3",
+    "astro": "7.1.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "fontkit": "2.0.4",
+    "pagefind": "1.5.2",
+    "sharp": "^0.35.3",
+    "typescript": "latest",
+    "yaml": "latest"
+  }
+}

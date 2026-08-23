@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'; import EntityIndex from '../../components/EntityIndex.astro'; import { publicEntries } from '../../utils/content'; const entries:any[]=await publicEntries('campaigns');
+---
+<BaseLayout title="Campaigns" description="Sourced campaign records and their relationships."><EntityIndex title="Campaigns" description="Campaign records connect activity windows, actors, targeting, malware, tools and techniques without implying false precision." type="Campaign" base="/campaigns/" entries={entries}/></BaseLayout>

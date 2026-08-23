@@ -1,0 +1,111 @@
+---
+const path = Astro.url.pathname;
+
+const productNavigation = [
+  { name: 'Overview', href: '/' },
+  { name: 'Actors', href: '/actors/' },
+  { name: 'Campaigns', href: '/campaigns/' },
+  { name: 'Malware', href: '/malware/' },
+  { name: 'Tools', href: '/tools/' },
+  { name: 'Techniques', href: '/techniques/' },
+  { name: 'Sources', href: '/sources/' },
+  { name: 'Updates', href: '/updates/' },
+  { name: 'About', href: '/about/' }
+];
+
+const portfolioNavigation = [
+  { name: 'Research', href: 'https://hecavex.com/en/research/' },
+  { name: 'Radar', href: 'https://radar.hecavex.com/' },
+  { name: 'APT Notes', href: '/', current: true },
+  { name: 'Labs', href: 'https://labs.hecavex.com/' },
+  { name: 'Data', href: 'https://labs.hecavex.com/data/' }
+];
+
+const active = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header class="site-header" data-portfolio-shell="v1">
+  <div class="network-bar">
+    <a class="brand" href="https://hecavex.com/en/" aria-label="HECAVEX Research">
+      <img src="/brand/hecavex-mark.svg" alt="" width="42" height="42" />
+      <span class="brand-copy">
+        <strong>HECAVEX</strong>
+        <small>APT Notes / intelligence catalogue</small>
+      </span>
+    </a>
+
+    <nav class="portfolio-navigation" aria-label="HECAVEX projects">
+      {portfolioNavigation.map((item) => (
+        <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.name}</a>
+      ))}
+    </nav>
+
+    <details class="mobile-navigation" data-mobile-navigation>
+      <summary aria-label="Open navigation menu">
+        <svg class="menu-open-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        <svg class="menu-close-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        <span>Menu</span>
+      </summary>
+      <div class="mobile-navigation-panel">
+        <nav class="mobile-product-navigation" aria-label="APT Notes sections">
+          <span class="navigation-label">APT Notes</span>
+          {productNavigation.map((item) => (
+            <a href={item.href} aria-current={active(item.href) ? 'page' : undefined}>{item.name}</a>
+          ))}
+          <a href="/search/">Search</a>
+        </nav>
+        <nav class="mobile-portfolio-navigation" aria-label="HECAVEX projects">
+          <span class="navigation-label">HECAVEX network</span>
+          {portfolioNavigation.map((item) => (
+            <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.name}</a>
+          ))}
+        </nav>
+      </div>
+    </details>
+  </div>
+
+  <div class="product-bar">
+    <a class="product-identity" href="/">
+      <strong>APT Notes</strong>
+      <span>Source-backed threat actor research</span>
+    </a>
+    <nav class="product-navigation" aria-label="APT Notes sections">
+      {productNavigation.map((item) => (
+        <a href={item.href} aria-current={active(item.href) ? 'page' : undefined}>{item.name}</a>
+      ))}
+    </nav>
+    <form class="header-search" action="/search/" role="search">
+      <label class="sr-only" for="global-q">Search APT Notes</label>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
+      <input id="global-q" name="q" type="search" placeholder="Search" autocomplete="off" />
+    </form>
+  </div>
+</header>
+
+<script>
+  const initialiseNavigation = () => {
+    document.querySelectorAll<HTMLDetailsElement>('[data-mobile-navigation]').forEach((navigation) => {
+      if (navigation.dataset.ready === 'true') return;
+      navigation.dataset.ready = 'true';
+      const summary = navigation.querySelector<HTMLElement>('summary');
+      const updateLabel = () => summary?.setAttribute('aria-label', navigation.open ? 'Close navigation menu' : 'Open navigation menu');
+
+      navigation.addEventListener('toggle', updateLabel);
+      navigation.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => link.addEventListener('click', () => {
+        navigation.open = false;
+      }));
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !navigation.open) return;
+        navigation.open = false;
+        summary?.focus({ preventScroll: true });
+      });
+      updateLabel();
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialiseNavigation, { once: true });
+  } else {
+    initialiseNavigation();
+  }
+</script>

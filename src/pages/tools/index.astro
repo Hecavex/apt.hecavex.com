@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'; import EntityIndex from '../../components/EntityIndex.astro'; import { publicEntries } from '../../utils/content'; const entries:any[]=await publicEntries('tools');
+---
+<BaseLayout title="Tools" description="Legitimate, dual-use and offensive tools linked to public reporting."><EntityIndex title="Tools" description="Tool records distinguish legitimate and dual-use software from malware and record only sourced operational relationships." type="Tool" base="/tools/" entries={entries}/></BaseLayout>
