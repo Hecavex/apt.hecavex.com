@@ -20,7 +20,7 @@ test('required production routes and assets exist', () => {
   for (const file of [
     'index.html', 'actors/index.html', 'actors/apt28/index.html', 'actors/apt44/index.html',
     'about/methodology/index.html', 'licence/index.html', 'sources/index.html', 'updates/index.html',
-    'feed.xml', 'robots.txt', '.well-known/security.txt', 'THIRD_PARTY_NOTICES.txt', 'CNAME',
+    'feed.xml', 'robots.txt', 'llms.txt', '.well-known/security.txt', 'THIRD_PARTY_NOTICES.txt', 'CNAME',
     'sitemap-index.xml', 'pagefind/pagefind.js', 'og/default.svg', 'og/default.png',
     'fonts/inter/inter-latin-400-normal.woff2',
     'fonts/inter/inter-latin-600-normal.woff2',
@@ -317,4 +317,14 @@ test('sitemap and feed contain only canonical public records', () => {
   for (const match of feed.matchAll(/https:\/\/apt\.hecavex\.com\/updates\/#([^<"]+)/g)) {
     assert.match(read('updates/index.html'), new RegExp(`id="${match[1]}"`));
   }
+});
+
+test('machine discovery preserves the source and API boundaries', () => {
+  const robots = read('robots.txt');
+  const llms = read('llms.txt');
+  assert.match(robots, /^Content-Signal: search=yes, ai-input=yes, ai-train=no$/m);
+  assert.match(robots, /^User-agent: GPTBot$/m);
+  assert.match(llms, /static, read-only research product/);
+  assert.match(llms, /https:\/\/apt\.hecavex\.com\/api\/actors\.json/);
+  assert.match(llms, /not a live IOC feed/);
 });

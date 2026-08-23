@@ -69,6 +69,9 @@ jobs:
         run: |
           test "$(cat dist/CNAME)" = "apt.hecavex.com"
           test -f dist/.well-known/security.txt
+          test -f dist/llms.txt
+          grep -Fqx "Content-Signal: search=yes, ai-input=yes, ai-train=no" dist/robots.txt
+          grep -Fq "https://apt.hecavex.com/api/actors.json" dist/llms.txt
           ! grep -R -E "localhost|github\.io" dist --include='*.html' --include='*.xml'
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5

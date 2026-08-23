@@ -1,0 +1,30 @@
+# APT Notes by HECAVEX
+
+> A source-backed public catalogue of threat actors, campaigns, malware, tools, techniques, and attribution claims.
+
+APT Notes is a static, read-only research product. Preserve source-specific naming and attribution boundaries: a shared victim, tool, infrastructure node, or technique is not sufficient on its own to equate two actor labels. The catalogue is curated rather than exhaustive and has no account, write, or monitoring API.
+
+## Catalogue
+
+- [Overview](https://apt.hecavex.com/): Product scope and featured research.
+- [Actors](https://apt.hecavex.com/actors/): Reviewed threat-actor profiles.
+- [Campaigns](https://apt.hecavex.com/campaigns/): Source-linked campaign records.
+- [Malware](https://apt.hecavex.com/malware/): Malware records represented in published profiles.
+- [Tools](https://apt.hecavex.com/tools/): Publicly reported tooling.
+- [Techniques](https://apt.hecavex.com/techniques/): Source-linked ATT&CK technique evidence.
+- [Sources](https://apt.hecavex.com/sources/): Primary and supporting source records.
+- [Updates](https://apt.hecavex.com/updates/): Chronological substantive change log.
+
+## Method and terms
+
+- [Methodology](https://apt.hecavex.com/about/methodology/): Source hierarchy, attribution, confidence, review, and corrections.
+- [About](https://apt.hecavex.com/about/): Purpose, audience, ownership, and maintenance boundary.
+- [Licence](https://apt.hecavex.com/licence/): Software, research, source, and trademark terms.
+- [Atom feed](https://apt.hecavex.com/feed.xml): Current catalogue updates.
+
+## Read-only JSON
+
+- [Actor index](https://apt.hecavex.com/api/actors.json): Static list of public actor records.
+- Actor record convention: `https://apt.hecavex.com/api/actors/{slug}.json`.
+
+The JSON output is a maintained static publication surface, not a live IOC feed or a statement that every vendor cluster is equivalent.
