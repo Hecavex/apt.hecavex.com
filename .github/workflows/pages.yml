@@ -16,6 +16,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      PUBLIC_HECAVEX_ANALYTICS_TOKEN: ${{ vars.HECAVEX_ANALYTICS_TOKEN }}
     permissions:
       contents: read
       pages: read
@@ -43,10 +45,17 @@ jobs:
         run: npm run lint
       - name: Build and validate
         run: npm run build
-        env:
-          PUBLIC_HECAVEX_ANALYTICS_TOKEN: ${{ vars.HECAVEX_ANALYTICS_TOKEN }}
       - name: Test production output
         run: npm run audit && npm test
+      - name: Verify configured analytics in production output
+        shell: bash
+        run: |
+          test -n "$PUBLIC_HECAVEX_ANALYTICS_TOKEN"
+          html_count="$(find dist -type f -name '*.html' | wc -l)"
+          loader_count="$(grep -R -l -F 'data-hecavex-analytics' dist --include='*.html' | wc -l)"
+          token_count="$(grep -R -l -F "$PUBLIC_HECAVEX_ANALYTICS_TOKEN" dist --include='*.html' | wc -l)"
+          test "$loader_count" -eq "$html_count"
+          test "$token_count" -eq "$html_count"
       - name: Check responsive layout, navigation and accessibility
         run: python scripts/test_responsive.py
       - name: Retain responsive and accessibility evidence

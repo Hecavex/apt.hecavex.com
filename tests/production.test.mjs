@@ -29,6 +29,26 @@ test('required production routes and assets exist', () => {
   ]) assert.ok(fs.existsSync(path.join(root, file)), file);
 });
 
+test('Cloudflare Web Analytics is gated and emitted exactly once on every HTML page', () => {
+  const configuredToken = process.env.PUBLIC_HECAVEX_ANALYTICS_TOKEN?.trim() ?? '';
+  const htmlFiles = files.filter(file => file.endsWith('.html'));
+  for (const file of htmlFiles) {
+    const html = fs.readFileSync(file, 'utf8');
+    const loaders = [...html.matchAll(/<script\b[^>]*\bdata-hecavex-analytics(?:=(?:"[^"]*"|'[^']*'))?[^>]*>([\s\S]*?)<\/script>/gi)];
+    if (!configuredToken) {
+      assert.equal(loaders.length, 0, `${path.relative(root, file)} must stay keyless in an unconfigured build`);
+      continue;
+    }
+    assert.equal(loaders.length, 1, `${path.relative(root, file)} must contain one analytics loader`);
+    const loader = loaders[0][0];
+    assert.match(loader, /navigator\.doNotTrack === '1'/);
+    assert.match(loader, /window\.doNotTrack === '1'/);
+    assert.match(loader, /https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js/);
+    assert.ok(loader.includes(configuredToken), `${path.relative(root, file)} must contain the configured analytics token`);
+    assert.doesNotMatch(loader, /beacon\.min\.js\?/);
+  }
+});
+
 test('editorial placeholders do not leak into public output', () => {
   const output = files
     .filter(file => /\.(html|xml|json)$/.test(file))

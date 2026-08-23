@@ -39,7 +39,7 @@ The production workflow builds and deploys the `main` branch to GitHub Pages. `p
 
 Every deployment validates content references and controlled values, generates social previews, type-checks and builds the Astro site, creates the Pagefind search index, audits metadata and asset budgets, tests production links, and checks keyboard access, focus behaviour and responsive layout. The operator release gate is `npm run verify`; browser checks run separately in the workflow and retain their JSON evidence for 30 days.
 
-The site has no accounts, application database or hosted search provider. Optional aggregate measurement remains disabled unless the repository variable `HECAVEX_ANALYTICS_TOKEN` is configured, and the deployed loader respects Do Not Track.
+The site has no accounts, application database or hosted search provider. Production enables Cloudflare Web Analytics once through the shared layout for aggregate audience and page-performance measurement unless Do Not Track is set to `1`. The public site token is supplied at build time through `PUBLIC_HECAVEX_ANALYTICS_TOKEN`; it is deployment metadata rather than a secret. The beacon uses no cookies or browser storage, and the deployed methodology links to the portfolio privacy policy and describes the measurement boundary.
 
 ## Rights and security
 
