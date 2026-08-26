@@ -1,0 +1,297 @@
+---
+import { render } from 'astro:content';
+import { byId, formatDate, label, reviewStatus, unique } from '../../utils/content';
+import {
+  entityHref,
+  recordName,
+  typeCollections,
+  type EntityCollection,
+  type ReferenceUsage,
+  type RelationshipRecord
+} from '../../utils/knowledge';
+import KnowledgeLink from './KnowledgeLink.astro';
+
+interface Props {
+  collection: Exclude<EntityCollection, 'actors'>;
+  entry: any;
+  knowledge: any;
+}
+
+type RelatedRecord = { collection: EntityCollection; entry: any; annotation?: string };
+type RelationshipGroup = { title: string; note?: string; records: RelatedRecord[] };
+
+const { collection, entry, knowledge } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const canonicalHref = entityHref(collection, d.slug);
+const absoluteCanonicalHref = new URL(canonicalHref, Astro.site).href;
+const jsonHref = `/api/${collection}/${d.slug}.json`;
+const typeName = label(collection === 'malware' ? 'malware' : collection.slice(0, -1));
+const heading = collection === 'techniques' ? `${d.mitre_id} ${d.name}` : recordName(entry);
+const headingId = `knowledge-record-${collection}-${d.slug}`;
+
+// Build one explicit resolution boundary from the loaded public catalogue.
+const maps: Record<EntityCollection, Map<string, any>> = {
+  actors: byId(knowledge.actors),
+  campaigns: byId(knowledge.campaigns),
+  malware: byId(knowledge.malware),
+  tools: byId(knowledge.tools),
+  techniques: byId(knowledge.techniques),
+  sources: byId(knowledge.sources)
+};
+
+const sortRecords = (records: RelatedRecord[]) => records.sort((left, right) =>
+  recordName(left.entry).localeCompare(recordName(right.entry), 'en')
+);
+
+const resolve = (targetCollection: EntityCollection, ids: string[] = [], annotation?: string): RelatedRecord[] =>
+  sortRecords(unique(ids).map((id) => maps[targetCollection].get(id)).filter(Boolean).map((related) => ({
+    collection: targetCollection,
+    entry: related,
+    annotation
+  })));
+
+const reverse = (targetCollection: EntityCollection, field: string): RelatedRecord[] =>
+  sortRecords(knowledge[targetCollection]
+    .filter((candidate: any) => (candidate.data[field] ?? []).includes(d.id))
+    .map((related: any) => ({ collection: targetCollection, entry: related })));
+
+const dedupeRecords = (records: RelatedRecord[]) => {
+  const seen = new Set<string>();
+  return records.filter((record) => {
+    const key = `${record.collection}:${record.entry.data.id}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+const relationshipGroups: RelationshipGroup[] = [];
+let sourcedRelationships: RelationshipRecord[] = [];
+
+if (collection === 'campaigns') {
+  relationshipGroups.push(
+    { title: 'Actors', records: resolve('actors', d.actors) },
+    { title: 'Malware', records: resolve('malware', d.malware) },
+    { title: 'Tools', records: resolve('tools', d.tools) },
+    { title: 'Techniques', note: 'Catalogue mappings; not standalone procedure evidence.', records: resolve('techniques', d.techniques) }
+  );
+  sourcedRelationships = knowledge.relationships.filter((relationship: RelationshipRecord) =>
+    relationship.campaign_context?.id === d.id
+  );
+}
+
+if (collection === 'malware') {
+  relationshipGroups.push(
+    { title: 'Actors', records: resolve('actors', d.actors) },
+    { title: 'Campaigns', records: dedupeRecords([...resolve('campaigns', d.campaigns), ...reverse('campaigns', 'malware')]) },
+    { title: 'Techniques', note: 'Catalogue mappings; not standalone procedure evidence.', records: resolve('techniques', d.techniques) }
+  );
+}
+
+if (collection === 'tools') {
+  relationshipGroups.push(
+    { title: 'Actors', records: resolve('actors', d.actors) },
+    { title: 'Campaigns', records: reverse('campaigns', 'tools') },
+    { title: 'Techniques', note: 'Catalogue mappings; not standalone procedure evidence.', records: resolve('techniques', d.techniques) }
+  );
+}
+
+if (collection === 'techniques') {
+  sourcedRelationships = knowledge.relationships.filter((relationship: RelationshipRecord) =>
+    relationship.target_entity.id === d.id
+  );
+  relationshipGroups.push(
+    { title: 'Campaign catalogue mappings', records: reverse('campaigns', 'techniques') },
+    { title: 'Malware catalogue mappings', records: reverse('malware', 'techniques') },
+    { title: 'Tool catalogue mappings', records: reverse('tools', 'techniques') }
+  );
+}
+
+const sourceUsage: ReferenceUsage[] = collection === 'sources'
+  ? (knowledge.referenceUsage.get(d.id) ?? [])
+  : [];
+
+const sourceRecords = collection === 'sources' ? [] : resolve('sources', d.sources);
+const hasRelationships = sourcedRelationships.length > 0 || relationshipGroups.some((group) => group.records.length > 0) || sourceUsage.length > 0;
+const hasBody = Boolean(entry.body?.trim());
+const lastReviewed = d.last_reviewed;
+const freshness = lastReviewed ? reviewStatus(lastReviewed) : undefined;
+const schemaMigrationReason = 'Structured publication contract introduced.';
+const usesSchemaMigrationLifecycle = d.change_reason === schemaMigrationReason;
+const revisionMetadataIntroduced = d.modified_at ?? d.created_at;
+const techniqueUrl = collection === 'techniques'
+  ? `https://attack.mitre.org/techniques/${d.mitre_id.replace('.', '/')}/`
+  : undefined;
+---
+<article
+  class="knowledge-record"
+  aria-labelledby={headingId}
+  data-knowledge-record-fragment
+  data-knowledge-record-collection={collection}
+  data-knowledge-record-id={d.id}
+  data-knowledge-record-url={canonicalHref}
+  data-knowledge-record-title={heading}
+  data-pagefind-body
+  data-pagefind-meta={`type:${typeName}`}
+>
+  <header class="knowledge-record__header" data-knowledge-section="identity">
+    <p class="eyebrow">{typeName} record · <span class="mono">{d.id}</span></p>
+    <h1 id={headingId} tabindex="-1" data-knowledge-record-heading>{heading}</h1>
+    {d.summary && <p class="lead">{d.summary}</p>}
+
+    <dl class="fact-grid knowledge-record__identity">
+      {collection === 'campaigns' && <>
+        <div class="fact"><dt>Activity window</dt><dd>{d.start_date}{d.end_date ? ` to ${d.end_date}` : ' onward'}</dd></div>
+        <div class="fact"><dt>Confidence</dt><dd><span class={`badge ${d.confidence}`}>{label(d.confidence)}</span></dd></div>
+        <div class="fact"><dt>Regions</dt><dd>{d.regions.join(', ') || 'Not recorded'}</dd></div>
+        <div class="fact"><dt>Sectors</dt><dd>{d.sectors.join(', ') || 'Not recorded'}</dd></div>
+        {freshness && <div class="fact"><dt>Review state</dt><dd><span class={`badge ${freshness.key}`}>{freshness.label}</span></dd></div>}
+        <div class="fact"><dt>Aliases</dt><dd>{d.aliases.join(', ') || 'None recorded'}</dd></div>
+      </>}
+      {collection === 'malware' && <>
+        <div class="fact"><dt>Family type</dt><dd>{label(d.family_type)}</dd></div>
+        <div class="fact"><dt>Platforms</dt><dd>{d.platforms.join(', ') || 'Not recorded'}</dd></div>
+        <div class="fact"><dt>Confidence</dt><dd><span class={`badge ${d.confidence}`}>{label(d.confidence)}</span></dd></div>
+        <div class="fact"><dt>Aliases</dt><dd>{d.aliases.join(', ') || 'None recorded'}</dd></div>
+        {freshness && <div class="fact"><dt>Review state</dt><dd><span class={`badge ${freshness.key}`}>{freshness.label}</span></dd></div>}
+      </>}
+      {collection === 'tools' && <>
+        <div class="fact"><dt>Tool type</dt><dd>{label(d.tool_type)}</dd></div>
+        <div class="fact"><dt>Platforms</dt><dd>{d.platforms.join(', ') || 'Not recorded'}</dd></div>
+        <div class="fact"><dt>Confidence</dt><dd><span class={`badge ${d.confidence}`}>{label(d.confidence)}</span></dd></div>
+        <div class="fact"><dt>Aliases</dt><dd>{d.aliases.join(', ') || 'None recorded'}</dd></div>
+        {freshness && <div class="fact"><dt>Review state</dt><dd><span class={`badge ${freshness.key}`}>{freshness.label}</span></dd></div>}
+      </>}
+      {collection === 'techniques' && <>
+        <div class="fact"><dt>MITRE ATT&amp;CK ID</dt><dd class="mono">{d.mitre_id}</dd></div>
+        <div class="fact"><dt>Tactic</dt><dd>{label(d.tactic)}</dd></div>
+        <div class="fact"><dt>Stable ID</dt><dd class="mono">{d.id}</dd></div>
+        <div class="fact"><dt>Record status</dt><dd>{d.revoked ? 'Revoked' : d.deprecated ? 'Deprecated' : 'Published'}</dd></div>
+      </>}
+      {collection === 'sources' && <>
+        <div class="fact"><dt>Publisher</dt><dd>{d.publisher}</dd></div>
+        <div class="fact"><dt>Source type</dt><dd>{label(d.source_type)}</dd></div>
+        <div class="fact"><dt>Published</dt><dd>{formatDate(d.published_at)}</dd></div>
+        <div class="fact"><dt>Accessed</dt><dd>{formatDate(d.accessed_at)}</dd></div>
+        <div class="fact"><dt>Language</dt><dd>{d.language.toUpperCase()}</dd></div>
+        <div class="fact"><dt>Link status</dt><dd>{label(d.link_status)}</dd></div>
+        <div class="fact"><dt>Authors</dt><dd>{d.authors.join(', ') || 'Not stated'}</dd></div>
+        <div class="fact"><dt>Stable ID</dt><dd class="mono">{d.id}</dd></div>
+      </>}
+    </dl>
+  </header>
+
+  <section class="knowledge-record__section knowledge-record__assessment" data-knowledge-section="assessment">
+    <p class="eyebrow">Assessment</p>
+    <h2>{collection === 'sources' ? 'Source context' : 'What the record supports'}</h2>
+    {hasBody ? <div class="prose knowledge-record__body"><Content /></div> : <p>No additional public assessment is recorded.</p>}
+    {collection === 'sources' && d.notes && <div class="knowledge-record__editorial-note"><h3>Editorial note</h3><p>{d.notes}</p></div>}
+  </section>
+
+  <section class="knowledge-record__section knowledge-record__relationships" data-knowledge-section="relationships">
+    <p class="eyebrow">Relationships</p>
+    <h2>{collection === 'sources' ? 'Used by' : 'Connected records'}</h2>
+
+    {sourcedRelationships.length > 0 && <div class="knowledge-record__relationship-group">
+      <h3>Source-backed procedure relationships</h3>
+      <p>These edges come from explicit procedure evidence in an actor dossier.</p>
+      <ul>
+        {sourcedRelationships.map((relationship) => <li id={relationship.id}>
+          <KnowledgeLink collection="actors" slug={maps.actors.get(relationship.source_entity.id)?.data.slug ?? relationship.source_entity.id}>{relationship.source_entity.name}</KnowledgeLink>
+          {' uses '}
+          <KnowledgeLink collection="techniques" slug={maps.techniques.get(relationship.target_entity.id)?.data.slug ?? relationship.target_entity.id}>{relationship.target_entity.external_id}{' '}{relationship.target_entity.name}</KnowledgeLink>
+          {relationship.campaign_context && <>
+            {' during '}
+            <KnowledgeLink collection="campaigns" slug={maps.campaigns.get(relationship.campaign_context.id)?.data.slug ?? relationship.campaign_context.id}>{relationship.campaign_context.name}</KnowledgeLink>
+          </>}
+          <p>{relationship.evidence}</p>
+          <dl>
+            <div><dt>Observed</dt><dd>{relationship.first_observed || 'Not stated'}{relationship.last_observed ? ` to ${relationship.last_observed}` : ''}</dd></div>
+            <div><dt>References</dt><dd>{relationship.references.map((id, index) => {
+              const source = maps.sources.get(id);
+              return <>{index > 0 && ', '}{source ? <KnowledgeLink collection="sources" slug={source.data.slug}>{source.data.publisher}</KnowledgeLink> : id}</>;
+            })}</dd></div>
+          </dl>
+          <span class={`badge ${relationship.confidence}`}>{label(relationship.confidence)} confidence</span>
+        </li>)}
+      </ul>
+    </div>}
+
+    {relationshipGroups.some((group) => group.records.length > 0) && <p class="knowledge-record__boundary-note">The following connected records are catalogue mappings. They preserve the published record structure but are not promoted to source-specific relationship evidence.</p>}
+    {relationshipGroups.filter((group) => group.records.length > 0).map((group) => <div class="knowledge-record__relationship-group">
+      <h3>{group.title}</h3>
+      {group.note && <p>{group.note}</p>}
+      <ul>{group.records.map((record) => <li>
+        <KnowledgeLink collection={record.collection} slug={record.entry.data.slug}>{record.collection === 'techniques' ? record.entry.data.mitre_id : ''}{record.collection === 'techniques' && ' '}{recordName(record.entry)}</KnowledgeLink>
+        {record.annotation && <small>{record.annotation}</small>}
+      </li>)}</ul>
+    </div>)}
+
+    {sourceUsage.length > 0 && <div class="knowledge-record__relationship-group">
+      <p>This reference is cited by {sourceUsage.length} public {sourceUsage.length === 1 ? 'record' : 'records'}.</p>
+      <ul>{sourceUsage.map((usage) => {
+        const targetCollection = usage.entity_type === 'change' || usage.entity_type === 'relationship'
+          ? undefined
+          : typeCollections[usage.entity_type];
+        const target = targetCollection ? maps[targetCollection].get(usage.entity_id) : undefined;
+        return <li>
+          {targetCollection && target
+            ? <KnowledgeLink collection={targetCollection} slug={target.data.slug}>{usage.entity_name}</KnowledgeLink>
+            : <a href={usage.entity_url}>{usage.entity_name}</a>}
+          <small>{label(usage.usage_kind)}</small>
+        </li>;
+      })}</ul>
+    </div>}
+
+    {d.related_research?.length > 0 && <div class="knowledge-record__relationship-group">
+      <h3>Related HECAVEX research</h3>
+      <ul>{d.related_research.map((research: any) => <li><a href={research.url}>{research.title} ↗</a></li>)}</ul>
+    </div>}
+
+    {!hasRelationships && <p>No public relationships are recorded. Absence from this view is not evidence that no relationship exists.</p>}
+  </section>
+
+  <section class="knowledge-record__section knowledge-record__evidence" data-knowledge-section="evidence">
+    <p class="eyebrow">Evidence</p>
+    <h2>{collection === 'sources' ? 'Publication and preservation' : 'Sources'}</h2>
+    {collection === 'sources' ? <dl class="knowledge-record__evidence-list">
+      <div><dt>Primary publication</dt><dd><a href={d.url} rel="external">{d.url} ↗</a></dd></div>
+      {d.archived_url && <div><dt>Archived copy</dt><dd><a href={d.archived_url} rel="external">{d.archived_url} ↗</a></dd></div>}
+      {d.final_url && <div><dt>Last resolved URL</dt><dd><a href={d.final_url} rel="external">{d.final_url} ↗</a></dd></div>}
+      {d.link_checked_at && <div><dt>Link checked</dt><dd>{formatDate(d.link_checked_at)}{d.http_status ? ` · HTTP ${d.http_status}` : ''}</dd></div>}
+    </dl> : <ol class="source-list">
+      {sourceRecords.map(({ entry: source }) => <li>
+        <KnowledgeLink collection="sources" slug={source.data.slug}>{source.data.title}</KnowledgeLink>
+        <span>{source.data.publisher} · {formatDate(source.data.published_at)} · {label(source.data.source_type)}</span>
+      </li>)}
+    </ol>}
+  </section>
+
+  <section class="knowledge-record__section knowledge-record__revision" data-knowledge-section="revision">
+    <p class="eyebrow">Revision</p>
+    <h2>Record state</h2>
+    <dl class="fact-grid">
+      <div class="fact"><dt>Version</dt><dd class="mono">{d.version}</dd></div>
+      <div class="fact"><dt>Analyst review</dt><dd>{lastReviewed ? formatDate(lastReviewed) : 'Not recorded'}</dd></div>
+      {usesSchemaMigrationLifecycle
+        ? <div class="fact"><dt>Revision metadata</dt><dd>Schema introduced {formatDate(revisionMetadataIntroduced)}</dd></div>
+        : <>
+          <div class="fact"><dt>Created</dt><dd>{formatDate(d.created_at)}</dd></div>
+          <div class="fact"><dt>Modified</dt><dd>{formatDate(d.modified_at)}</dd></div>
+        </>}
+      <div class="fact"><dt>Lifecycle</dt><dd>{d.revoked ? 'Revoked' : d.deprecated ? 'Deprecated' : 'Current public record'}</dd></div>
+      <div class="fact"><dt>Change reason</dt><dd>{d.change_reason}</dd></div>
+    </dl>
+    {usesSchemaMigrationLifecycle && <p class="meta">The revision date marks introduction of the structured publication schema. It is not the record's original creation, modification or analyst-review date.</p>}
+    {d.superseded_by && <p>Superseded by <span class="mono">{d.superseded_by}</span>.</p>}
+  </section>
+
+  <footer class="knowledge-record__actions" data-knowledge-section="actions">
+    <a class="button" href={jsonHref}>Open public JSON</a>
+    <a href={canonicalHref} data-knowledge-open-page data-knowledge-bypass>Open full page</a>
+    <button type="button" data-knowledge-copy-link data-copy-record-url={absoluteCanonicalHref}>Copy record link</button>
+    {techniqueUrl && <a href={techniqueUrl} rel="external">Open MITRE ATT&amp;CK ↗</a>}
+    {collection === 'sources' && <a href={d.url} rel="external">Open primary publication ↗</a>}
+  </footer>
+</article>

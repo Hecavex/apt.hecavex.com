@@ -1,4 +1,9 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro'; import EntityIndex from '../../components/EntityIndex.astro'; import { publicEntries } from '../../utils/content'; const entries:any[]=await publicEntries('campaigns');
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CatalogueMoved from '../../components/knowledge/CatalogueMoved.astro';
+import { publicEntries } from '../../utils/content';
+const entries = await publicEntries('campaigns');
 ---
-<BaseLayout title="Campaigns" description="Sourced campaign records and their relationships."><EntityIndex title="Campaigns" description="Campaign records connect activity windows, actors, targeting, malware, tools and techniques without implying false precision." type="Campaign" base="/campaigns/" entries={entries}/></BaseLayout>
+<BaseLayout title="Campaigns moved to Knowledge" description="Campaign records now share one Knowledge explorer." noindex={true}>
+  <CatalogueMoved name="Campaigns" href="/knowledge/?view=campaigns" count={entries.length} description="Campaign records now open in context beside software, techniques and references." />
+</BaseLayout>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import KnowledgeExplorer from '../../components/knowledge/KnowledgeExplorer.astro';
+import { loadKnowledge } from '../../utils/knowledge';
+
+const knowledge = await loadKnowledge();
+const total = knowledge.campaigns.length + knowledge.malware.length + knowledge.tools.length + knowledge.techniques.length + knowledge.sources.length;
+---
+<BaseLayout title="Knowledge explorer" description="Search campaigns, software, techniques and references supporting APT Notes actor dossiers.">
+  <section class="shell knowledge-page">
+    <header class="page-head knowledge-head">
+      <div>
+        <p class="eyebrow">Supporting intelligence records</p>
+        <h1>Knowledge explorer</h1>
+        <p class="lead">Inspect the campaigns, software, ATT&amp;CK mappings and references that support the actor dossiers without losing your place.</p>
+      </div>
+      <span class="meta">{total} supporting records</span>
+    </header>
+    <p class="scope-note"><strong>Reading boundary:</strong> catalogue associations describe recorded links. Only relationships with explicit procedure evidence are promoted to the <a href="/relationships/">sourced Relationships view</a>.</p>
+    <KnowledgeExplorer knowledge={knowledge} />
+  </section>
+</BaseLayout>

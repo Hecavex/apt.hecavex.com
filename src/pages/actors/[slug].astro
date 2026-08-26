@@ -2,7 +2,8 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProfileToc from '../../components/ProfileToc.astro';
-import { publicEntries, bySlug, label, formatDate, reviewStatus } from '../../utils/content';
+import KnowledgeLink from '../../components/knowledge/KnowledgeLink.astro';
+import { publicEntries, byId, label, formatDate, reviewStatus } from '../../utils/content';
 
 export async function getStaticPaths() {
   return (await getCollection('actors', ({ data }) => !data.draft)).map((entry) => ({
@@ -17,12 +18,12 @@ const [sources, campaigns, malware, tools, techniques, updates] = await Promise.
   ['sources', 'campaigns', 'malware', 'tools', 'techniques', 'updates'].map((name) => publicEntries(name as any))
 );
 const maps = {
-  sources: bySlug(sources as any),
-  campaigns: bySlug(campaigns as any),
-  malware: bySlug(malware as any),
-  tools: bySlug(tools as any),
-  techniques: bySlug(techniques as any),
-  updates: bySlug(updates as any)
+  sources: byId(sources as any),
+  campaigns: byId(campaigns as any),
+  malware: byId(malware as any),
+  tools: byId(tools as any),
+  techniques: byId(techniques as any),
+  updates: byId(updates as any)
 } as any;
 const d = entry.data;
 const freshness = reviewStatus(d.last_reviewed);
@@ -37,7 +38,7 @@ const tocItems = [
   ...(d.techniques.length > 0 ? [{ slug: 'techniques', text: 'MITRE ATT&CK techniques' }] : []),
   ...(d.vulnerabilities.length > 0 ? [{ slug: 'vulnerabilities', text: 'Vulnerabilities' }] : []),
   ...(d.related_research.length > 0 ? [{ slug: 'related-research', text: 'Related research' }] : []),
-  { slug: 'sources', text: 'Sources' },
+  { slug: 'sources', text: 'References' },
   ...(d.updates.length > 0 ? [{ slug: 'change-history', text: 'Change history' }] : [])
 ];
 ---
@@ -78,6 +79,15 @@ const tocItems = [
 
     <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a>{['apt28', 'apt44'].includes(d.slug) && <a href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Interactive ATT&amp;CK evidence map ↗</a>}<a href="/about/methodology/">Review policy →</a></div>
 
+    <dl class="fact-grid actor-record-state" aria-label="Record state">
+      <div class="fact"><dt>Record version</dt><dd class="mono">{d.version}</dd></div>
+      <div class="fact"><dt>Created</dt><dd>{formatDate(d.created_at)}</dd></div>
+      <div class="fact"><dt>Modified</dt><dd>{formatDate(d.modified_at)}</dd></div>
+      <div class="fact"><dt>Review state</dt><dd><span class={`badge ${freshness.key}`}>{freshness.label}</span></dd></div>
+      <div class="fact"><dt>Lifecycle</dt><dd>{d.revoked ? 'Revoked' : d.deprecated ? 'Deprecated' : 'Current public record'}</dd></div>
+      <div class="fact"><dt>Revision record</dt><dd><a href={`/changes/?entity=actor#${d.updates.at(-1) ?? ''}`}>View changes →</a></dd></div>
+    </dl>
+
     <div class="profile-grid">
       <ProfileToc items={tocItems} />
 
@@ -116,7 +126,7 @@ const tocItems = [
           <section id="operational-timeline">
             <h2>Operational evolution</h2>
             <ol class="timeline evidence-timeline">
-              {d.operational_timeline.map((event: any) => <li><time>{event.date}</time><h3>{event.title}</h3><p>{event.summary}</p><p class="evidence-line"><span class={`badge ${event.confidence}`}>{label(event.confidence)}</span>{event.sources.map((id: string) => <a href={`/sources/${id}/`}>{maps.sources.get(id)?.data.publisher ?? id}</a>)}</p></li>)}
+              {d.operational_timeline.map((event: any) => <li><time>{event.date}</time><h3>{event.title}</h3><p>{event.summary}</p><p class="evidence-line"><span class={`badge ${event.confidence}`}>{label(event.confidence)}</span>{event.sources.map((id: string) => { const source = maps.sources.get(id); return source ? <KnowledgeLink collection="sources" slug={source.data.slug}>{source.data.publisher}</KnowledgeLink> : <span>{id}</span>; })}</p></li>)}
             </ol>
           </section>
         )}
@@ -126,7 +136,7 @@ const tocItems = [
             <h2>Campaigns and operational clusters</h2>
             <p>Campaign confidence is evaluated separately from the actor-level attribution.</p>
             <div class="entity-card-grid">
-              {d.campaigns.map((id: string) => { const campaign = maps.campaigns.get(id); return campaign ? <a class="entity-card" href={`/campaigns/${id}/`}><span class="entity-card-meta">{campaign.data.start_date}{campaign.data.end_date ? `–${campaign.data.end_date}` : ''} · {label(campaign.data.confidence)} confidence</span><h3>{campaign.data.name}</h3><p>{campaign.data.summary}</p><strong>Open campaign →</strong></a> : null; })}
+              {d.campaigns.map((id: string) => { const campaign = maps.campaigns.get(id); return campaign ? <KnowledgeLink class="entity-card" collection="campaigns" slug={campaign.data.slug}><span class="entity-card-meta">{campaign.data.start_date}{campaign.data.end_date ? `–${campaign.data.end_date}` : ''} · {label(campaign.data.confidence)} confidence</span><h3>{campaign.data.name}</h3><p>{campaign.data.summary}</p><strong>Inspect campaign →</strong></KnowledgeLink> : null; })}
             </div>
           </section>
         )}
@@ -136,8 +146,8 @@ const tocItems = [
             <h2>Malware and tooling</h2>
             <p>The inventory prioritises publicly documented capabilities relevant to current operations. It is not intended to be a complete historical malware catalogue.</p>
             <div class="capability-list">
-              {d.malware.map((id: string) => { const item = maps.malware.get(id); return item ? <a href={`/malware/${id}/`}><span><strong>{item.data.name}</strong><small>{item.data.family_type} · {item.data.platforms.join(', ')}</small></span><i aria-hidden="true">→</i></a> : null; })}
-              {d.tools.map((id: string) => { const item = maps.tools.get(id); return item ? <a href={`/tools/${id}/`}><span><strong>{item.data.name}</strong><small>{label(item.data.tool_type)} tool · {item.data.platforms.join(', ')}</small></span><i aria-hidden="true">→</i></a> : null; })}
+              {d.malware.map((id: string) => { const item = maps.malware.get(id); return item ? <KnowledgeLink collection="malware" slug={item.data.slug}><span><strong>{item.data.name}</strong><small>{item.data.family_type} · {item.data.platforms.join(', ')}</small></span><i aria-hidden="true">→</i></KnowledgeLink> : null; })}
+              {d.tools.map((id: string) => { const item = maps.tools.get(id); return item ? <KnowledgeLink collection="tools" slug={item.data.slug}><span><strong>{item.data.name}</strong><small>{label(item.data.tool_type)} tool · {item.data.platforms.join(', ')}</small></span><i aria-hidden="true">→</i></KnowledgeLink> : null; })}
             </div>
           </section>
         )}
@@ -150,7 +160,7 @@ const tocItems = [
                 <span class={`badge ${attribution.confidence}`}>{label(attribution.status)}</span>
                 <h3>{attribution.attributed_entity}</h3>
                 <p>{attribution.claim}</p>
-                <p class="meta">Source: <a href={`/sources/${attribution.source}/`}>{maps.sources.get(attribution.source)?.data.name ?? attribution.source}</a> · {formatDate(attribution.published_at)} · {label(attribution.confidence)} confidence</p>
+                <p class="meta">Reference: {maps.sources.get(attribution.source) ? <KnowledgeLink collection="sources" slug={maps.sources.get(attribution.source).data.slug}>{maps.sources.get(attribution.source).data.name}</KnowledgeLink> : attribution.source} · {formatDate(attribution.published_at)} · {label(attribution.confidence)} confidence</p>
                 <p>{attribution.notes}</p>
               </div>
             ))}
@@ -163,7 +173,7 @@ const tocItems = [
             <p>This is a curated evidence set, not a dump of every technique ever associated with {d.name}.</p>
             {['apt28', 'apt44'].includes(d.slug) && <p><a class="button" href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Explore the interactive evidence matrix ↗</a></p>}
             <div class="technique-grid">
-              {d.techniques.map((id: string) => { const technique = maps.techniques.get(id); const evidence = d.technique_evidence.find((item: any) => item.technique === id); return technique ? <a href={`/techniques/${id}/`}><span class="mono">{technique.data.mitre_id}</span><strong>{technique.data.name}</strong><small>{technique.data.tactic}{evidence ? ` · ${label(evidence.confidence)} confidence` : ''}</small></a> : null; })}
+              {d.techniques.map((id: string) => { const technique = maps.techniques.get(id); const evidence = d.technique_evidence.find((item: any) => item.technique === id); return technique ? <KnowledgeLink collection="techniques" slug={technique.data.slug}><span class="mono">{technique.data.mitre_id}</span><strong>{technique.data.name}</strong><small>{technique.data.tactic}{evidence ? ` · ${label(evidence.confidence)} confidence` : ''}</small></KnowledgeLink> : null; })}
             </div>
           </section>
         )}
@@ -175,7 +185,7 @@ const tocItems = [
             <div class="table-wrap vulnerability-table" role="region" aria-label={`Observed ${d.name} vulnerability use`} tabindex="0">
               <table>
                 <thead><tr><th>CVE and product</th><th>Operational role</th><th>First observed</th><th>Confidence</th></tr></thead>
-                <tbody>{d.vulnerabilities.map((vulnerability: any) => <tr><td><a class="mono" href={`https://www.cve.org/CVERecord?id=${vulnerability.cve}`}>{vulnerability.cve}</a><small>{vulnerability.product}</small></td><td>{vulnerability.role}{vulnerability.campaign && <small><a href={`/campaigns/${vulnerability.campaign}/`}>{maps.campaigns.get(vulnerability.campaign)?.data.name ?? vulnerability.campaign}</a></small>}</td><td>{vulnerability.first_observed || 'Not stated'}</td><td><span class={`badge ${vulnerability.confidence}`}>{label(vulnerability.confidence)}</span><small><a href={`/sources/${vulnerability.source}/`}>Evidence</a></small></td></tr>)}</tbody>
+                <tbody>{d.vulnerabilities.map((vulnerability: any) => { const campaign = vulnerability.campaign ? maps.campaigns.get(vulnerability.campaign) : undefined; const source = maps.sources.get(vulnerability.source); return <tr><td><a class="mono" href={`https://www.cve.org/CVERecord?id=${vulnerability.cve}`}>{vulnerability.cve}</a><small>{vulnerability.product}</small></td><td>{vulnerability.role}{campaign && <small><KnowledgeLink collection="campaigns" slug={campaign.data.slug}>{campaign.data.name}</KnowledgeLink></small>}</td><td>{vulnerability.first_observed || 'Not stated'}</td><td><span class={`badge ${vulnerability.confidence}`}>{label(vulnerability.confidence)}</span><small>{source ? <KnowledgeLink collection="sources" slug={source.data.slug}>Evidence</KnowledgeLink> : vulnerability.source}</small></td></tr>; })}</tbody>
               </table>
             </div>
           </section>
@@ -184,8 +194,8 @@ const tocItems = [
         {d.related_research.length > 0 && <section id="related-research"><h2>Related Hecavex research</h2><ul>{d.related_research.map((research: any) => <li><a href={research.url}>{research.title} ↗</a></li>)}</ul></section>}
 
         <section id="sources">
-          <h2>Sources</h2>
-          <ol class="source-list">{d.sources.map((id: string) => { const source = maps.sources.get(id); return <li>{source ? <><a href={source.data.url}>{source.data.title}</a><span>{source.data.publisher} · {formatDate(source.data.published_at)} · <a href={`/sources/${source.data.slug}/`}>Source record</a></span></> : <span>{id} · source record pending</span>}</li>; })}</ol>
+          <h2>References</h2>
+          <ol class="source-list">{d.sources.map((id: string) => { const source = maps.sources.get(id); return <li>{source ? <><a href={source.data.url}>{source.data.title}</a><span>{source.data.publisher} · {formatDate(source.data.published_at)} · <KnowledgeLink collection="sources" slug={source.data.slug}>Reference record</KnowledgeLink></span></> : <span>{id} · reference record pending</span>}</li>; })}</ol>
         </section>
 
         {d.updates.length > 0 && (

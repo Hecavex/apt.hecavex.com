@@ -4,8 +4,16 @@ export const motivations = ['espionage', 'financial', 'disruption', 'destruction
 export const actorStatuses = ['active', 'intermittently-active', 'inactive', 'disrupted', 'merged', 'historical', 'uncertain'] as const;
 export const aliasRelationships = ['common-alias', 'vendor-tracking-cluster', 'historical-designation', 'research-cluster', 'government-designation', 'possible-overlap', 'subgroup', 'umbrella-group', 'disputed-equivalence', 'unknown'] as const;
 export const attributionStatuses = ['confirmed', 'reported', 'assessed', 'disputed', 'unknown'] as const;
-export const updateTypes = ['profile-created', 'attribution-updated', 'alias-updated', 'targeting-updated', 'campaign-added', 'malware-added', 'technique-added', 'source-added', 'confidence-changed', 'status-changed', 'correction', 'editorial-update'] as const;
+export const updateTypes = [
+  'profile-created', 'record-modified', 'attribution-updated', 'alias-updated',
+  'targeting-updated', 'campaign-added', 'malware-added', 'technique-added',
+  'source-added', 'relationship-added', 'relationship-modified',
+  'relationship-removed', 'confidence-changed', 'status-changed',
+  'record-deprecated', 'record-revoked', 'record-superseded',
+  'source-link-status-changed', 'dataset-release', 'correction', 'editorial-update'
+] as const;
 export const sourceTypes = ['government', 'vendor-research', 'academic', 'legal', 'media', 'nonprofit', 'community', 'other'] as const;
+export const linkStatuses = ['unknown', 'ok', 'redirected', 'unavailable'] as const;
 
 export const confidenceDefinitions = {
   low: 'Limited or weakly corroborated public evidence; the assessment may change materially.',

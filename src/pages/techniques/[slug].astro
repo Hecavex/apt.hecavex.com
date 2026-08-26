@@ -1,25 +1,17 @@
 ---
-import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { publicEntries, bySlug, formatDate } from '../../utils/content';
+import EntityProfile from '../../components/EntityProfile.astro';
+import { loadKnowledge } from '../../utils/knowledge';
 
 export async function getStaticPaths() {
-  return (await getCollection('techniques', ({ data }) => !data.draft)).map(entry => ({ params: { slug: entry.data.slug }, props: { entry } }));
+  const knowledge = await loadKnowledge();
+  return knowledge.techniques.map((entry: any) => ({ params: { slug: entry.data.slug }, props: { entry } }));
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
-const sourceMap = bySlug(await publicEntries('sources') as any);
+const knowledge = await loadKnowledge();
 const d = entry.data;
 ---
 <BaseLayout title={`${d.mitre_id} ${d.name}`} description={d.summary} type="ProfilePage" image={`/og/generated/technique-${d.slug}.png`} imageAlt={`${d.mitre_id} ${d.name} technique record by APT Notes`}>
-  <article class="shell narrow prose entity-profile" data-pagefind-body data-pagefind-meta="type:Technique">
-    <p class="eyebrow">Technique · <span class="mono">{d.mitre_id}</span></p>
-    <h1>{d.name}</h1>
-    <p class="lead">{d.summary}</p>
-    <dl class="fact-grid"><div class="fact"><dt>MITRE ID</dt><dd>{d.mitre_id}</dd></div><div class="fact"><dt>Tactic</dt><dd>{d.tactic}</dd></div></dl>
-    <Content />
-    <h2>Sources</h2>
-    <ol>{d.sources.map((id: string) => { const source: any = sourceMap.get(id); return <li>{source ? <a href={source.data.url}>{source.data.title} — {source.data.publisher}, {formatDate(source.data.published_at)}</a> : id}</li>; })}</ol>
-  </article>
+  <EntityProfile entry={entry} collection="techniques" knowledge={knowledge} />
 </BaseLayout>

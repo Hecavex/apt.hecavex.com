@@ -13,12 +13,14 @@
     "build:og": "node scripts/generate-og.mjs",
     "preview": "astro preview",
     "check": "astro check",
-    "audit": "node scripts/audit-build.mjs && npm run audit:performance",
+    "audit": "node scripts/audit-build.mjs && npm run audit:data && npm run audit:performance",
+    "audit:data": "node scripts/audit-data.mjs",
     "audit:performance": "node scripts/audit-performance.mjs",
+    "check:sources": "node scripts/check-source-links.mjs",
     "lint": "node scripts/lint.mjs",
+    "test:content": "node scripts/test-content-validation.mjs",
     "validate": "node scripts/validate-content.mjs",
-    "test": "node --test tests/*.test.mjs",
-    "verify": "npm run lint && npm run build && npm run audit && npm test"
+    "verify": "npm run lint && npm run test:content && npm run build && npm run audit"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.3",

@@ -1,0 +1,38 @@
+{
+  "expected_relationships": 1,
+  "cases": [
+    {
+      "name": "valid nested content tree",
+      "valid": true,
+      "includes": [
+        "Validated 8 content records (8 public, 0 drafts) and 1 current evidence relationships."
+      ]
+    },
+    {
+      "name": "invalid typed nested references",
+      "valid": false,
+      "overlay": "cases/invalid-nested-reference",
+      "includes": [
+        "technique_evidence[0] campaign \"source-one\" resolves to sources, expected campaigns",
+        "timeline source \"actor-one\" resolves to actors, expected sources"
+      ]
+    },
+    {
+      "name": "supersession cycle and invalid lifecycle state",
+      "valid": false,
+      "overlay": "cases/invalid-lifecycle",
+      "includes": [
+        "a record cannot be both deprecated and revoked",
+        "superseded_by cycle detected"
+      ]
+    },
+    {
+      "name": "broken version chain",
+      "valid": false,
+      "overlay": "cases/broken-version-chain",
+      "includes": [
+        "previous_version does not match prior change new_version \"1.0.0\""
+      ]
+    }
+  ]
+}

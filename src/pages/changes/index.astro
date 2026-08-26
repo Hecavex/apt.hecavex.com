@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { release } from '../../data/release';
+import { formatDate, label, unique } from '../../utils/content';
+import { entityHref, loadKnowledge, typeCollections, type EntityType } from '../../utils/knowledge';
+
+const knowledge = await loadKnowledge();
+const updates = [...knowledge.updates].sort((left: any, right: any) => +new Date(right.data.date) - +new Date(left.data.date) || left.data.id.localeCompare(right.data.id));
+const latestEventTime = updates.reduce((latest: number, update: any) => Math.max(latest, +new Date(update.data.date)), +new Date(release.releasedAt));
+const asOf = new Date(latestEventTime);
+const withinDays = (date: Date, days: number) => asOf.getTime() - date.getTime() <= days * 86_400_000;
+const recent30 = updates.filter((update: any) => withinDays(update.data.date, 30));
+const recent90 = updates.filter((update: any) => withinDays(update.data.date, 90));
+const entityTypes = unique(updates.map((update: any) => update.data.entity_type)).sort();
+const changeTypes = unique(updates.map((update: any) => update.data.update_type)).sort();
+const updatesById = new Map(updates.map((update: any) => [update.data.id, update]));
+const releaseGroups = [...updates.reduce((groups: Map<string, any[]>, update: any) => {
+  const releaseId = update.data.release_id;
+  groups.set(releaseId, [...(groups.get(releaseId) ?? []), update]);
+  return groups;
+}, new Map()).entries()];
+const recordUrl = (update: any) => {
+  const collection = typeCollections[update.data.entity_type as EntityType];
+  const entry = knowledge.maps[collection]!.get(update.data.entity);
+  return entry ? entityHref(collection, entry.data.slug) : '/knowledge/';
+};
+---
+<BaseLayout title="Changes" description="A durable record of substantive APT Notes publications, corrections and relationship changes.">
+  <section class="shell changes-page">
+    <header class="page-head changes-head">
+      <div>
+        <p class="eyebrow">Public revision record</p>
+        <h1>What changed</h1>
+        <p class="lead">Substantive publications, corrections and intelligence revisions with a stable event identity, affected fields and an explanation of why the record changed.</p>
+      </div>
+      <span class="meta">Release {updates[0]?.data.release_id ?? 'apt-notes-2026-08-26'}</span>
+    </header>
+
+    <div class="stat-grid change-stats" aria-label="Change history summary">
+      <div class="stat"><strong>{recent30.length}</strong><span>Events / 30 days</span></div>
+      <div class="stat"><strong>{recent90.length}</strong><span>Events / 90 days</span></div>
+      <div class="stat"><strong>{updates.filter((item: any) => item.data.update_type === 'profile-created').length}</strong><span>Profiles created</span></div>
+      <div class="stat"><strong>{updates.filter((item: any) => item.data.update_type === 'correction').length}</strong><span>Corrections</span></div>
+    </div>
+
+    <div class="change-subscriptions">
+      <p><strong>Follow changes without polling the catalogue.</strong><span>Atom and JSON expose only editorial change events, not inferred review activity.</span></p>
+      <nav aria-label="Change data"><a href="/changes/feed.xml">Atom</a><a href="/api/changes.json">JSON</a><a href="/data/changes.csv">CSV</a><a href="/api/version.json">Version</a></nav>
+    </div>
+
+    <form class="controls change-controls" data-change-controls data-as-of={asOf.toISOString()} aria-label="Change filters">
+      <div class="advanced-filter-grid">
+        <label>Search changes<input type="search" name="q" placeholder="Title, record, field…" /></label>
+        <label>Entity type<select name="entity"><option value="">All entity types</option>{entityTypes.map((value) => <option value={value}>{label(value)}</option>)}</select></label>
+        <label>Change type<select name="type"><option value="">All change types</option>{changeTypes.map((value) => <option value={value}>{label(value)}</option>)}</select></label>
+        <label>Window<select name="window"><option value="all">Complete record</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select></label>
+      </div>
+      <button class="filter-reset" type="reset">Reset filters</button>
+    </form>
+    <p class="meta change-count" data-change-count role="status">{updates.length} changes shown</p>
+
+    {releaseGroups.map(([releaseId, releaseUpdates]) => <section class="change-release-group" data-change-release-group>
+      <header class="change-group-header">
+        <h2>Release {releaseId}</h2>
+        <span>{releaseUpdates.length} {releaseUpdates.length === 1 ? 'event' : 'events'}</span>
+      </header>
+      <ol class="change-list" data-change-list data-pagefind-body>
+      {releaseUpdates.map((update: any) => <li id={update.data.slug} class="change-record"
+        data-change-record data-entity={update.data.entity_type} data-type={update.data.update_type}
+        data-date={update.data.date.toISOString()}
+        data-search={`${update.data.title} ${update.data.summary} ${update.data.what_changed} ${update.data.why} ${update.data.entity} ${update.data.affected_fields.join(' ')}`.toLowerCase()}
+        data-pagefind-meta="type:Change">
+        <div class="change-record-meta">
+          <time datetime={update.data.date.toISOString()}>{formatDate(update.data.date)}</time>
+          <span class="badge">{label(update.data.update_type)}</span>
+          <span class="mono">{update.data.id}</span>
+        </div>
+        <div class="change-record-body">
+          <h2>{update.data.title}</h2>
+          <p>{update.data.summary}</p>
+          <dl class="change-detail-grid">
+            <div><dt>What changed</dt><dd>{update.data.what_changed || update.data.summary}</dd></div>
+            <div><dt>Why</dt><dd>{update.data.why || 'The public record was updated to reflect the stated source-backed change.'}</dd></div>
+            <div><dt>Affected fields</dt><dd>{update.data.affected_fields.length ? update.data.affected_fields.map((field: string) => <span class="badge">{label(field)}</span>) : 'Not field-scoped'}</dd></div>
+            <div><dt>Version</dt><dd><span class="mono">{update.data.previous_version ? `${update.data.previous_version} → ` : ''}{update.data.new_version}</span></dd></div>
+          </dl>
+          {update.data.affected_relationships.length > 0 && <div class="change-support">
+            <strong>Affected relationships</strong>
+            <ul>{update.data.affected_relationships.map((id: string) => <li><a href={`/relationships/#${id}`}>{id}</a></li>)}</ul>
+          </div>}
+          {update.data.correction_of && <div class="change-support">
+            <strong>Correction record</strong>
+            <p>{updatesById.get(update.data.correction_of)
+              ? <a href={`/changes/#${updatesById.get(update.data.correction_of)!.data.slug}`}>Corrects {update.data.correction_of}</a>
+              : <>Corrects <span class="mono">{update.data.correction_of}</span></>}</p>
+          </div>}
+          <div class="change-support">
+            <strong>Supporting references</strong>
+            {update.data.sources.length
+              ? <ul>{update.data.sources.map((id: string) => {
+                  const source = knowledge.maps.sources!.get(id);
+                  return source ? <li><a href={`/sources/${source.data.slug}/`} data-knowledge-link>{source.data.publisher}: {source.data.title}</a></li> : null;
+                })}</ul>
+              : <p>{update.data.editorial_note || 'Editorial publication record; no external supporting reference was attached.'}</p>}
+          </div>
+          <p class="change-actions"><a href={recordUrl(update)}>Open affected record →</a><a href={`/api/changes/${update.data.slug}.json`}>Event JSON</a></p>
+        </div>
+      </li>)}
+      </ol>
+    </section>)}
+    <div class="empty" data-change-empty hidden><h2>No matching changes</h2><p>Remove a filter or expand the time window.</p></div>
+  </section>
+</BaseLayout>
+
+<script>
+  const initialiseChangeFilters = () => {
+    const form = document.querySelector<HTMLFormElement>('[data-change-controls]');
+    if (!form) return;
+    const rows = [...document.querySelectorAll<HTMLElement>('[data-change-record]')];
+    const groups = [...document.querySelectorAll<HTMLElement>('[data-change-release-group]')];
+    const count = document.querySelector<HTMLElement>('[data-change-count]')!;
+    const empty = document.querySelector<HTMLElement>('[data-change-empty]')!;
+    const asOf = new Date(form.dataset.asOf!).getTime();
+    const apply = () => {
+      const data = new FormData(form);
+      const q = String(data.get('q') ?? '').trim().toLowerCase();
+      const entity = String(data.get('entity') ?? '');
+      const type = String(data.get('type') ?? '');
+      const windowDays = Number(data.get('window') ?? 0);
+      const shown = rows.filter((row) => (!q || row.dataset.search!.includes(q))
+        && (!entity || row.dataset.entity === entity)
+        && (!type || row.dataset.type === type)
+        && (!windowDays || asOf - new Date(row.dataset.date!).getTime() <= windowDays * 86_400_000));
+      rows.forEach((row) => { row.hidden = !shown.includes(row); });
+      groups.forEach((group) => {
+        group.hidden = ![...group.querySelectorAll<HTMLElement>('[data-change-record]')].some((row) => !row.hidden);
+      });
+      const parameters = new URLSearchParams();
+      if (entity) parameters.set('entity', entity);
+      if (type) parameters.set('type', type);
+      if (windowDays) parameters.set('window', String(windowDays));
+      history.replaceState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}${location.hash}`);
+      count.textContent = `${shown.length} ${shown.length === 1 ? 'change' : 'changes'} shown`;
+      empty.hidden = shown.length !== 0;
+    };
+    const initial = new URLSearchParams(location.search);
+    for (const name of ['entity', 'type', 'window']) {
+      const value = initial.get(name);
+      const field = form.elements.namedItem(name) as HTMLInputElement | null;
+      if (field && value) field.value = value;
+    }
+    form.addEventListener('input', apply);
+    form.addEventListener('change', apply);
+    form.addEventListener('reset', () => requestAnimationFrame(() => { history.replaceState(null, '', location.pathname); apply(); }));
+    apply();
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialiseChangeFilters, { once: true });
+  else initialiseChangeFilters();
+</script>

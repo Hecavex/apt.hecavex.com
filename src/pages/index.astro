@@ -1,16 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { publicEntries, formatDate } from '../utils/content';
-const actors:any[] = await publicEntries('actors');
-const campaigns:any[] = await publicEntries('campaigns');
-const malware:any[] = await publicEntries('malware');
-const tools:any[] = await publicEntries('tools');
-const sources:any[] = await publicEntries('sources');
-const updates:any[] = await publicEntries('updates');
+import { formatDate } from '../utils/content';
+import { loadKnowledge } from '../utils/knowledge';
+const knowledge = await loadKnowledge();
+const { actors, campaigns, malware, tools, techniques, sources, updates, relationships } = knowledge;
 const aliases = actors.reduce((sum, actor:any) => sum + actor.data.aliases.length, 0);
 const recent = [...actors].sort((a:any,b:any) => +new Date(b.data.last_reviewed)-+new Date(a.data.last_reviewed)).slice(0,5);
 const latest = [...updates].sort((a:any,b:any) => +new Date(b.data.date)-+new Date(a.data.date)).slice(0,5);
-const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaigns.length],['Malware',malware.length],['Tools',tools.length],['Sources',sources.length]];
+const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaigns.length],['Software',malware.length + tools.length],['Techniques',techniques.length],['Relationships',relationships.length]];
 ---
 <BaseLayout>
   <section class="shell">
@@ -18,16 +15,20 @@ const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaig
       <p class="eyebrow">Structured threat intelligence</p>
       <h1>Threat actor intelligence,<br />structured for research.</h1>
       <p class="lead">A curated collection of deeply sourced threat-actor dossiers and their related campaigns, malware, targeting and attribution.</p>
-      <a class="button" href="/actors/">Browse actors →</a>
-      <p class="hero-meta">APT NOTES · BY HECAVEX</p>
+      <div class="hero-actions"><a class="button" href="/actors/">Browse actors →</a><a href="/knowledge/">Search Knowledge →</a></div>
+      <p class="hero-meta">APT NOTES · BY HECAVEX · {sources.length} PUBLIC REFERENCES</p>
     </header>
     <div class="stat-grid" aria-label="Public knowledge base statistics">{stats.map(([name,count]) => <div class="stat"><strong>{count}</strong><span>{name}</span></div>)}</div>
-    <p class="scope-note"><strong>Coverage:</strong> selected deep profiles, not an exhaustive actor directory. Maintained by <a href="https://hecavex.com/en/about/">Deividas Lis / HECAVEX</a> on a best-effort basis; every public record must meet the sourcing and review requirements in the <a href="/about/methodology/">methodology</a>. See <a href="/about/">project status and limitations</a>.</p>
+    <p class="scope-note"><strong>Coverage:</strong> selected deep profiles, not an exhaustive actor directory. Actor dossiers are the editorial product; Knowledge records support them, and only procedure-backed links enter <a href="/relationships/">Relationships</a>. Review the <a href="/about/methodology/">methodology</a> and <a href="/about/">publication boundaries</a>.</p>
     <div class="section-head"><h2>Recently reviewed profiles</h2><a href="/actors/">All actors →</a></div>
     {recent.length ? <div class="database-list">{recent.map((actor:any) => <article class="db-row"><div class="db-cell"><h3><a href={`/actors/${actor.data.slug}/`}>{actor.data.name}</a></h3><p>{actor.data.summary}</p></div><div class="db-cell"><small>Origin</small>{actor.data.suspected_origins.join(', ') || 'Unknown'}</div><div class="db-cell"><small>Status</small><span class={`badge ${actor.data.status}`}>{actor.data.status}</span></div><div class="db-cell"><small>Confidence</small><span class={`badge ${actor.data.confidence}`}>{actor.data.confidence}</span></div><div class="db-cell"><small>Reviewed</small>{formatDate(actor.data.last_reviewed)}</div></article>)}</div> : <div class="empty">No public actor profiles yet.</div>}
-    <div class="section-head"><h2>Browse the knowledge base</h2></div>
-    <div class="grid">{[['Actors','/actors/'],['Campaigns','/campaigns/'],['Malware','/malware/'],['Tools','/tools/'],['Techniques','/techniques/'],['Sources','/sources/']].map(([name,url]) => <a class="panel" href={url}><strong>{name}</strong><br/><span>Browse structured records →</span></a>)}</div>
-    <div class="section-head"><h2>Latest intelligence changes</h2><a href="/updates/">Complete change log →</a></div>
-    <ol class="timeline">{latest.map((update:any) => <li><time datetime={update.data.date.toISOString()}>{formatDate(update.data.date)}</time><h3>{update.data.title}</h3><p>{update.data.summary}</p></li>)}</ol>
+    <div class="section-head"><h2>Choose the depth you need</h2></div>
+    <div class="overview-paths">
+      <a class="panel overview-path overview-path-primary" href="/actors/"><span>Primary research</span><strong>Actor dossiers</strong><p>Read source-specific identity, attribution, chronology, targeting, capabilities and procedure evidence.</p><i>Browse {actors.length} dossiers →</i></a>
+      <a class="panel overview-path" href="/knowledge/"><span>Supporting intelligence</span><strong>Knowledge explorer</strong><p>Inspect campaigns, software, techniques and references in context without losing your place.</p><i>Search {campaigns.length + malware.length + tools.length + techniques.length + sources.length} records →</i></a>
+      <a class="panel overview-path" href="/relationships/"><span>Evidence layer</span><strong>Sourced relationships</strong><p>Review the bounded actor-to-technique links that carry an explicit procedure statement and reference.</p><i>Inspect {relationships.length} relationships →</i></a>
+    </div>
+    <div class="section-head"><h2>Latest substantive changes</h2><a href="/changes/">Complete revision record →</a></div>
+    <ol class="timeline">{latest.map((update:any) => <li><time datetime={update.data.date.toISOString()}>{formatDate(update.data.date)}</time><h3><a href={`/changes/#${update.data.slug}`}>{update.data.title}</a></h3><p>{update.data.what_changed || update.data.summary}</p></li>)}</ol>
   </section>
 </BaseLayout>

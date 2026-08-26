@@ -1,0 +1,288 @@
+---
+import { formatDate, label, unique } from '../../utils/content';
+import { entityHref, recordName } from '../../utils/knowledge';
+
+const { knowledge } = Astro.props;
+const actorMap = knowledge.maps.actors;
+const campaignMap = knowledge.maps.campaigns;
+const relationshipActors = new Map<string, Set<string>>();
+for (const relationship of knowledge.relationships) {
+  const list = relationshipActors.get(relationship.target_entity.id) ?? new Set<string>();
+  list.add(relationship.source_entity.id);
+  relationshipActors.set(relationship.target_entity.id, list);
+}
+
+const supportingRecords = [
+  ...knowledge.campaigns.map((entry: any) => ({
+    type: 'campaign', id: entry.data.id, slug: entry.data.slug, name: entry.data.name,
+    url: entityHref('campaigns', entry.data.slug), aliases: entry.data.aliases,
+    confidence: entry.data.confidence, lastReviewed: entry.data.last_reviewed.toISOString(),
+    actorIds: entry.data.actors, actorNames: entry.data.actors.map((id: string) => actorMap.get(id)?.data.name ?? id),
+    activity: `${entry.data.start_date}${entry.data.end_date ? `–${entry.data.end_date}` : '–present'}`,
+    regions: entry.data.regions, sectors: entry.data.sectors,
+    capabilities: entry.data.malware.length + entry.data.tools.length + entry.data.techniques.length
+  })),
+  ...knowledge.malware.map((entry: any) => ({
+    type: 'malware', id: entry.data.id, slug: entry.data.slug, name: entry.data.name,
+    url: entityHref('malware', entry.data.slug), aliases: entry.data.aliases,
+    confidence: entry.data.confidence, lastReviewed: entry.data.last_reviewed.toISOString(),
+    actorIds: entry.data.actors, actorNames: entry.data.actors.map((id: string) => actorMap.get(id)?.data.name ?? id),
+    kind: entry.data.family_type, platforms: entry.data.platforms,
+    campaignNames: entry.data.campaigns.map((id: string) => campaignMap.get(id)?.data.name ?? id),
+    relationshipCount: entry.data.actors.length + entry.data.campaigns.length + entry.data.techniques.length
+  })),
+  ...knowledge.tools.map((entry: any) => ({
+    type: 'tool', id: entry.data.id, slug: entry.data.slug, name: entry.data.name,
+    url: entityHref('tools', entry.data.slug), aliases: entry.data.aliases,
+    confidence: entry.data.confidence, lastReviewed: entry.data.last_reviewed.toISOString(),
+    actorIds: entry.data.actors, actorNames: entry.data.actors.map((id: string) => actorMap.get(id)?.data.name ?? id),
+    kind: `${label(entry.data.tool_type)} tool`, platforms: entry.data.platforms,
+    campaignNames: [], relationshipCount: entry.data.actors.length + entry.data.techniques.length
+  })),
+  ...knowledge.techniques.map((entry: any) => ({
+    type: 'technique', id: entry.data.id, slug: entry.data.slug, name: entry.data.name,
+    url: entityHref('techniques', entry.data.slug), aliases: [], confidence: '',
+    lastReviewed: entry.data.modified_at.toISOString(), mitreId: entry.data.mitre_id,
+    tactic: entry.data.tactic, actorIds: [...(relationshipActors.get(entry.data.id) ?? [])],
+    actorNames: [...(relationshipActors.get(entry.data.id) ?? [])].map((id: string) => actorMap.get(id)?.data.name ?? id),
+    referenceCount: entry.data.sources.length, evidenceCount: knowledge.relationships.filter((relationship: any) => relationship.target_entity.id === entry.data.id).length
+  })),
+  ...knowledge.sources.map((entry: any) => ({
+    type: 'source', id: entry.data.id, slug: entry.data.slug, name: entry.data.title,
+    url: entityHref('sources', entry.data.slug), aliases: [entry.data.name], confidence: '',
+    lastReviewed: entry.data.accessed_at.toISOString(), publisher: entry.data.publisher,
+    publishedAt: entry.data.published_at.toISOString(), sourceType: entry.data.source_type,
+    linkStatus: entry.data.link_status, usageCount: (knowledge.referenceUsage.get(entry.data.id) ?? []).length,
+    actorIds: unique((knowledge.referenceUsage.get(entry.data.id) ?? []).filter((usage: any) => usage.entity_type === 'actor').map((usage: any) => usage.entity_id)),
+    actorNames: unique((knowledge.referenceUsage.get(entry.data.id) ?? []).filter((usage: any) => usage.entity_type === 'actor').map((usage: any) => usage.entity_name))
+  }))
+];
+const json = JSON.stringify(supportingRecords).replaceAll('<', '\\u003c');
+const actors = knowledge.actors.map((actor: any) => ({ id: actor.data.id, name: actor.data.name }));
+---
+
+<div class="knowledge-explorer" data-knowledge-explorer>
+  <nav class="knowledge-views" aria-label="Knowledge record types">
+    <a href="/knowledge/?view=campaigns" data-knowledge-view="campaigns" aria-current="page">Campaigns <span>{knowledge.campaigns.length}</span></a>
+    <a href="/knowledge/?view=software" data-knowledge-view="software">Software <span>{knowledge.malware.length + knowledge.tools.length}</span></a>
+    <a href="/knowledge/?view=techniques" data-knowledge-view="techniques">Techniques <span>{knowledge.techniques.length}</span></a>
+    <a href="/knowledge/?view=references" data-knowledge-view="references">References <span>{knowledge.sources.length}</span></a>
+  </nav>
+
+  <form class="knowledge-controls controls" data-knowledge-controls aria-label="Knowledge filters">
+    <div class="knowledge-control-grid">
+      <label>Search records<input type="search" name="q" placeholder="Name, alias, ID, publisher…" autocomplete="off" /></label>
+      <label data-software-kind hidden>Software type<select name="kind"><option value="">Malware and tools</option><option value="malware">Malware only</option><option value="tool">Tools only</option></select></label>
+      <label>Associated actor<select name="actor"><option value="">All actors</option>{actors.map((actor: any) => <option value={actor.id}>{actor.name}</option>)}</select></label>
+      <label data-confidence-filter>Confidence<select name="confidence"><option value="">All confidence</option><option value="high">High</option><option value="moderate">Moderate</option><option value="low">Low</option></select></label>
+      <label>Sort<select name="sort"><option value="name">Name</option><option value="reviewed">Recently reviewed</option><option value="relationships">Most connected</option></select></label>
+    </div>
+    <div class="knowledge-control-actions">
+      <button class="filter-reset" type="reset">Reset filters</button>
+      <button class="filter-reset" type="button" data-download-filtered>Download filtered CSV</button>
+    </div>
+  </form>
+
+  <div class="knowledge-result-bar">
+    <p class="meta" data-knowledge-status role="status">{knowledge.campaigns.length} campaign records</p>
+    <a href="/api/index.json">Machine-readable catalogue →</a>
+  </div>
+
+  <div class="table-wrap knowledge-table-wrap" role="region" aria-label="Knowledge records" tabindex="0">
+    <table data-knowledge-table>
+      <caption>Campaign records</caption>
+      <thead><tr><th scope="col">Campaign</th><th scope="col">Actor</th><th scope="col">Activity</th><th scope="col">Target scope</th><th scope="col">Relationships</th><th scope="col">Reviewed</th></tr></thead>
+      <tbody>
+        {knowledge.campaigns.map((entry: any) => <tr>
+          <th scope="row"><a href={entityHref('campaigns', entry.data.slug)} data-knowledge-link>{recordName(entry)}</a><small>{entry.data.aliases.slice(0, 2).join(' · ')}</small></th>
+          <td>{entry.data.actors.map((id: string) => actorMap.get(id)?.data.name ?? id).join(', ')}</td>
+          <td>{entry.data.start_date}{entry.data.end_date ? `–${entry.data.end_date}` : '–present'}</td>
+          <td>{[...entry.data.regions, ...entry.data.sectors].slice(0, 3).join(' · ') || 'Not specified'}</td>
+          <td>{entry.data.malware.length + entry.data.tools.length + entry.data.techniques.length}</td>
+          <td>{formatDate(entry.data.last_reviewed)}</td>
+        </tr>)}
+      </tbody>
+    </table>
+  </div>
+  <div class="empty" data-knowledge-empty hidden><h2>No matching records</h2><p>Remove a filter or broaden the search.</p></div>
+  <noscript><p class="callout">JavaScript enables the combined explorer. The addressable catalogues remain available: <a href="/campaigns/">Campaigns</a>, <a href="/malware/">Malware</a>, <a href="/tools/">Tools</a>, <a href="/techniques/">Techniques</a>, and <a href="/sources/">References</a>.</p></noscript>
+  <script is:inline type="application/json" data-knowledge-data set:html={json}></script>
+</div>
+
+<script>
+  const initialiseKnowledgeExplorer = () => {
+    const root = document.querySelector<HTMLElement>('[data-knowledge-explorer]');
+    if (!root || root.dataset.ready === 'true') return;
+    root.dataset.ready = 'true';
+    const records = JSON.parse(root.querySelector<HTMLScriptElement>('[data-knowledge-data]')?.textContent ?? '[]');
+    const form = root.querySelector<HTMLFormElement>('[data-knowledge-controls]')!;
+    const table = root.querySelector<HTMLTableElement>('[data-knowledge-table]')!;
+    const status = root.querySelector<HTMLElement>('[data-knowledge-status]')!;
+    const empty = root.querySelector<HTMLElement>('[data-knowledge-empty]')!;
+    const softwareKind = root.querySelector<HTMLElement>('[data-software-kind]')!;
+    const confidenceFilter = root.querySelector<HTMLElement>('[data-confidence-filter]')!;
+    let currentRows: any[] = [];
+
+    type KnowledgeView = 'campaigns' | 'software' | 'techniques' | 'references';
+    const state = (): { view: KnowledgeView; kind: string; actor: string; confidence: string; sort: string } => {
+      const parameters = new URLSearchParams(location.search);
+      const requested = parameters.get('view');
+      const view: KnowledgeView = requested === 'software' || requested === 'techniques' || requested === 'references' ? requested : 'campaigns';
+      return {
+        view,
+        kind: parameters.get('kind') ?? '',
+        actor: parameters.get('actor') ?? '',
+        confidence: parameters.get('confidence') ?? '',
+        sort: parameters.get('sort') ?? 'name'
+      };
+    };
+
+    const syncFormFromUrl = () => {
+      const current = state();
+      for (const name of ['kind', 'actor', 'confidence', 'sort'] as const) {
+        const field = form.elements.namedItem(name) as HTMLInputElement | null;
+        if (field) field.value = current[name];
+      }
+    };
+
+    const cell = (text: unknown, tag: 'td' | 'th' = 'td') => {
+      const element = document.createElement(tag);
+      if (tag === 'th') element.scope = 'row';
+      element.textContent = text == null || text === '' ? '—' : String(text);
+      return element;
+    };
+
+    const recordCell = (record: any) => {
+      const heading = document.createElement('th');
+      heading.scope = 'row';
+      const link = document.createElement('a');
+      link.href = record.url;
+      link.dataset.knowledgeLink = '';
+      link.textContent = record.name;
+      heading.append(link);
+      const identifier = record.mitreId || record.id;
+      if (identifier) {
+        const small = document.createElement('small');
+        small.textContent = identifier;
+        heading.append(small);
+      }
+      return heading;
+    };
+
+    const columns: Record<string, { caption: string; headings: string[]; row: (record: any) => HTMLElement[] }> = {
+      campaigns: {
+        caption: 'Campaign records', headings: ['Campaign', 'Actor', 'Activity', 'Target scope', 'Relationships', 'Reviewed'],
+        row: (record) => [recordCell(record), cell(record.actorNames.join(', ') || 'Not specified'), cell(record.activity), cell([...record.regions, ...record.sectors].slice(0, 3).join(' · ') || 'Not specified'), cell(record.capabilities), cell(new Date(record.lastReviewed).toLocaleDateString('en-GB', { dateStyle: 'medium', timeZone: 'UTC' }))]
+      },
+      software: {
+        caption: 'Software records', headings: ['Software', 'Kind', 'Actor', 'Campaign context', 'Platforms', 'Relationships'],
+        row: (record) => [recordCell(record), cell(record.kind), cell(record.actorNames.join(', ') || 'Not specified'), cell(record.campaignNames.join(', ') || 'Not specified'), cell(record.platforms.join(' · ') || 'Not specified'), cell(record.relationshipCount)]
+      },
+      techniques: {
+        caption: 'Technique mappings', headings: ['Technique', 'Tactic', 'Actor evidence', 'Procedure records', 'References'],
+        row: (record) => [recordCell(record), cell(record.tactic), cell(record.actorNames.join(', ') || 'Catalogue mapping only'), cell(record.evidenceCount), cell(record.referenceCount)]
+      },
+      references: {
+        caption: 'Reference records', headings: ['Reference', 'Publisher', 'Published', 'Type', 'Used by', 'Link status'],
+        row: (record) => [recordCell(record), cell(record.publisher), cell(new Date(record.publishedAt).toLocaleDateString('en-GB', { dateStyle: 'medium', timeZone: 'UTC' })), cell(record.sourceType.replaceAll('-', ' ')), cell(record.usageCount), cell(record.linkStatus)]
+      }
+    };
+
+    const render = () => {
+      const current = state();
+      const data = new FormData(form);
+      const query = String(data.get('q') ?? '').trim().toLowerCase();
+      const actor = String(data.get('actor') ?? current.actor);
+      const confidence = String(data.get('confidence') ?? '');
+      const kind = String(data.get('kind') ?? current.kind);
+      const sort = String(data.get('sort') ?? current.sort);
+      const typeMatch = (record: any) => current.view === 'campaigns' ? record.type === 'campaign' : current.view === 'software' ? ['malware', 'tool'].includes(record.type) : current.view === 'techniques' ? record.type === 'technique' : record.type === 'source';
+      currentRows = records.filter((record: any) => typeMatch(record)
+        && (!kind || record.type === kind)
+        && (!actor || record.actorIds.includes(actor))
+        && (!confidence || record.confidence === confidence)
+        && (!query || [record.id, record.name, ...(record.aliases ?? []), ...(record.actorNames ?? []), record.publisher, record.mitreId, record.tactic].filter(Boolean).join(' ').toLowerCase().includes(query)));
+      currentRows.sort((left: any, right: any) => sort === 'reviewed'
+        ? right.lastReviewed.localeCompare(left.lastReviewed)
+        : sort === 'relationships'
+          ? (right.relationshipCount ?? right.evidenceCount ?? right.usageCount ?? right.capabilities ?? 0) - (left.relationshipCount ?? left.evidenceCount ?? left.usageCount ?? left.capabilities ?? 0)
+          : left.name.localeCompare(right.name));
+
+      root.querySelectorAll<HTMLAnchorElement>('[data-knowledge-view]').forEach((link) => link.setAttribute('aria-current', link.dataset.knowledgeView === current.view ? 'page' : 'false'));
+      softwareKind.hidden = current.view !== 'software';
+      confidenceFilter.hidden = ['techniques', 'references'].includes(current.view);
+      const config = columns[current.view]!;
+      if (table.caption) table.caption.textContent = config.caption;
+      const headRow = document.createElement('tr');
+      for (const heading of config.headings) {
+        const item = document.createElement('th');
+        item.scope = 'col';
+        item.textContent = heading;
+        headRow.append(item);
+      }
+      table.tHead?.replaceChildren(headRow);
+      const body = table.tBodies[0] ?? table.createTBody();
+      body.replaceChildren(...currentRows.map((record: any) => {
+        const row = document.createElement('tr');
+        row.append(...config.row(record));
+        return row;
+      }));
+      const noun = current.view === 'references' ? 'reference' : current.view === 'software' ? 'software' : current.view.slice(0, -1);
+      status.textContent = `${currentRows.length} ${noun} ${currentRows.length === 1 ? 'record' : 'records'}`;
+      empty.hidden = currentRows.length !== 0;
+      table.parentElement!.hidden = currentRows.length === 0;
+    };
+
+    const updateUrl = () => {
+      const current = state();
+      const data = new FormData(form);
+      const parameters = new URLSearchParams();
+      if (current.view !== 'campaigns') parameters.set('view', current.view);
+      for (const name of ['kind', 'actor', 'confidence', 'sort']) {
+        const value = String(data.get(name) ?? '');
+        if (value && !(name === 'sort' && value === 'name')) parameters.set(name, value);
+      }
+      history.replaceState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}`);
+    };
+
+    root.querySelectorAll<HTMLAnchorElement>('[data-knowledge-view]').forEach((link) => link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const parameters = new URLSearchParams(location.search);
+      const view = link.dataset.knowledgeView ?? 'campaigns';
+      if (view === 'campaigns') parameters.delete('view'); else parameters.set('view', view);
+      if (view !== 'software') parameters.delete('kind');
+      history.pushState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}`);
+      syncFormFromUrl();
+      render();
+    }));
+    syncFormFromUrl();
+    form.addEventListener('input', () => { updateUrl(); render(); });
+    form.addEventListener('change', () => { updateUrl(); render(); });
+    form.addEventListener('reset', () => requestAnimationFrame(() => {
+      const current = state();
+      const parameters = new URLSearchParams();
+      if (current.view !== 'campaigns') parameters.set('view', current.view);
+      history.replaceState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}`);
+      syncFormFromUrl();
+      render();
+    }));
+    window.addEventListener('popstate', () => { syncFormFromUrl(); render(); });
+    root.querySelector<HTMLButtonElement>('[data-download-filtered]')?.addEventListener('click', () => {
+      const values = currentRows.map((record: any) => [record.name, record.type, record.id, record.actorNames?.join(' | ') ?? '', record.confidence ?? '', record.url]);
+      const quote = (value: unknown) => {
+        const normalized = String(value ?? '');
+        const spreadsheetSafe = /^[=+\-@]/.test(normalized) ? `'${normalized}` : normalized;
+        return `"${spreadsheetSafe.replaceAll('"', '""')}"`;
+      };
+      const csv = [['Name', 'Type', 'Stable ID', 'Actors', 'Confidence', 'URL'], ...values].map((row) => row.map(quote).join(',')).join('\r\n');
+      const anchor = document.createElement('a');
+      anchor.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+      anchor.download = `apt-notes-${state().view}-filtered.csv`;
+      anchor.click();
+      URL.revokeObjectURL(anchor.href);
+    });
+    render();
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialiseKnowledgeExplorer, { once: true });
+  else initialiseKnowledgeExplorer();
+</script>

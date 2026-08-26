@@ -1,4 +1,49 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';import{confidenceDefinitions}from'../../data/vocabularies';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { confidenceDefinitions } from '../../data/vocabularies';
 ---
-<BaseLayout title="Methodology" description="APT Notes methodology for scope, sourcing, naming, attribution, confidence and corrections."><article class="shell narrow prose"><p class="eyebrow">Editorial standards</p><h1>Methodology</h1><h2>Scope</h2><p>APT Notes is a curated dossier collection, not an exhaustive threat-actor directory. It covers publicly documented actors and only the operations, entities and behaviours needed to understand the selected profiles. Inclusion requires a durable research purpose and sufficient public sourcing.</p><h2>Inclusion criteria</h2><p>Profiles require a stable identifier, meaningful summary, review date, confidence statement and normalized sources. Drafts and placeholders are never published.</p><h2>Review freshness</h2><p>Published actor profiles are reviewed at least annually. Records up to 180 days old are current, records between 181 and 365 days are due for review, and older records are marked stale. Review freshness is calculated from the profile's public <code>last_reviewed</code> date and does not imply that the actor became inactive.</p><h2>Naming and aliases</h2><p class="callout">Threat actor names are analytical constructs. Different organisations may use different names for overlapping, broader or narrower sets of activity.</p><p>Aliases are source-mapped and assigned a relationship type. A vendor tracking cluster is not treated as an automatic one-to-one equivalent.</p><h2>Sources and attribution</h2><p>Claims retain their publisher, date and source type. Government, vendor, academic and other reporting are not blended into a single unattributed conclusion. Source reporting, APT Notes assessment, disputed attribution and unresolved attribution are clearly separated.</p><p class="callout">Inclusion in APT Notes does not independently confirm every public attribution claim associated with an actor.</p><h2>Confidence</h2><dl>{Object.entries(confidenceDefinitions).map(([name,definition])=><><dt><strong>{name.charAt(0).toUpperCase()+name.slice(1)}</strong></dt><dd>{definition}</dd></>)}</dl><p>Confidence is qualitative and never presented as a numeric probability.</p><h2>Machine-readable exports</h2><p>Static JSON exports preserve the public record as rendered at build time. Consumers must retain source references, review dates and confidence. The exports are not an IOC feed and should not be converted into automatic blocking decisions.</p><h2>Updates and corrections</h2><p>Substantive changes are written to the structured update collection. Corrections identify what changed without silently rewriting analytical history.</p><h2>Limitations</h2><p>Public reporting is incomplete, collection access is unequal, and actor boundaries change. A profile is a reviewed representation of available evidence, not a claim of omniscience or a live operational feed.</p><h2>Privacy</h2><p>APT Notes uses no advertising cookies, fingerprinting or external search telemetry. Search is generated locally in the production build. Cloudflare Web Analytics measures aggregate page views, referrers, device and browser categories, country and page-performance metrics. Its beacon does not store or access cookies or browser storage, Cloudflare states that it does not track individuals across sites, and the HECAVEX loader does not start it when Do Not Track is set to <code>1</code>. Measurement follows the <a href="https://hecavex.com/en/privacy/">HECAVEX privacy policy</a>.</p></article></BaseLayout>
+<BaseLayout title="Methodology" description="APT Notes methodology for selection, sourcing, naming, relationships, confidence, review and corrections.">
+  <article class="shell narrow prose methodology-page">
+    <p class="eyebrow">Editorial standards</p>
+    <h1>Methodology</h1>
+    <p class="lead">How selected public reporting becomes an APT Notes record, which claims become relationships, and how uncertainty and revision history are preserved.</p>
+
+    <h2>Scope and inclusion</h2>
+    <p>APT Notes is a curated dossier publication, not an exhaustive threat-actor directory. A public actor profile requires a durable research purpose, a stable identity, sufficient primary or source-specific reporting, an explicit confidence statement and a substantive review date.</p>
+    <p>Campaigns, software, techniques and references are supporting records. They are included when they help explain a published actor dossier; a short supporting record is not presented as an independent long-form assessment.</p>
+
+    <h2>Naming and aliases</h2>
+    <p class="callout">Threat actor names are analytical constructs. Different organisations may use different names for overlapping, broader or narrower sets of activity.</p>
+    <p>Aliases retain the reporting source and an explicit relationship such as common alias, vendor tracking cluster, government designation, possible overlap or disputed equivalence. Name similarity alone is not treated as identity.</p>
+
+    <h2>References and attribution</h2>
+    <p>Claims retain their publisher, authors where stated, publication date, source type and access date. Government, legal, vendor, academic and other reporting are not blended into one unattributed conclusion. Original links remain primary; archives and link-health state are additional durability metadata.</p>
+    <p class="callout">Inclusion in APT Notes does not independently confirm every attribution claim associated with an actor.</p>
+
+    <h2>Catalogue associations and sourced relationships</h2>
+    <p>Catalogue associations indicate that one public record names another. They are useful for browsing but do not, on their own, claim independent corroboration.</p>
+    <p>A relationship enters the public <a href="/relationships/">Relationships view</a> only when it has a stable ID, typed source and target, a concrete evidence statement, confidence, and at least one supporting reference. The initial layer is deliberately bounded to actor-to-technique procedure evidence already recorded in actor dossiers.</p>
+
+    <h2>Confidence</h2>
+    <dl>{Object.entries(confidenceDefinitions).map(([name, definition]) => <><dt><strong>{name.charAt(0).toUpperCase() + name.slice(1)}</strong></dt><dd>{definition}</dd></>)}</dl>
+    <p>Confidence is qualitative and applies to the stated assessment or relationship. It is not a numeric probability and is not inherited automatically by every related record.</p>
+
+    <h2>Revision and review</h2>
+    <p>Entity records carry a stable ID, created and modified timestamps, semantic version, change reason, review date where applicable, and deprecated, revoked or superseded state. The fixed 26 August 2026 migration date marks the introduction of this contract where earlier editorial metadata was not available; it does not invent an original research date.</p>
+    <p>Actor profiles are intended to receive a substantive review at least annually. Up to 180 days is current, 181–365 days is review due, and older records are stale. Review age does not imply actor inactivity.</p>
+
+    <h2>Changes and corrections</h2>
+    <p>Substantive publications, material revisions, corrections, deprecations, revocations and relationship changes are published in <a href="/changes/">Changes</a>. Each event identifies what changed, why, affected fields or relationships, and the version transition. Existing URLs remain addressable when a record is deprecated or superseded.</p>
+
+    <h2>Modal and fallback records</h2>
+    <p>During normal browsing, secondary records open in an in-context dialog so filters and reading position are retained. Each trigger is still a real link. Direct navigation, reload, no-JavaScript access, modifier clicks and fetch failures use the same emitted fallback record at its canonical URL.</p>
+
+    <h2>Machine-readable publishing</h2>
+    <p>Static JSON and CSV expose all public entity types, sourced relationships and change events. A release manifest provides stable dataset and schema versions. The dedicated Atom feed contains editorial change events only; it does not manufacture updates from review dates.</p>
+    <p>Consumers must preserve confidence, evidence, references, revision state and attribution boundaries. The exports are not an IOC feed and should not be converted directly into blocking decisions.</p>
+
+    <h2>Limitations and privacy</h2>
+    <p>Public reporting is incomplete, access to evidence is unequal, and actor boundaries change. A dossier is a reviewed representation of available evidence, not a claim of exhaustive visibility or a live operational feed.</p>
+    <p>APT Notes uses no advertising cookies, fingerprinting or external search telemetry. Search is generated locally. Cloudflare Web Analytics provides aggregate measurements without cross-site individual tracking; the HECAVEX loader does not start it when Do Not Track is set to <code>1</code>. See the <a href="https://hecavex.com/en/privacy/">HECAVEX privacy policy</a>.</p>
+  </article>
+</BaseLayout>

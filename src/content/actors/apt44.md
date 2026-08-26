@@ -2,6 +2,10 @@
 id: apt44
 name: APT44
 slug: apt44
+created_at: 2026-08-09
+modified_at: 2026-08-09
+version: 1.0.0
+change_reason: Initial source-backed public profile.
 summary: A Russian military intelligence intrusion set associated with GRU Unit 74455 and a full-spectrum mission spanning strategic access, espionage, destructive attacks, operational-technology disruption and influence activity.
 actor_types: [state-sponsored]
 status: active

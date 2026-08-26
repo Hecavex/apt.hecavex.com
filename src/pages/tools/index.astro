@@ -1,4 +1,9 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro'; import EntityIndex from '../../components/EntityIndex.astro'; import { publicEntries } from '../../utils/content'; const entries:any[]=await publicEntries('tools');
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CatalogueMoved from '../../components/knowledge/CatalogueMoved.astro';
+import { publicEntries } from '../../utils/content';
+const entries = await publicEntries('tools');
 ---
-<BaseLayout title="Tools" description="Legitimate, dual-use and offensive tools linked to public reporting."><EntityIndex title="Tools" description="Tool records distinguish legitimate and dual-use software from malware and record only sourced operational relationships." type="Tool" base="/tools/" entries={entries}/></BaseLayout>
+<BaseLayout title="Tools moved to Knowledge" description="Tool records now appear in the combined Software view." noindex={true}>
+  <CatalogueMoved name="Tools" href="/knowledge/?view=software&kind=tool" count={entries.length} description="Malware and tools now share one Software view while retaining distinct record types." />
+</BaseLayout>

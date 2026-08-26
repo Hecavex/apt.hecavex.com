@@ -1,4 +1,9 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro'; import EntityIndex from '../../components/EntityIndex.astro'; import { publicEntries } from '../../utils/content'; const entries:any[]=await publicEntries('sources');
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CatalogueMoved from '../../components/knowledge/CatalogueMoved.astro';
+import { publicEntries } from '../../utils/content';
+const entries = await publicEntries('sources');
 ---
-<BaseLayout title="Sources" description="Normalized public sources used by APT Notes."><EntityIndex title="Sources" description="Each source preserves publisher, authors, publication and access dates, source type, language and canonical URL." type="Source" base="/sources/" entries={entries}/></BaseLayout>
+<BaseLayout title="References moved to Knowledge" description="Public reference records now appear in the Knowledge explorer." noindex={true}>
+  <CatalogueMoved name="References" href="/knowledge/?view=references" count={entries.length} description="Reference records now expose publication metadata, preservation state and every public record that cites them." />
+</BaseLayout>

@@ -1,5 +1,8 @@
 ---
-import { render } from 'astro:content';import { publicEntries,bySlug,formatDate,label } from '../utils/content';
-const { entry, type } = Astro.props;const {Content}=await render(entry);const sourceMap=bySlug(await publicEntries('sources') as any);const d=entry.data;
+import KnowledgeRecord from './knowledge/KnowledgeRecord.astro';
+
+const { entry, collection, knowledge } = Astro.props;
 ---
-<article class="shell narrow prose entity-profile" data-pagefind-body data-pagefind-meta={`type:${type}`}><p class="eyebrow">{type} profile · <span class="mono">{d.id}</span></p><h1>{d.name}</h1><p class="lead">{d.summary}</p><dl class="fact-grid"><div class="fact"><dt>Confidence</dt><dd><span class={`badge ${d.confidence}`}>{label(d.confidence)}</span></dd></div><div class="fact"><dt>Last reviewed</dt><dd>{formatDate(d.last_reviewed)}</dd></div><div class="fact"><dt>Actors</dt><dd>{d.actors?.join(', ')||'Not recorded'}</dd></div><div class="fact"><dt>Stable ID</dt><dd class="mono">{d.id}</dd></div></dl><Content/><h2>Sources</h2><ol>{d.sources.map((id:string)=>{const s:any=sourceMap.get(id);return <li>{s?<><a href={s.data.url}>{s.data.title}</a> — {s.data.publisher}, {formatDate(s.data.published_at)}</>:<span>{id} · source record pending</span>}</li>})}</ol>{d.related_research?.length>0&&<><h2>Related Hecavex research</h2><ul>{d.related_research.map((r:any)=><li><a href={r.url}>{r.title} ↗</a></li>)}</ul></>}</article>
+<div class="shell knowledge-record-page">
+  <KnowledgeRecord entry={entry} collection={collection} knowledge={knowledge} />
+</div>

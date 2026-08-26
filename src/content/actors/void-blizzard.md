@@ -2,6 +2,10 @@
 id: void-blizzard
 name: Void Blizzard
 slug: void-blizzard
+created_at: 2026-08-14
+modified_at: 2026-08-14
+version: 1.1.0
+change_reason: Zimbra campaign evidence added to the initial public profile.
 summary: A Russia-affiliated espionage cluster using commodity credentials, stolen session cookies and cloud-native collection against NATO, EU and Ukraine-related targets.
 actor_types: [state-sponsored]
 status: active

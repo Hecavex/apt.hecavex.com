@@ -1,0 +1,8 @@
+---
+const { name, href, count, description } = Astro.props;
+---
+<section class="shell narrow compatibility-page">
+  <header class="page-head"><div><p class="eyebrow">Catalogue compatibility route</p><h1>{name} moved into Knowledge</h1><p class="lead">{description}</p></div><span class="meta">{count} public records</span></header>
+  <p>Individual record addresses remain unchanged. The combined explorer provides the current search, filters, reverse links and in-context detail panels.</p>
+  <p><a class="button" href={href}>Open {name} in Knowledge →</a></p>
+</section>

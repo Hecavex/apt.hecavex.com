@@ -2,6 +2,10 @@
 id: apt28
 name: APT28
 slug: apt28
+created_at: 2026-08-05
+modified_at: 2026-08-09
+version: 2.0.0
+change_reason: Major evidence and presentation review through August 2026.
 summary: A Russian military intelligence intrusion set associated with GRU Unit 26165 and persistent espionage against governments, defence, logistics, technology, identity systems and organisations supporting Ukraine.
 actor_types: [state-sponsored]
 status: active

@@ -1,30 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { publicEntries, formatDate, label } from '../../utils/content';
-
-const updates: any[] = (await publicEntries('updates'))
-  .sort((a: any, b: any) => +new Date(b.data.date) - +new Date(a.data.date));
 ---
-
-<BaseLayout title="Updates" description="Chronological record of substantive intelligence and editorial changes.">
-  <section class="shell narrow updates-page">
-    <header class="page-head">
-      <div>
-        <p class="eyebrow">Change log</p>
-        <h1>Updates</h1>
-        <p class="lead">A chronological record of profile creation, attribution changes, corrections and other substantive intelligence changes.</p>
-      </div>
-    </header>
-    <ol class="timeline" data-pagefind-body>
-      {updates.map((update) => (
-        <li id={update.data.slug} data-pagefind-meta="type:Update">
-          <time datetime={update.data.date.toISOString()}>{formatDate(update.data.date)}</time>
-          <span class="badge">{label(update.data.update_type)}</span>
-          <h2>{update.data.title}</h2>
-          <p>{update.data.summary}</p>
-          <p class="meta">Entity: <a href={`/${update.data.entity_type}s/${update.data.entity}/`}>{update.data.entity}</a></p>
-        </li>
-      ))}
-    </ol>
+<BaseLayout title="Updates moved to Changes" description="The APT Notes public revision record is now published under Changes." noindex={true}>
+  <section class="shell narrow prose compatibility-page">
+    <p class="eyebrow">Compatibility route</p>
+    <h1>Updates are now Changes</h1>
+    <p class="lead">The revision record now distinguishes what changed, why it changed, affected fields, record versions and stable machine-readable events.</p>
+    <p><a class="button" href="/changes/">Open Changes →</a></p>
   </section>
 </BaseLayout>
+<script is:inline>
+  if (location.hash) location.replace(`/changes/${location.hash}`);
+</script>

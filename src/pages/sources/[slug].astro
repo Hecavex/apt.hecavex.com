@@ -1,24 +1,17 @@
 ---
-import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate, label } from '../../utils/content';
+import EntityProfile from '../../components/EntityProfile.astro';
+import { loadKnowledge } from '../../utils/knowledge';
 
 export async function getStaticPaths() {
-  return (await getCollection('sources', ({ data }) => !data.draft)).map(entry => ({ params: { slug: entry.data.slug }, props: { entry } }));
+  const knowledge = await loadKnowledge();
+  return knowledge.sources.map((entry: any) => ({ params: { slug: entry.data.slug }, props: { entry } }));
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const knowledge = await loadKnowledge();
 const d = entry.data;
 ---
-<BaseLayout title={d.title} description={`Source record for ${d.title}, published by ${d.publisher}.`} image={`/og/generated/source-${d.slug}.png`} imageAlt={`${d.title} source record by APT Notes`}>
-  <article class="shell narrow prose" data-pagefind-body data-pagefind-meta="type:Source">
-    <p class="eyebrow">Normalized source record</p>
-    <h1>{d.title}</h1>
-    <dl class="fact-grid source-facts" data-source-facts><div class="fact"><dt>Publisher</dt><dd>{d.publisher}</dd></div><div class="fact"><dt>Source type</dt><dd>{label(d.source_type)}</dd></div><div class="fact"><dt>Published</dt><dd>{formatDate(d.published_at)}</dd></div><div class="fact"><dt>Accessed</dt><dd>{formatDate(d.accessed_at)}</dd></div><div class="fact fact--language"><dt>Language</dt><dd>{d.language.toUpperCase()}</dd></div><div class="fact fact--authors"><dt>Authors</dt><dd>{d.authors.join(', ') || 'Not stated'}</dd></div></dl>
-    <p><a class="button" href={d.url}>Open primary URL ↗</a></p>
-    {d.archived_url && <p><a href={d.archived_url}>Archived copy ↗</a></p>}
-    <Content />
-    {d.notes && <><h2>Editorial notes</h2><p>{d.notes}</p></>}
-  </article>
+<BaseLayout title={d.title} description={`Source record for ${d.title}, published by ${d.publisher}.`} type="ProfilePage" image={`/og/generated/source-${d.slug}.png`} imageAlt={`${d.title} source record by APT Notes`}>
+  <EntityProfile entry={entry} collection="sources" knowledge={knowledge} />
 </BaseLayout>

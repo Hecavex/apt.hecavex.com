@@ -1,0 +1,19 @@
+---
+import { entityHref, type EntityCollection } from '../../utils/knowledge';
+
+interface Props {
+  collection: EntityCollection;
+  slug: string;
+  class?: string;
+  title?: string;
+}
+
+const { collection, slug, class: className, title } = Astro.props;
+const opensInRecordDialog = collection !== 'actors';
+---
+<a
+  href={entityHref(collection, slug)}
+  class={className}
+  title={title}
+  data-knowledge-link={opensInRecordDialog ? 'true' : undefined}
+><slot /></a>

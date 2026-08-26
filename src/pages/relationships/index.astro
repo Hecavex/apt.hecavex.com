@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { label, unique } from '../../utils/content';
+import { loadKnowledge } from '../../utils/knowledge';
+
+const knowledge = await loadKnowledge();
+const relationships = knowledge.relationships;
+const sourceMap = knowledge.maps.sources!;
+const techniqueMap = knowledge.maps.techniques!;
+const actors = unique(relationships.map((relationship: any) => relationship.source_entity.name)).sort();
+const tactics = unique(relationships.map((relationship: any) => techniqueMap.get(relationship.target_entity.id)?.data.tactic ?? 'Unknown')).sort();
+---
+<BaseLayout title="Relationships" description="Sourced actor-to-technique procedure relationships published by APT Notes.">
+  <section class="shell relationships-page">
+    <header class="page-head relationship-head">
+      <div>
+        <p class="eyebrow">Sourced relationship layer</p>
+        <h1>Evidence before edges.</h1>
+        <p class="lead">A bounded view of actor-to-technique links backed by procedure evidence in the public dossiers. It is not a complete graph of every catalogue association.</p>
+      </div>
+      <span class="meta">{relationships.length} evidenced relationships</span>
+    </header>
+
+    <div class="relationship-summary stat-grid" aria-label="Relationship coverage">
+      <div class="stat"><strong>{actors.length}</strong><span>Actor dossiers</span></div>
+      <div class="stat"><strong>{unique(relationships.map((item: any) => item.target_entity.id)).length}</strong><span>Techniques</span></div>
+      <div class="stat"><strong>{unique(relationships.flatMap((item: any) => item.references)).length}</strong><span>References</span></div>
+      <div class="stat"><strong>{relationships.filter((item: any) => item.campaign_context).length}</strong><span>Campaign-scoped</span></div>
+    </div>
+
+    <form class="controls relationship-controls" data-relationship-controls aria-label="Relationship filters">
+      <div class="advanced-filter-grid">
+        <label>Search evidence<input type="search" name="q" placeholder="Actor, technique, procedure…" /></label>
+        <label>Actor<select name="actor"><option value="">All actors</option>{actors.map((actor) => <option value={actor}>{actor}</option>)}</select></label>
+        <label>Tactic<select name="tactic"><option value="">All tactics</option>{tactics.map((tactic) => <option value={tactic}>{tactic}</option>)}</select></label>
+        <label>Confidence<select name="confidence"><option value="">All confidence</option><option value="high">High</option><option value="moderate">Moderate</option><option value="low">Low</option></select></label>
+      </div>
+      <div class="knowledge-control-actions"><button class="filter-reset" type="reset">Reset filters</button><a class="filter-reset" href="/api/relationships.json">JSON</a><a class="filter-reset" href="/data/relationships.csv">CSV</a></div>
+    </form>
+    <p class="meta relationship-count" data-relationship-count role="status">{relationships.length} relationships shown</p>
+
+    <div class="relationship-list" data-relationship-list data-pagefind-body>
+      {relationships.map((relationship: any) => {
+        const technique = techniqueMap.get(relationship.target_entity.id);
+        return <article id={relationship.id} class="relationship-record" data-relationship-record
+          data-search={`${relationship.source_entity.name} ${relationship.target_entity.name} ${relationship.target_entity.external_id} ${relationship.evidence} ${relationship.campaign_context?.name ?? ''}`.toLowerCase()}
+          data-actor={relationship.source_entity.name}
+          data-tactic={technique?.data.tactic ?? 'Unknown'}
+          data-confidence={relationship.confidence}>
+          <header>
+            <p class="eyebrow"><span class="mono">{relationship.id}</span></p>
+            <h2><a href={relationship.source_entity.url}>{relationship.source_entity.name}</a> <span>uses</span> <a href={relationship.target_entity.url} data-knowledge-link>{relationship.target_entity.name}</a></h2>
+            <p class="relationship-identifiers"><span class={`badge ${relationship.confidence}`}>{label(relationship.confidence)} confidence</span><span class="mono">{relationship.target_entity.external_id}</span><span>{technique?.data.tactic}</span></p>
+          </header>
+          <div class="relationship-evidence">
+            <p>{relationship.evidence}</p>
+            {relationship.campaign_context && <p class="meta">Campaign context: <a href={relationship.campaign_context.url} data-knowledge-link>{relationship.campaign_context.name}</a></p>}
+          </div>
+          <footer>
+            <span>Evidence</span>
+            {relationship.references.map((id: string) => {
+              const source = sourceMap.get(id);
+              return <a href={`/sources/${source?.data.slug ?? id}/`} data-knowledge-link>{source?.data.publisher ?? id}</a>;
+            })}
+            <a href={`/api/relationships/${relationship.id}.json`}>JSON</a>
+          </footer>
+        </article>;
+      })}
+    </div>
+    <div class="empty" data-relationship-empty hidden><h2>No matching relationships</h2><p>Remove a filter or broaden the evidence search.</p></div>
+  </section>
+</BaseLayout>
+
+<script>
+  const initialiseRelationshipFilters = () => {
+    const form = document.querySelector<HTMLFormElement>('[data-relationship-controls]');
+    if (!form) return;
+    const rows = [...document.querySelectorAll<HTMLElement>('[data-relationship-record]')];
+    const count = document.querySelector<HTMLElement>('[data-relationship-count]')!;
+    const empty = document.querySelector<HTMLElement>('[data-relationship-empty]')!;
+    const categoricalNames = ['actor', 'tactic', 'confidence'] as const;
+    const syncFormFromUrl = () => {
+      const parameters = new URLSearchParams(location.search);
+      for (const name of categoricalNames) {
+        const field = form.elements.namedItem(name) as HTMLSelectElement | null;
+        if (field) field.value = parameters.get(name) ?? '';
+      }
+    };
+    const apply = (updateHistory = true) => {
+      const data = new FormData(form);
+      const q = String(data.get('q') ?? '').trim().toLowerCase();
+      const shown = rows.filter((row) => (!q || row.dataset.search!.includes(q))
+        && categoricalNames.every((name) => {
+          const value = String(data.get(name) ?? '');
+          return !value || row.dataset[name] === value;
+        }));
+      rows.forEach((row) => { row.hidden = !shown.includes(row); });
+      count.textContent = `${shown.length} ${shown.length === 1 ? 'relationship' : 'relationships'} shown`;
+      empty.hidden = shown.length !== 0;
+      if (updateHistory) {
+        const parameters = new URLSearchParams();
+        for (const name of categoricalNames) {
+          const value = String(data.get(name) ?? '');
+          if (value) parameters.set(name, value);
+        }
+        history.replaceState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}${location.hash}`);
+      }
+    };
+    form.addEventListener('input', () => apply());
+    form.addEventListener('change', () => apply());
+    form.addEventListener('reset', () => requestAnimationFrame(() => {
+      history.replaceState(null, '', location.pathname);
+      apply(false);
+    }));
+    window.addEventListener('popstate', () => { syncFormFromUrl(); apply(false); });
+    syncFormFromUrl();
+    apply(false);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialiseRelationshipFilters, { once: true });
+  else initialiseRelationshipFilters();
+</script>

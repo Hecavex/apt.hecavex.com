@@ -7,6 +7,7 @@ const walk = directory => fs.readdirSync(directory, { withFileTypes: true }).for
 walk(root);
 const errors = [];
 const canonicals = new Map();
+const knowledgeLinks = [];
 const meta = (html, key, attribute = 'name') => html.match(new RegExp(`<meta[^>]+${attribute}=["']${key.replace(':', '\\:')}["'][^>]+content=["']([^"']*)["']|<meta[^>]+content=["']([^"']*)["'][^>]+${attribute}=["']${key.replace(':', '\\:')}["']`, 'i'))?.slice(1).find(Boolean)?.trim() || '';
 
 for (const file of files) {
@@ -37,6 +38,37 @@ for (const file of files) {
     if (!/<h1(?:\s|>)/i.test(html)) errors.push(`${relative}: missing h1`);
   }
   for (const image of html.match(/<img\b[^>]*>/gi) || []) if (!/\salt=["'][^"']*["']/i.test(image)) errors.push(`${relative}: image missing alt attribute`);
+
+  const dialogCount = (html.match(/<dialog\b[^>]*data-knowledge-dialog(?:\s|=|>)/gi) || []).length;
+  if (dialogCount !== 1) errors.push(`${relative}: expected one shared knowledge dialog, found ${dialogCount}`);
+
+  const ids = [...html.matchAll(/\sid=["']([^"']+)["']/gi)].map(match => match[1]);
+  const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
+  if (duplicateIds.length) errors.push(`${relative}: duplicate DOM IDs (${duplicateIds.join(', ')})`);
+
+  if (/^(campaigns|malware|tools|techniques|sources)\/[^/]+\/index\.html$/.test(relative)) {
+    const fragments = (html.match(/data-knowledge-record-fragment(?:\s|=|>)/gi) || []).length;
+    if (fragments !== 1) errors.push(`${relative}: expected one knowledge fallback fragment, found ${fragments}`);
+    if (!/data-knowledge-record-heading(?:\s|=|>)/i.test(html)) errors.push(`${relative}: knowledge fallback is missing its focusable heading`);
+  }
+
+  for (const anchor of html.match(/<a\b[^>]*data-knowledge-link[^>]*>/gi) || []) {
+    const href = anchor.match(/\shref=["']([^"']+)["']/i)?.[1];
+    if (href) knowledgeLinks.push({ source: relative, href });
+  }
+}
+
+for (const link of knowledgeLinks) {
+  let url;
+  try { url = new URL(link.href, 'https://apt.hecavex.com/'); } catch { errors.push(`${link.source}: invalid knowledge link ${link.href}`); continue; }
+  if (url.origin !== 'https://apt.hecavex.com') { errors.push(`${link.source}: knowledge link is not same-origin (${url.href})`); continue; }
+  if (!/^\/(campaigns|malware|tools|techniques|sources)\/[a-z0-9-]+\/$/.test(url.pathname)) errors.push(`${link.source}: knowledge link is outside the secondary-record allowlist (${url.pathname})`);
+  const target = path.join(root, url.pathname.replace(/^\/+/, ''), 'index.html');
+  if (!fs.existsSync(target)) errors.push(`${link.source}: knowledge fallback does not exist (${url.pathname})`);
+}
+
+for (const required of ['changes/index.html', 'changes/feed.xml', 'api/index.json', 'api/version.json', 'api/relationships.json', 'api/changes.json']) {
+  if (!fs.existsSync(path.join(root, required))) errors.push(`missing required publication output: ${required}`);
 }
 
 if (errors.length) { console.error([...new Set(errors)].join('\n')); process.exit(1); }

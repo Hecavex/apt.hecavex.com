@@ -1,11 +1,80 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Search" description="Search public APT Notes entities and sources." noindex={true}><section class="shell narrow"><header class="page-head"><div><p class="eyebrow">Local static search</p><h1>Search APT Notes</h1><p class="lead">Results include public actors, campaigns, malware, tools, techniques and sources. Drafts are excluded.</p></div></header><form class="search-hero" id="search-form"><label class="sr-only" for="search-q">Search</label><input id="search-q" name="q" type="search" placeholder="Search actors, aliases, campaigns, malware or techniques" autofocus/><button>Search</button></form><p class="meta" id="search-status" aria-live="polite">Enter a search term.</p><div id="search-results" class="database-list"></div></section><script>
-const form=document.querySelector<HTMLFormElement>('#search-form')!;const input=document.querySelector<HTMLInputElement>('#search-q')!;const output=document.querySelector('#search-results')!;const status=document.querySelector('#search-status')!;let engine:any;
-const escape=(v:string)=>v.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
-const run=async()=>{const q=input.value.trim().slice(0,160);const params=new URLSearchParams();if(q)params.set('q',q);history.replaceState(null,'',`${location.pathname}${params.size?'?'+params:''}`);output.innerHTML='';if(!q){status.textContent='Enter a search term.';return}status.textContent='Searching…';try{
-// @ts-expect-error Pagefind creates this browser module after Astro builds the site.
-engine??=await import(/* @vite-ignore */ '/pagefind/pagefind.js');await engine.init();const search=await engine.search(q);const data=await Promise.all(search.results.slice(0,30).map((r:any)=>r.data()));status.textContent=`${search.results.length} ${search.results.length===1?'result':'results'}`;if(!data.length){output.innerHTML='<div class="empty"><h2>No results</h2><p>Try an alias, MITRE ID, sector, region or publisher.</p></div>';return}output.innerHTML=data.map((r:any)=>`<article class="db-row"><div class="db-cell"><h2><a href="${encodeURI(r.url)}">${escape(r.meta.title||'Untitled')}</a></h2><p>${r.excerpt}</p></div><div class="db-cell"><small>Type</small>${escape(r.meta.type||'Record')}</div></article>`).join('')}catch{status.textContent='Search is available in the production build and preview.'}};
-const q=new URLSearchParams(location.search).get('q');if(q){input.value=q;run()}form.addEventListener('submit',e=>{e.preventDefault();run()});
-</script></BaseLayout>
+<BaseLayout title="Search" description="Search public APT Notes actors, supporting records and references." noindex={true}>
+  <section class="shell narrow search-page">
+    <header class="page-head"><div><p class="eyebrow">Local static search</p><h1>Search APT Notes</h1><p class="lead">Search actor names and aliases, campaigns, software, ATT&amp;CK IDs, reference titles and publishers. Drafts are excluded.</p></div></header>
+    <form class="search-hero" id="search-form"><label class="sr-only" for="search-q">Search</label><input id="search-q" name="q" type="search" placeholder="Name, alias, MITRE ID or publisher" autofocus/><button>Search</button></form>
+    <p class="meta" id="search-status" role="status">Enter a search term.</p>
+    <div id="search-results" class="database-list"></div>
+    <div class="empty" id="search-empty" hidden><h2>No results</h2><p>Try an alias, MITRE ID, campaign, technique or publisher.</p></div>
+  </section>
+  <script>
+    const form = document.querySelector<HTMLFormElement>('#search-form')!;
+    const input = document.querySelector<HTMLInputElement>('#search-q')!;
+    const output = document.querySelector<HTMLElement>('#search-results')!;
+    const status = document.querySelector<HTMLElement>('#search-status')!;
+    const empty = document.querySelector<HTMLElement>('#search-empty')!;
+    let engine: any;
+    const secondaryPath = /^\/(campaigns|malware|tools|techniques|sources)\//;
+    const plainExcerpt = (value: string) => new DOMParser().parseFromString(value, 'text/html').body.textContent?.trim() ?? '';
+    const resultNode = (record: any) => {
+      const article = document.createElement('article');
+      article.className = 'db-row search-result-row';
+      const primary = document.createElement('div');
+      primary.className = 'db-cell';
+      const heading = document.createElement('h2');
+      const link = document.createElement('a');
+      link.href = record.url;
+      link.textContent = record.meta.title || 'Untitled';
+      if (secondaryPath.test(new URL(record.url, location.origin).pathname)) link.dataset.knowledgeLink = '';
+      heading.append(link);
+      const excerpt = document.createElement('p');
+      excerpt.textContent = plainExcerpt(record.excerpt || record.content || '');
+      primary.append(heading, excerpt);
+      const type = document.createElement('div');
+      type.className = 'db-cell';
+      const label = document.createElement('small');
+      label.textContent = 'Record type';
+      type.append(label, document.createTextNode(record.meta.type || 'Record'));
+      article.append(primary, type);
+      return article;
+    };
+    const run = async () => {
+      const query = input.value.trim().slice(0, 160);
+      const parameters = new URLSearchParams();
+      if (query) parameters.set('q', query);
+      history.replaceState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}`);
+      output.replaceChildren();
+      empty.hidden = true;
+      if (!query) { status.textContent = 'Enter a search term.'; return; }
+      status.textContent = 'Searching…';
+      try {
+        // @ts-expect-error Pagefind creates this browser module after Astro builds the site.
+        engine ??= await import(/* @vite-ignore */ '/pagefind/pagefind.js');
+        await engine.init();
+        const search = await engine.search(query);
+        const data = await Promise.all(search.results.slice(0, 40).map((result: any) => result.data()));
+        const normalized = query.toLowerCase();
+        data.sort((left: any, right: any) => {
+          const rank = (record: any) => {
+            const title = String(record.meta.title || '').toLowerCase();
+            const url = String(record.url || '').toLowerCase();
+            if (title === normalized || url.split('/').filter(Boolean).at(-1) === normalized) return 0;
+            if (title.startsWith(normalized)) return 1;
+            return 2;
+          };
+          return rank(left) - rank(right);
+        });
+        status.textContent = `${search.results.length} ${search.results.length === 1 ? 'result' : 'results'}`;
+        empty.hidden = data.length !== 0;
+        output.replaceChildren(...data.slice(0, 30).map(resultNode));
+      } catch {
+        status.textContent = 'Search is available in the production build and preview.';
+      }
+    };
+    const query = new URLSearchParams(location.search).get('q');
+    if (query) { input.value = query; void run(); }
+    form.addEventListener('submit', (event) => { event.preventDefault(); void run(); });
+  </script>
+</BaseLayout>

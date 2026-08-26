@@ -1,30 +1,62 @@
 # APT Notes by HECAVEX
 
-> A source-backed public catalogue of threat actors, campaigns, malware, tools, techniques, and attribution claims.
+> A source-backed public catalogue of threat actors, campaigns, software, techniques, relationships and attribution claims.
 
-APT Notes is a static, read-only research product. Preserve source-specific naming and attribution boundaries: a shared victim, tool, infrastructure node, or technique is not sufficient on its own to equate two actor labels. The catalogue is curated rather than exhaustive and has no account, write, or monitoring API.
+APT Notes is a static, read-only research publication. Preserve source-specific naming and attribution boundaries: a shared victim, tool, infrastructure node or technique is not sufficient on its own to equate two actor labels. The catalogue is curated rather than exhaustive and has no account, write or monitoring API.
 
-## Catalogue
+## Primary pages
 
-- [Overview](https://apt.hecavex.com/): Product scope and featured research.
-- [Actors](https://apt.hecavex.com/actors/): Reviewed threat-actor profiles.
-- [Campaigns](https://apt.hecavex.com/campaigns/): Source-linked campaign records.
-- [Malware](https://apt.hecavex.com/malware/): Malware records represented in published profiles.
-- [Tools](https://apt.hecavex.com/tools/): Publicly reported tooling.
-- [Techniques](https://apt.hecavex.com/techniques/): Source-linked ATT&CK technique evidence.
-- [Sources](https://apt.hecavex.com/sources/): Primary and supporting source records.
-- [Updates](https://apt.hecavex.com/updates/): Chronological substantive change log.
+- [Overview](https://apt.hecavex.com/): Product scope and featured dossiers.
+- [Actors](https://apt.hecavex.com/actors/): Reviewed threat-actor dossiers.
+- [Knowledge](https://apt.hecavex.com/knowledge/): Campaign, software, technique and reference catalogue.
+- [Relationships](https://apt.hecavex.com/relationships/): Explicit actor-to-technique procedure evidence.
+- [Changes](https://apt.hecavex.com/changes/): Chronological substantive change record.
+- [Methodology](https://apt.hecavex.com/about/methodology/): Source hierarchy, attribution, confidence, review and corrections.
+- [About](https://apt.hecavex.com/about/): Purpose, scope, audience, workflow and limitations.
+- [Licence](https://apt.hecavex.com/licence/): Software, research, source and trademark terms.
 
-## Method and terms
+Secondary records normally open in a panel for uninterrupted browsing. Their canonical HTML routes remain addressable and are suitable for direct links. Actor dossiers remain full pages.
 
-- [Methodology](https://apt.hecavex.com/about/methodology/): Source hierarchy, attribution, confidence, review, and corrections.
-- [About](https://apt.hecavex.com/about/): Purpose, audience, ownership, and maintenance boundary.
-- [Licence](https://apt.hecavex.com/licence/): Software, research, source, and trademark terms.
-- [Atom feed](https://apt.hecavex.com/feed.xml): Current catalogue updates.
+## Release discovery
 
-## Read-only JSON
+- [Catalogue index](https://apt.hecavex.com/api/index.json): Counts and canonical JSON, CSV, record and feed locations.
+- [Release manifest](https://apt.hecavex.com/api/version.json): Dataset/schema versions, release metadata, counts and principal assets.
+- [Knowledge index](https://apt.hecavex.com/api/knowledge.json): Compact cross-entity discovery records.
+- [Changes Atom feed](https://apt.hecavex.com/changes/feed.xml): Additions, corrections, lifecycle and relationship changes.
+- [Compatibility Atom feed](https://apt.hecavex.com/feed.xml): The same bounded Changes stream at the historical feed address.
 
-- [Actor index](https://apt.hecavex.com/api/actors.json): Static list of public actor records.
-- Actor record convention: `https://apt.hecavex.com/api/actors/{slug}.json`.
+Every JSON document includes schema version, dataset version, release ID, release time, publisher, licence, methodology and a publication notice. The outputs are deterministic static files, not live query endpoints.
 
-The JSON output is a maintained static publication surface, not a live IOC feed or a statement that every vendor cluster is equivalent.
+## JSON datasets
+
+- [Actors](https://apt.hecavex.com/api/actors.json)
+- [Campaigns](https://apt.hecavex.com/api/campaigns.json)
+- [Malware](https://apt.hecavex.com/api/malware.json)
+- [Tools](https://apt.hecavex.com/api/tools.json)
+- [Software](https://apt.hecavex.com/api/software.json): Combined malware and tool view.
+- [Techniques](https://apt.hecavex.com/api/techniques.json)
+- [Sources](https://apt.hecavex.com/api/sources.json)
+- [References](https://apt.hecavex.com/api/references.json): Public alias of the Sources dataset.
+- [Relationships](https://apt.hecavex.com/api/relationships.json)
+- [Changes](https://apt.hecavex.com/api/changes.json)
+
+Per-record JSON convention: `https://apt.hecavex.com/api/{collection}/{slug}.json`. Relationship records use their stable relationship ID in place of a slug.
+
+## CSV datasets
+
+- [Actors CSV](https://apt.hecavex.com/data/actors.csv)
+- [Campaigns CSV](https://apt.hecavex.com/data/campaigns.csv)
+- [Malware CSV](https://apt.hecavex.com/data/malware.csv)
+- [Tools CSV](https://apt.hecavex.com/data/tools.csv)
+- [Software CSV](https://apt.hecavex.com/data/software.csv)
+- [Techniques CSV](https://apt.hecavex.com/data/techniques.csv)
+- [Sources CSV](https://apt.hecavex.com/data/sources.csv)
+- [References CSV](https://apt.hecavex.com/data/references.csv)
+- [Relationships CSV](https://apt.hecavex.com/data/relationships.csv)
+- [Changes CSV](https://apt.hecavex.com/data/changes.csv)
+
+## Interpretation boundary
+
+Broad entity arrays are catalogue mappings. The Relationships dataset is deliberately narrower and is generated only from explicit procedure evidence in public actor dossiers. Relationship confidence is an editorial evidence assessment, not a probability or proof of current activity.
+
+Do not infer that two vendor clusters are equivalent merely because they share a technique, campaign, tool, victim or infrastructure. Preserve evidence text, references, confidence, lifecycle state and review/version fields when reusing a record.
