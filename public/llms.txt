@@ -4,6 +4,8 @@
 
 APT Notes is a static, read-only research publication. Preserve source-specific naming and attribution boundaries: a shared victim, tool, infrastructure node or technique is not sufficient on its own to equate two actor labels. The catalogue is curated rather than exhaustive and has no account, write or monitoring API.
 
+The APT Notes name is a publication identity, not a classification applied to every record. Actor types can include state-sponsored, state-aligned, hacktivist and cybercriminal activity. Preserve those types, motivations and attribution claims as separate fields.
+
 ## Primary pages
 
 - [Overview](https://apt.hecavex.com/): Product scope and featured dossiers.

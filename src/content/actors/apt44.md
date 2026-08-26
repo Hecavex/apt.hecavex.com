@@ -3,9 +3,9 @@ id: apt44
 name: APT44
 slug: apt44
 created_at: 2026-08-09
-modified_at: 2026-08-09
-version: 1.0.0
-change_reason: Initial source-backed public profile.
+modified_at: 2026-08-26
+version: 1.1.0
+change_reason: Added current UK government identity corroboration and bounded CVE-2025-8088 exploitation evidence.
 summary: A Russian military intelligence intrusion set associated with GRU Unit 74455 and a full-spectrum mission spanning strategic access, espionage, destructive attacks, operational-technology disruption and influence activity.
 actor_types: [state-sponsored]
 status: active
@@ -14,10 +14,10 @@ motivations: [espionage, disruption, destruction, influence, credential-access, 
 active_since: "2009"
 last_observed: "2026"
 confidence: high
-last_reviewed: 2026-08-09
+last_reviewed: 2026-08-26
 authors: [deividas-lis]
 mission: Obtain and preserve access, collect intelligence, disrupt or destroy selected systems and amplify operational effects in support of Russian military and state objectives.
-current_assessment: "APT44 remains an active full-spectrum threat. Current public reporting shows two complementary priorities: scalable access to internet-facing infrastructure that can be retained for strategic use, and intelligence collection from defence-related systems, battlefield platforms and private messaging data. Its history means retained access must be evaluated for both espionage and destructive follow-on risk."
+current_assessment: "APT44 remains an active full-spectrum threat. Current public reporting shows scalable access to internet-facing infrastructure, intelligence collection from defence-related systems and continuing adoption of client-side n-day exploitation. Its history means retained access must be evaluated for both espionage and destructive follow-on risk."
 parent_entities:
   - name: GRU Main Centre for Special Technologies, Military Unit 74455
     entity_type: Russian military intelligence unit
@@ -129,6 +129,14 @@ attribution:
     confidence: high
     status: assessed
     notes: The subgroup relationship should not be expanded to every opportunistic compromise without supporting evidence.
+  - claim: The current UK government profile identifies Unit 74455 as the Main Center for Special Technologies and associates it with APT44 and Sandworm.
+    attributed_entity: GRU Main Center for Special Technologies, Military Unit 74455
+    source: uk-gru-profile-2026
+    source_type: government
+    published_at: 2026-07-13
+    confidence: high
+    status: assessed
+    notes: This is current government identity corroboration; it does not independently validate every vendor-defined campaign boundary.
 targeting:
   regions: [Ukraine, Europe, North America, Central Asia, South Asia, Middle East, Australia, Global]
   countries: [Ukraine, Poland, Georgia, France, United Kingdom, United States, Canada, Australia, South Korea]
@@ -137,7 +145,7 @@ targeting:
 campaigns: [badpilot, ukraine-electric-power-2022, prestige-ransomware, notpetya-operation]
 malware: [localolive, cyclops-blink, caddywiper, prestige, notpetya, wavesign]
 tools: [shadowlink, rclone]
-techniques: [exploit-public-facing-application, server-software-component-web-shell, external-remote-services, remote-access-software, os-credential-dumping-lsass, valid-accounts, data-from-local-system, powershell, scheduled-task, data-destruction, lateral-tool-transfer, systemd-service, supply-chain-compromise]
+techniques: [exploit-public-facing-application, exploit-client-execution, server-software-component-web-shell, external-remote-services, remote-access-software, os-credential-dumping-lsass, valid-accounts, data-from-local-system, powershell, scheduled-task, data-destruction, lateral-tool-transfer, systemd-service, supply-chain-compromise]
 vulnerabilities:
   - cve: CVE-2021-34473
     product: Microsoft Exchange Server
@@ -195,6 +203,13 @@ vulnerabilities:
     confidence: high
     source: microsoft-badpilot-2025
     notes: Microsoft observed Atera retrieval from actor-controlled infrastructure during April 2024 exploitation.
+  - cve: CVE-2025-8088
+    product: RARLAB WinRAR
+    role: Client-side path traversal used to write a malicious LNK file and attempt follow-on downloads
+    first_observed: "2025 reporting window"
+    confidence: high
+    source: gtig-winrar-cve-2025-8088-2026
+    notes: GTIG reports an APT44 archive with a Ukrainian-named decoy and malicious LNK. NESTPACKER and Snipbot in the same article belong to a different actor and are not linked here.
 technique_evidence:
   - technique: exploit-public-facing-application
     campaign: badpilot
@@ -203,6 +218,12 @@ technique_evidence:
     confidence: high
     sources: [microsoft-badpilot-2025]
     notes: Seven named CVEs and one JBoss exploitation pattern are recorded in the public report.
+  - technique: exploit-client-execution
+    first_observed: "2025 reporting window"
+    last_observed: "2026 reporting"
+    confidence: high
+    sources: [gtig-winrar-cve-2025-8088-2026]
+    notes: APT44 used a malicious RAR archive exploiting CVE-2025-8088 to drop a Ukrainian-named decoy and an LNK that attempted further downloads.
   - technique: server-software-component-web-shell
     campaign: badpilot
     first_observed: "2021"
@@ -327,12 +348,17 @@ operational_timeline:
     summary: GTIG reported continued attempts to collect Signal and Telegram data and target battlefield-management and defence-related technology.
     confidence: high
     sources: [gtig-defense-industrial-base-2026]
+  - date: "2025-2026 reporting"
+    title: APT44 adopts WinRAR n-day exploitation
+    summary: GTIG documented CVE-2025-8088 use against Ukraine to drop a decoy and malicious LNK for attempted follow-on downloads.
+    confidence: high
+    sources: [gtig-winrar-cve-2025-8088-2026]
 external_identifiers:
   mitre_attack: G0034
   other: [GRU Unit 74455, GTsST]
 related_research: []
-sources: [gtig-defense-industrial-base-2026, microsoft-badpilot-2025, gtig-apt44-2024, mitre-g0034, doj-sandworm-indictment-2020, ncsc-cyclops-blink-2022, mandiant-ukraine-power-2023, microsoft-prestige-2022, mandiant-apt44-correction-2024]
-updates: [apt44-profile-created]
+sources: [uk-gru-profile-2026, gtig-winrar-cve-2025-8088-2026, gtig-defense-industrial-base-2026, microsoft-badpilot-2025, gtig-apt44-2024, mitre-g0034, doj-sandworm-indictment-2020, ncsc-cyclops-blink-2022, mandiant-ukraine-power-2023, microsoft-prestige-2022, mandiant-apt44-correction-2024]
+updates: [apt44-profile-created, apt44-winrar-exploitation-added-2026]
 featured: true
 draft: false
 ---
@@ -362,6 +388,8 @@ Two public developments define the current assessment.
 First, BadPilot shows systematic exploitation of internet-facing infrastructure. The subgroup used published vulnerabilities, web shells, RMM software, credential dumping, OpenSSH and Tor-based access. Most opportunistic victims did not necessarily receive extensive follow-on activity, but selected compromises provided durable access to strategically relevant organisations.
 
 Second, GTIG's 2026 defence-sector assessment reports continued APT44 attempts to collect Telegram and Signal data, including use of WAVESIGN, and targeting related to battlefield-management systems and defence technology. Some device access may occur outside normal enterprise visibility, particularly when equipment is physically obtained in a conflict zone.
+
+Third, GTIG documented APT44 exploitation of CVE-2025-8088 in WinRAR. The reported archive dropped a Ukrainian-named decoy and a malicious LNK that attempted further downloads. The report demonstrates adoption of a widely exploited n-day; it does not connect APT44 to the NESTPACKER or Snipbot activity described for a different actor in the same publication.
 
 ## Targeting and operational model
 

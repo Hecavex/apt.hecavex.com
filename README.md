@@ -41,7 +41,7 @@ The production workflow builds and deploys the `main` branch to GitHub Pages. `p
 
 Every deployment validates content references, lifecycle states and sourced relationship endpoints, generates social previews, type-checks and builds the Astro site, creates the Pagefind search index, and audits production metadata, fallback fragments, JSON/CSV/XML data products and asset budgets. The operator release gate is `npm run verify`.
 
-The public data catalogue starts at [`/api/index.json`](https://apt.hecavex.com/api/index.json). It includes deterministic per-type and per-record JSON, canonical CSV exports, 30 sourced relationship objects, a Changes Atom feed and an explicit release/version manifest. Rebuilding the same release does not manufacture a new publication timestamp.
+The public data catalogue starts at [`/api/index.json`](https://apt.hecavex.com/api/index.json). It includes deterministic per-type and per-record JSON, canonical CSV exports, 48 sourced relationship objects, a Changes Atom feed and an explicit release/version manifest. Rebuilding the same release does not manufacture a new publication timestamp.
 
 The site has no accounts, application database or hosted search provider. Production enables Cloudflare Web Analytics once through the shared layout for aggregate audience and page-performance measurement unless Do Not Track is set to `1`. The public site token is supplied at build time through `PUBLIC_HECAVEX_ANALYTICS_TOKEN`; it is deployment metadata rather than a secret. The beacon uses no cookies or browser storage, and the deployed methodology links to the portfolio privacy policy and describes the measurement boundary.
 

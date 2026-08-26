@@ -1,9 +1,9 @@
 export const release = {
-  id: 'apt-notes-2026-08-26',
-  datasetVersion: '2.0.0',
+  id: 'apt-notes-2026-08-26-european-actor-expansion',
+  datasetVersion: '2.1.0',
   schemaVersion: '2.0.0',
-  releasedAt: '2026-08-26T00:00:00.000Z',
-  previousVersion: '1.0.0'
+  releasedAt: '2026-08-26T08:14:22.790Z',
+  previousVersion: '2.0.0'
 } as const;
 
 export const publication = {

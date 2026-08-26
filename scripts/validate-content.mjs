@@ -106,7 +106,7 @@ const stableReferencePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const lifecycleMigrationDate = '2026-08-26T00:00:00.000Z';
 const expectedRelationshipOption = option('expected-relationships');
 const expectedCurrentRelationshipCount = expectedRelationshipOption === undefined
-  ? 30
+  ? 48
   : Number.parseInt(expectedRelationshipOption, 10);
 const errors = [];
 const warnings = [];

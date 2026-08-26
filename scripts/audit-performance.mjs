@@ -19,6 +19,15 @@ const budgets = new Map([
   ['.png', { raw: kibibytes(64) }],
   ['.woff2', { raw: kibibytes(48) }],
 ]);
+// Catalogue indexes intentionally scale with the reviewed record set. Keep their
+// transfer-size limits as strict as the general budget while allowing additional
+// uncompressed source text for the in-context record panels and public exports.
+const catalogueBudgets = new Map([
+  ['api/knowledge.json', { raw: kibibytes(160), gzip: kibibytes(24) }],
+  ['api/relationships.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
+  ['knowledge/index.html', { raw: kibibytes(96), gzip: kibibytes(16) }],
+  ['relationships/index.html', { raw: kibibytes(96), gzip: kibibytes(16) }],
+]);
 const pageShellGzipBudget = kibibytes(40);
 const files = [];
 
@@ -49,7 +58,7 @@ const measure = file => {
 
 for (const file of files) {
   const extension = path.extname(file).toLowerCase();
-  const budget = budgets.get(extension);
+  const budget = catalogueBudgets.get(relative(file)) ?? budgets.get(extension);
   if (!budget) continue;
   const size = measure(file);
   for (const kind of ['raw', 'gzip']) {

@@ -3,9 +3,9 @@ id: apt28
 name: APT28
 slug: apt28
 created_at: 2026-08-05
-modified_at: 2026-08-09
-version: 2.0.0
-change_reason: Major evidence and presentation review through August 2026.
+modified_at: 2026-08-26
+version: 2.0.1
+change_reason: Reviewed against current 2025-2026 official reporting; no material analytic change was required.
 summary: A Russian military intelligence intrusion set associated with GRU Unit 26165 and persistent espionage against governments, defence, logistics, technology, identity systems and organisations supporting Ukraine.
 actor_types: [state-sponsored]
 status: active
@@ -14,7 +14,7 @@ motivations: [espionage, credential-access, data-theft]
 active_since: "2004"
 last_observed: "2026"
 confidence: high
-last_reviewed: 2026-08-09
+last_reviewed: 2026-08-26
 authors: [deividas-lis]
 mission: Collect strategic and military intelligence in support of Russian government foreign-policy and operational objectives, with recurring emphasis on identity, email, defence, logistics and Ukraine-related networks.
 current_assessment: APT28 remains an active, adaptive espionage actor. Its recent operations combine rapid client-side exploitation, long-term mailbox access and compromised edge infrastructure that can expose authentication flows before traffic reaches an organisation's managed boundary.
@@ -314,8 +314,8 @@ external_identifiers:
   mitre_attack: G0007
   other: [GRU Unit 26165]
 related_research: []
-sources: [ncsc-apt28-dns-2026, microsoft-soho-dns-2026, doj-operation-masquerade-2026, zscaler-operation-neusploit, akamai-cve-2026-21513, gtig-promptsteal-2025, ncsc-authentic-antics-2025, eset-operation-roundpress-2025, cisa-aa25-141a, volexity-nearest-neighbor-2024, microsoft-gooseegg-2024, microsoft-cve-2023-23397, doj-soho-botnet-2024, mandiant-apt44-correction-2024, ncsc-jaguar-tooth-2023, doj-gru-indictment-2018, mitre-g0007]
-updates: [apt28-profile-created, apt28-major-review-2026]
+sources: [uk-gru-profile-2026, ncsc-apt28-dns-2026, microsoft-soho-dns-2026, doj-operation-masquerade-2026, zscaler-operation-neusploit, akamai-cve-2026-21513, gtig-promptsteal-2025, ncsc-authentic-antics-2025, eset-operation-roundpress-2025, cisa-aa25-141a, volexity-nearest-neighbor-2024, microsoft-gooseegg-2024, microsoft-cve-2023-23397, doj-soho-botnet-2024, mandiant-apt44-correction-2024, ncsc-jaguar-tooth-2023, doj-gru-indictment-2018, mitre-g0007]
+updates: [apt28-profile-created, apt28-major-review-2026, apt28-reviewed-no-change-2026]
 featured: true
 draft: false
 ---

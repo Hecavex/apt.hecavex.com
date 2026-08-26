@@ -3,9 +3,9 @@ id: void-blizzard
 name: Void Blizzard
 slug: void-blizzard
 created_at: 2026-08-14
-modified_at: 2026-08-14
-version: 1.1.0
-change_reason: Zimbra campaign evidence added to the initial public profile.
+modified_at: 2026-08-26
+version: 1.1.1
+change_reason: Reviewed against the current government and vendor record; no material analytic change was required.
 summary: A Russia-affiliated espionage cluster using commodity credentials, stolen session cookies and cloud-native collection against NATO, EU and Ukraine-related targets.
 actor_types: [state-sponsored]
 status: active
@@ -14,7 +14,7 @@ motivations: [espionage, credential-access, data-theft]
 active_since: "2024-04"
 last_observed: "2026-07"
 confidence: high
-last_reviewed: 2026-08-14
+last_reviewed: 2026-08-26
 authors: [deividas-lis]
 mission: Collect government, defence, logistics, technology, policy and Ukraine-support information from Western organisations through scalable identity compromise and cloud data access.
 current_assessment: Void Blizzard combines scalable identity abuse with a growing technical collection capability. Purchased credentials, stolen cookies, password spraying and legitimate cloud APIs remain central, while the 2025–2026 Zimbra campaign demonstrates access to a novel exploit and custom collection infrastructure.
@@ -52,7 +52,7 @@ attribution:
     confidence: high
     status: assessed
     notes: Microsoft does not publicly assign the cluster to a named Russian intelligence service or unit.
-  - claim: The Dutch services assess Laundry Bear is highly probably a Russian state-supported actor conducting espionage against Western organisations.
+  - claim: The Dutch services assess with high probability that Laundry Bear is a Russian state-supported actor conducting espionage against Western organisations.
     attributed_entity: Russian state-supported threat actor
     source: aivd-mivd-laundry-bear-2025
     source_type: government
@@ -67,7 +67,7 @@ attribution:
     published_at: 2026-07-23
     confidence: high
     status: assessed
-    notes: The advisory was authored and co-sealed by intelligence, defence and cybersecurity authorities across multiple NATO partners.
+    notes: The advisory was jointly issued by intelligence, defence and cybersecurity authorities across multiple NATO partners.
 targeting:
   regions: [Europe, North America, East Asia, Central Asia]
   countries: [Ukraine, Netherlands, NATO member states, European Union member states]
@@ -167,7 +167,7 @@ external_identifiers:
   other: [Laundry Bear]
 related_research: []
 sources: [joint-laundry-bear-zimbra-2026, microsoft-void-blizzard-2025, aivd-mivd-laundry-bear-2025]
-updates: [void-blizzard-profile-created, void-blizzard-zimbra-campaign-added]
+updates: [void-blizzard-profile-created, void-blizzard-zimbra-campaign-added, void-blizzard-reviewed-no-change-2026]
 featured: true
 draft: false
 ---
@@ -178,7 +178,7 @@ Void Blizzard is a useful corrective to the idea that a state-aligned operation 
 
 ## Attribution boundary
 
-Microsoft calls the cluster Void Blizzard and assesses it is Russia-affiliated. The Dutch AIVD and MIVD call it Laundry Bear and assess it is highly probably Russian state-supported. Their coordinated publications explicitly connect the names. Neither public source assigns the actor to a particular Russian service or military unit, so this profile does not fill that gap with inference.
+Microsoft calls the cluster Void Blizzard and assesses it is Russia-affiliated. The Dutch AIVD and MIVD call it Laundry Bear and assess with high probability that it is Russian state-supported. Their coordinated publications explicitly connect the names. Neither public source assigns the actor to a particular Russian service or military unit, so this profile does not fill that gap with inference.
 
 ## Access economy
 
