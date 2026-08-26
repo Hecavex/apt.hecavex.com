@@ -13,14 +13,20 @@ const meta = (html, key, attribute = 'name') => html.match(new RegExp(`<meta[^>]
 for (const file of files) {
   const relative = path.relative(root, file).replaceAll('\\', '/');
   const html = fs.readFileSync(file, 'utf8');
+  const compatibilityRoute = /<html[^>]+data-compatibility-route=["']true["']/i.test(html);
   const indexable = !/name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(html);
   if (!/<html[^>]+lang=["'][^"']+/i.test(html)) errors.push(`${relative}: missing html lang`);
   if (!/<title>\s*[^<]+/i.test(html)) errors.push(`${relative}: missing title`);
   if (!meta(html, 'description')) errors.push(`${relative}: missing meta description`);
+  if (!/<link[^>]+rel=["']icon["'][^>]+href=["']\/favicon\.svg["']/i.test(html) && !/<link[^>]+href=["']\/favicon\.svg["'][^>]+rel=["']icon["']/i.test(html)) errors.push(`${relative}: missing shared SVG favicon`);
+  if (!/<link[^>]+rel=["']apple-touch-icon["'][^>]+href=["']\/apple-touch-icon\.png["']/i.test(html) && !/<link[^>]+href=["']\/apple-touch-icon\.png["'][^>]+rel=["']apple-touch-icon["']/i.test(html)) errors.push(`${relative}: missing shared Apple touch icon`);
+  if (!/<link[^>]+rel=["']manifest["'][^>]+href=["']\/site\.webmanifest["']/i.test(html) && !/<link[^>]+href=["']\/site\.webmanifest["'][^>]+rel=["']manifest["']/i.test(html)) errors.push(`${relative}: missing origin manifest`);
   if (indexable) {
     const canonical = html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)/i)?.[1] || html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical/i)?.[1] || '';
     if (!canonical) errors.push(`${relative}: missing canonical`);
-    if (canonicals.has(canonical)) errors.push(`${relative}: duplicate canonical also used by ${canonicals.get(canonical)}`); else canonicals.set(canonical, relative);
+    if (!compatibilityRoute) {
+      if (canonicals.has(canonical)) errors.push(`${relative}: duplicate canonical also used by ${canonicals.get(canonical)}`); else canonicals.set(canonical, relative);
+    }
     for (const property of ['og:title', 'og:description', 'og:url', 'og:image', 'og:image:width', 'og:image:height', 'og:image:alt']) if (!meta(html, property, 'property')) errors.push(`${relative}: missing ${property}`);
     for (const name of ['twitter:card', 'twitter:title', 'twitter:description', 'twitter:image', 'twitter:image:alt']) if (!meta(html, name)) errors.push(`${relative}: missing ${name}`);
     const scripts = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
@@ -41,6 +47,8 @@ for (const file of files) {
 
   const dialogCount = (html.match(/<dialog\b[^>]*data-knowledge-dialog(?:\s|=|>)/gi) || []).length;
   if (dialogCount !== 1) errors.push(`${relative}: expected one shared knowledge dialog, found ${dialogCount}`);
+  if (!/<dialog\b[^>]*data-knowledge-dialog[^>]*aria-labelledby=["']knowledge-dialog-label["']/i.test(html)) errors.push(`${relative}: shared knowledge dialog is missing its static accessible name`);
+  if (!/<button\b[^>]*data-knowledge-dialog-close[^>]*aria-label=["'][^"']+["']/i.test(html)) errors.push(`${relative}: shared knowledge dialog is missing its labelled close control`);
 
   const ids = [...html.matchAll(/\sid=["']([^"']+)["']/gi)].map(match => match[1]);
   const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
@@ -50,6 +58,13 @@ for (const file of files) {
     const fragments = (html.match(/data-knowledge-record-fragment(?:\s|=|>)/gi) || []).length;
     if (fragments !== 1) errors.push(`${relative}: expected one knowledge fallback fragment, found ${fragments}`);
     if (!/data-knowledge-record-heading(?:\s|=|>)/i.test(html)) errors.push(`${relative}: knowledge fallback is missing its focusable heading`);
+  }
+
+  if (relative === 'about/methodology/index.html') {
+    if (!compatibilityRoute) errors.push(`${relative}: missing compatibility-route marker`);
+    if (!/rel=["']canonical["'][^>]+href=["']https:\/\/apt\.hecavex\.com\/methodology\//i.test(html) && !/href=["']https:\/\/apt\.hecavex\.com\/methodology\/["'][^>]+rel=["']canonical["']/i.test(html)) errors.push(`${relative}: canonical does not target /methodology/`);
+    if (!/http-equiv=["']refresh["'][^>]+content=["']0;\s*url=\/methodology\//i.test(html)) errors.push(`${relative}: missing immediate static redirect`);
+    if (!/<a[^>]+href=["']\/methodology\/["']/i.test(html)) errors.push(`${relative}: missing visible methodology fallback link`);
   }
 
   for (const anchor of html.match(/<a\b[^>]*data-knowledge-link[^>]*>/gi) || []) {
@@ -67,7 +82,7 @@ for (const link of knowledgeLinks) {
   if (!fs.existsSync(target)) errors.push(`${link.source}: knowledge fallback does not exist (${url.pathname})`);
 }
 
-for (const required of ['changes/index.html', 'changes/feed.xml', 'api/index.json', 'api/version.json', 'api/relationships.json', 'api/changes.json']) {
+for (const required of ['methodology/index.html', 'about/methodology/index.html', 'changes/index.html', 'changes/feed.xml', 'api/index.json', 'api/version.json', 'api/relationships.json', 'api/changes.json', 'favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'site.webmanifest']) {
   if (!fs.existsSync(path.join(root, required))) errors.push(`missing required publication output: ${required}`);
 }
 

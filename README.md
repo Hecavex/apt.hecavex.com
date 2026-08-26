@@ -2,7 +2,7 @@
 
 This repository is the production source for [apt.hecavex.com](https://apt.hecavex.com), the HECAVEX catalogue of source-backed threat actors and the campaigns, software, techniques, references and procedure evidence that support them.
 
-APT Notes is an operated HECAVEX publication, not a general-purpose threat-intelligence platform, starter project or self-hosting package. The public website is the authoritative rendered edition. Its [About](https://apt.hecavex.com/about/), [methodology](https://apt.hecavex.com/about/methodology/) and [data licence](https://apt.hecavex.com/licence/) pages define its scope, limitations, review policy and reuse boundary.
+APT Notes is an operated HECAVEX publication, not a general-purpose threat-intelligence platform, starter project or self-hosting package. The public website is the authoritative rendered edition. Its [About](https://apt.hecavex.com/about/), [methodology](https://apt.hecavex.com/methodology/) and [data licence](https://apt.hecavex.com/licence/) pages define its scope, limitations, review policy and reuse boundary.
 
 Status: **maintained on a best-effort basis** by Deividas Lis / HECAVEX. APT Notes provides neither comprehensive actor coverage nor a monitoring, attribution or response SLA.
 

@@ -2298,40 +2298,80 @@ tbody tr:hover {
 }
 
 .knowledge-record-page {
-  padding-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .knowledge-record {
-  max-width: 86rem;
+  max-width: 82rem;
   margin-inline: auto;
   border-top: 2px solid var(--cyan);
   background: var(--bg);
 }
 
-.knowledge-record__header {
-  padding: clamp(1.5rem, 3vw, 2.5rem);
+.knowledge-record__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem clamp(1rem, 2.5vw, 1.75rem);
   border: 1px solid var(--line);
   border-top: 0;
-  background: linear-gradient(135deg, var(--surface-cyan), var(--surface) 62%);
+  color: var(--faint);
+  font: 600 0.61rem var(--mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.knowledge-record__breadcrumb a {
+  color: var(--cyan);
+}
+
+.knowledge-record__header {
+  padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1rem, 2.5vw, 1.75rem);
+  border: 1px solid var(--line);
+  border-top: 0;
+  background: var(--surface);
 }
 
 .knowledge-record__header h1 {
-  max-width: 24ch;
+  max-width: 30ch;
   margin: 0;
-  font-size: clamp(2.1rem, 4vw, 3.5rem);
-  line-height: 1;
-  letter-spacing: -0.045em;
+  font-size: clamp(1.85rem, 3.2vw, 2.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
 }
 
 .knowledge-record__header .lead {
-  margin: 1.1rem 0 1.5rem;
+  max-width: 74ch;
+  margin: 0.9rem 0 1.15rem;
+}
+
+.knowledge-record .fact-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 1rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  background: transparent;
+}
+
+.knowledge-record .fact-grid > .fact,
+.knowledge-record .fact-grid > .fact:last-child:nth-child(n) {
+  min-width: min(100%, 13rem);
+  flex: 1 1 13rem;
+  grid-column: auto;
+  padding: 0.7rem 0.8rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
 }
 
 .knowledge-record__section {
   display: grid;
-  grid-template-columns: minmax(12rem, 0.38fr) minmax(0, 1fr);
-  gap: 0.5rem clamp(2rem, 6vw, 6rem);
-  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.25rem, 3vw, 2.5rem);
+  grid-template-columns: minmax(10rem, 0.28fr) minmax(0, 1fr);
+  gap: 0.4rem clamp(1.5rem, 4vw, 3.5rem);
+  padding: clamp(1.4rem, 2.8vw, 2.25rem) clamp(1rem, 2.5vw, 1.75rem);
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   border-left: 1px solid var(--line);
@@ -2364,9 +2404,8 @@ tbody tr:hover {
 
 .knowledge-record__relationship-group {
   margin-bottom: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--line);
-  background: var(--surface);
+  padding: 0 0 1rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .knowledge-record__relationship-group h3 {
@@ -2411,7 +2450,7 @@ tbody tr:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem 1rem;
-  padding: 1.25rem clamp(1.25rem, 3vw, 2.5rem);
+  padding: 1rem clamp(1rem, 2.5vw, 1.75rem);
   border: 1px solid var(--line);
   border-top: 0;
   background: var(--surface);
@@ -2498,6 +2537,29 @@ tbody tr:hover {
 .knowledge-dialog .knowledge-record {
   max-width: none;
   border-top: 0;
+}
+
+.knowledge-dialog .knowledge-record__breadcrumb,
+.knowledge-dialog [data-knowledge-back] {
+  display: none;
+}
+
+.knowledge-record-page [data-knowledge-open-page] {
+  display: none;
+}
+
+.compatibility-page {
+  min-height: 52vh;
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+.compatibility-page h1 {
+  max-width: 18ch;
+  margin: 0.5rem 0 1rem;
+}
+
+.compatibility-page p:not(.eyebrow) {
+  max-width: 58ch;
 }
 
 .knowledge-dialog-state {

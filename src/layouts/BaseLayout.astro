@@ -3,9 +3,27 @@ import AppHeader from '../components/AppHeader.astro';
 import KnowledgeDialog from '../components/knowledge/KnowledgeDialog.astro';
 import '../styles/global.css';
 
-interface Props { title?: string; description?: string; type?: string; noindex?: boolean; image?: string; imageAlt?: string; }
-const { title = 'APT Notes by HECAVEX', description = 'A structured knowledge base of threat actors and their operations.', type = 'CollectionPage', noindex = false, image = '/og/default.png', imageAlt = `${title} social preview` } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+interface Props {
+  title?: string;
+  description?: string;
+  type?: string;
+  noindex?: boolean;
+  image?: string;
+  imageAlt?: string;
+  canonicalPath?: string;
+  redirectTo?: string;
+}
+const {
+  title = 'APT Notes by HECAVEX',
+  description = 'A structured knowledge base of threat actors and their operations.',
+  type = 'CollectionPage',
+  noindex = false,
+  image = '/og/default.png',
+  imageAlt = `${title} social preview`,
+  canonicalPath,
+  redirectTo
+} = Astro.props;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site);
 const fullTitle = title === 'APT Notes by HECAVEX' ? title : `${title} | APT Notes by HECAVEX`;
 const pageId = `${canonical.href}#webpage`;
 const jsonLd = {
@@ -23,14 +41,19 @@ const jsonLd = {
 const measurementToken = import.meta.env.PUBLIC_HECAVEX_ANALYTICS_TOKEN?.trim() ?? '';
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-compatibility-route={redirectTo ? 'true' : undefined}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {redirectTo && <meta http-equiv="refresh" content={`0; url=${redirectTo}`} />}
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicons/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#05080b" />
     <link rel="alternate" type="application/atom+xml" title="APT Notes changes" href="/changes/feed.xml" />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
     <meta property="og:type" content="website" /><meta property="og:site_name" content="APT Notes by HECAVEX" /><meta property="og:locale" content="en_US" /><meta property="og:title" content={fullTitle} /><meta property="og:description" content={description} /><meta property="og:url" content={canonical} /><meta property="og:image" content={new URL(image, Astro.site)} /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content={imageAlt} />
@@ -57,7 +80,7 @@ const measurementToken = import.meta.env.PUBLIC_HECAVEX_ANALYTICS_TOKEN?.trim() 
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-brand"><strong>APT NOTES</strong><span>Source-backed public threat intelligence by <a href="https://hecavex.com/en/">HECAVEX</a>.</span></div>
-        <nav aria-label="Footer"><a href="https://hecavex.com/en/research/">Research</a><a href="https://radar.hecavex.com/">Radar</a><a href="/">APT Notes</a><a href="https://labs.hecavex.com/">Labs</a><a href="https://labs.hecavex.com/data/">Data</a><a href="/knowledge/">Knowledge</a><a href="/relationships/">Relationships</a><a href="/changes/">Changes</a><a href="/about/methodology/">Methodology</a><a href="/licence/">Licence</a><a href="/changes/feed.xml">Feed</a><a href="https://hecavex.com/en/privacy/">Privacy</a><a href="/security/">Security</a></nav>
+        <nav aria-label="Footer"><a href="https://hecavex.com/en/research/">Research</a><a href="https://radar.hecavex.com/">Radar</a><a href="/">APT Notes</a><a href="https://labs.hecavex.com/">Labs</a><a href="/knowledge/">Knowledge</a><a href="/relationships/">Relationships</a><a href="/changes/">Changes</a><a href="/methodology/">Methodology</a><a href="/licence/">Licence</a><a href="/changes/feed.xml">Feed</a><a href="https://hecavex.com/en/privacy/">Privacy</a><a href="/security/">Security</a></nav>
       </div>
     </footer>
   </body>

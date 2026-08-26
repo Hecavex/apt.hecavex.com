@@ -77,7 +77,7 @@ const tocItems = [
       ].map(([term, value]) => <div class="fact"><dt>{term}</dt><dd>{value}</dd></div>)}
     </dl>
 
-    <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a>{['apt28', 'apt44'].includes(d.slug) && <a href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Interactive ATT&amp;CK evidence map ↗</a>}<a href="/about/methodology/">Review policy →</a></div>
+    <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a>{['apt28', 'apt44'].includes(d.slug) && <a href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Interactive ATT&amp;CK evidence map ↗</a>}<a href="/methodology/">Review policy →</a></div>
 
     <dl class="fact-grid actor-record-state" aria-label="Record state">
       <div class="fact"><dt>Record version</dt><dd class="mono">{d.version}</dd></div>

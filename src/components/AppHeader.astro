@@ -7,7 +7,7 @@ const productNavigation = [
   { name: 'Knowledge', href: '/knowledge/' },
   { name: 'Relationships', href: '/relationships/' },
   { name: 'Changes', href: '/changes/' },
-  { name: 'Methodology', href: '/about/methodology/' },
+  { name: 'Methodology', href: '/methodology/' },
   { name: 'About', href: '/about/' }
 ];
 
@@ -15,14 +15,15 @@ const portfolioNavigation = [
   { name: 'Research', href: 'https://hecavex.com/en/research/' },
   { name: 'Radar', href: 'https://radar.hecavex.com/' },
   { name: 'APT Notes', href: '/', current: true },
-  { name: 'Labs', href: 'https://labs.hecavex.com/' },
-  { name: 'Data', href: 'https://labs.hecavex.com/data/' }
+  { name: 'Labs', href: 'https://labs.hecavex.com/' }
 ];
 
 const active = (href: string) => {
   if (href === '/') return path === '/';
   if (href === '/knowledge/') return ['/knowledge/', '/campaigns/', '/malware/', '/tools/', '/techniques/', '/sources/'].some((prefix) => path.startsWith(prefix));
   if (href === '/changes/') return path.startsWith('/changes/') || path.startsWith('/updates/');
+  if (href === '/methodology/') return path.startsWith('/methodology/') || path === '/about/methodology/';
+  if (href === '/about/') return path.startsWith('/about/') && path !== '/about/methodology/';
   return path.startsWith(href);
 };
 ---

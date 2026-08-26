@@ -40,7 +40,7 @@ const request = async (url, method) => {
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     headers: {
       'accept': 'text/html,application/xhtml+xml,application/pdf;q=0.9,*/*;q=0.1',
-      'user-agent': 'APT-Notes-Source-Health/1.0 (+https://apt.hecavex.com/about/methodology/)'
+      'user-agent': 'APT-Notes-Source-Health/1.0 (+https://apt.hecavex.com/methodology/)'
     }
   });
   if (method === 'GET') await response.body?.cancel();

@@ -119,7 +119,7 @@ const checkEnvelope = (document, label) => {
   assert(!Number.isNaN(Date.parse(document.released_at)), `${label}: invalid released_at`);
   assert(document.publisher === 'HECAVEX', `${label}: unexpected publisher`);
   assert(document.licence_url === `${site}/licence/`, `${label}: unexpected licence_url`);
-  assert(document.methodology === `${site}/about/methodology/`, `${label}: unexpected methodology URL`);
+  assert(document.methodology === `${site}/methodology/`, `${label}: unexpected methodology URL`);
   if (version && document !== version) {
     for (const field of envelopeFields) {
       assert(document[field] === version[field], `${label}: ${field} differs from release manifest`);

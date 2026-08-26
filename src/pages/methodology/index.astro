@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { confidenceDefinitions } from '../../data/vocabularies';
+
+const sections = [
+  { href: '#scope', label: 'Scope' },
+  { href: '#naming', label: 'Naming' },
+  { href: '#references', label: 'References' },
+  { href: '#relationships', label: 'Relationships' },
+  { href: '#confidence', label: 'Confidence' },
+  { href: '#revision', label: 'Revision' },
+  { href: '#changes', label: 'Changes' },
+  { href: '#fallback-records', label: 'Fallback records' },
+  { href: '#machine-readable', label: 'Machine access' },
+  { href: '#limitations', label: 'Limitations' }
+];
+---
+<BaseLayout title="Methodology" description="APT Notes methodology for selection, sourcing, naming, relationships, confidence, review and corrections.">
+  <article class="shell methodology-page methodology-section">
+    <header class="methodology-heading">
+      <div>
+        <p class="eyebrow">Editorial standards</p>
+        <h1>How evidence becomes an APT Notes record</h1>
+      </div>
+      <p>How selected public reporting becomes an APT Notes record, which claims become relationships, and how uncertainty and revision history are preserved.</p>
+    </header>
+
+    <nav class="methodology-toc" aria-label="Methodology sections">
+      <span>On this page</span>
+      <div>{sections.map((section) => <a href={section.href}>{section.label}</a>)}</div>
+    </nav>
+
+    <section class="methodology-detail" id="scope" aria-labelledby="scope-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Selection</p>
+        <h2 id="scope-title">Scope and inclusion</h2>
+        <div class="methodology-section-copy">
+          <p>APT Notes is a curated dossier publication, not an exhaustive threat-actor directory. The publication name is not an assertion that every included actor is an advanced persistent threat. State-sponsored, state-aligned, hacktivist and cybercriminal records may be included when they have durable relevance to European or Baltic security and enough source-specific reporting to support a defensible dossier.</p>
+          <p>A public actor profile requires a durable research purpose, a sufficiently stable identity, explicit actor-type and attribution boundaries, sufficient primary or source-specific reporting, an explicit confidence statement and a substantive review date. Ideology, criminal participation and reported state alignment are recorded as separate claims; one is not treated as proof of another.</p>
+          <p>Campaigns, software, techniques and references are supporting records. They are included when they help explain a published actor dossier; a short supporting record is not presented as an independent long-form assessment.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology-detail" id="naming" aria-labelledby="naming-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Identity</p>
+        <h2 id="naming-title">Naming and aliases</h2>
+        <div class="methodology-section-copy">
+          <p>Aliases retain the reporting source and an explicit relationship such as common alias, vendor tracking cluster, government designation, possible overlap or disputed equivalence. Name similarity alone is not treated as identity.</p>
+        </div>
+      </div>
+      <div class="methodology-note"><strong>Analytical boundary</strong><p>Threat actor names are analytical constructs. Different organisations may use different names for overlapping, broader or narrower sets of activity.</p></div>
+    </section>
+
+    <section class="methodology-detail" id="references" aria-labelledby="references-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Evidence</p>
+        <h2 id="references-title">References and attribution</h2>
+        <div class="methodology-section-copy">
+          <p>Claims retain their publisher, authors where stated, publication date, source type and access date. Government, legal, vendor, academic and other reporting are not blended into one unattributed conclusion. Original links remain primary; archives and link-health state are additional durability metadata.</p>
+        </div>
+      </div>
+      <div class="methodology-note methodology-note--warning"><strong>Attribution boundary</strong><p>Inclusion in APT Notes does not independently confirm every attribution claim associated with an actor.</p></div>
+    </section>
+
+    <section class="methodology-detail" id="relationships" aria-labelledby="relationships-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Connections</p>
+        <h2 id="relationships-title">Catalogue associations and sourced relationships</h2>
+        <div class="methodology-section-copy">
+          <p>Catalogue associations indicate that one public record names another. They are useful for browsing but do not, on their own, claim independent corroboration.</p>
+          <p>A relationship enters the public <a href="/relationships/">Relationships view</a> only when it has a stable ID, typed source and target, a concrete evidence statement, confidence, and at least one supporting reference. The initial layer is deliberately bounded to actor-to-technique procedure evidence already recorded in actor dossiers.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology-detail" id="confidence" aria-labelledby="confidence-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Assessment</p>
+        <h2 id="confidence-title">Confidence</h2>
+        <div class="methodology-section-copy">
+          <p>Confidence is qualitative and applies to the stated assessment or relationship. It is not a numeric probability and is not inherited automatically by every related record.</p>
+        </div>
+      </div>
+      <dl class="methodology-field-list">
+        {Object.entries(confidenceDefinitions).map(([name, definition]) => <div><dt>{name.charAt(0).toUpperCase() + name.slice(1)}</dt><dd>{definition}</dd></div>)}
+      </dl>
+    </section>
+
+    <section class="methodology-detail" id="revision" aria-labelledby="revision-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Lifecycle</p>
+        <h2 id="revision-title">Revision and review</h2>
+        <div class="methodology-section-copy">
+          <p>Entity records carry a stable ID, created and modified timestamps, semantic version, change reason, review date where applicable, and deprecated, revoked or superseded state. The fixed 26 August 2026 migration date marks the introduction of this contract where earlier editorial metadata was not available; it does not invent an original research date.</p>
+          <p>Actor profiles are intended to receive a substantive review at least annually. Up to 180 days is current, 181–365 days is review due, and older records are stale. Review age does not imply actor inactivity.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology-detail" id="changes" aria-labelledby="changes-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Accountability</p>
+        <h2 id="changes-title">Changes and corrections</h2>
+        <div class="methodology-section-copy">
+          <p>Substantive publications, material revisions, corrections, deprecations, revocations and relationship changes are published in <a href="/changes/">Changes</a>. Each event identifies what changed, why, affected fields or relationships, and the version transition. Existing URLs remain addressable when a record is deprecated or superseded.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology-detail" id="fallback-records" aria-labelledby="fallback-records-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Interface</p>
+        <h2 id="fallback-records-title">Modal and fallback records</h2>
+        <div class="methodology-section-copy">
+          <p>During normal browsing, secondary records open in an in-context dialog so filters and reading position are retained. Each trigger is still a real link. Direct navigation, reload, no-JavaScript access, modifier clicks and fetch failures use the same emitted fallback record at its canonical URL.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology-detail" id="machine-readable" aria-labelledby="machine-readable-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Publication</p>
+        <h2 id="machine-readable-title">Machine-readable publishing</h2>
+        <div class="methodology-section-copy">
+          <p>Static JSON and CSV expose all public entity types, sourced relationships and change events. A release manifest provides stable dataset and schema versions. The dedicated Atom feed contains editorial change events only; it does not manufacture updates from review dates.</p>
+          <p>Consumers must preserve confidence, evidence, references, revision state and attribution boundaries. The exports are not an IOC feed and should not be converted directly into blocking decisions.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology-detail" id="limitations" aria-labelledby="limitations-title">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Boundaries</p>
+        <h2 id="limitations-title">Limitations and privacy</h2>
+        <div class="methodology-section-copy">
+          <p>Public reporting is incomplete, access to evidence is unequal, and actor boundaries change. A dossier is a reviewed representation of available evidence, not a claim of exhaustive visibility or a live operational feed.</p>
+          <p>APT Notes uses no advertising cookies, fingerprinting or external search telemetry. Search is generated locally. Cloudflare Web Analytics provides aggregate measurements without cross-site individual tracking; the HECAVEX loader does not start it when Do Not Track is set to <code>1</code>. See the <a href="https://hecavex.com/en/privacy/">HECAVEX privacy policy</a>.</p>
+        </div>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

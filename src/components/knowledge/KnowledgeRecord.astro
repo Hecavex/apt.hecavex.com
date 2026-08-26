@@ -135,6 +135,12 @@ const techniqueUrl = collection === 'techniques'
   data-pagefind-body
   data-pagefind-meta={`type:${typeName}`}
 >
+  <nav class="knowledge-record__breadcrumb" aria-label="Breadcrumb">
+    <a href="/knowledge/" data-knowledge-back>Knowledge</a>
+    <span aria-hidden="true">/</span>
+    <span>{typeName}</span>
+  </nav>
+
   <header class="knowledge-record__header" data-knowledge-section="identity">
     <p class="eyebrow">{typeName} record · <span class="mono">{d.id}</span></p>
     <h1 id={headingId} tabindex="-1" data-knowledge-record-heading>{heading}</h1>
@@ -288,6 +294,7 @@ const techniqueUrl = collection === 'techniques'
   </section>
 
   <footer class="knowledge-record__actions" data-knowledge-section="actions">
+    <a href="/knowledge/" data-knowledge-back>← Back to Knowledge</a>
     <a class="button" href={jsonHref}>Open public JSON</a>
     <a href={canonicalHref} data-knowledge-open-page data-knowledge-bypass>Open full page</a>
     <button type="button" data-knowledge-copy-link data-copy-record-url={absoluteCanonicalHref}>Copy record link</button>

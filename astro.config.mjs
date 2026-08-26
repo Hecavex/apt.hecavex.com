@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [sitemap({ filter: (page) => {
     const pathname = new URL(page).pathname;
     const compatibilityIndexes = new Set(['/campaigns/', '/malware/', '/tools/', '/techniques/', '/sources/', '/updates/']);
-    return !pathname.includes('/drafts/') && pathname !== '/search/' && !compatibilityIndexes.has(pathname);
+    return !pathname.includes('/drafts/') && pathname !== '/search/' && pathname !== '/about/methodology/' && !compatibilityIndexes.has(pathname);
   } })],
   build: { format: 'directory' },
   security: { checkOrigin: true }

@@ -12,7 +12,7 @@ export const publication = {
   site: 'https://apt.hecavex.com',
   licence: 'CC-BY-4.0',
   licenceUrl: 'https://apt.hecavex.com/licence/',
-  methodologyUrl: 'https://apt.hecavex.com/about/methodology/',
+  methodologyUrl: 'https://apt.hecavex.com/methodology/',
   changesUrl: 'https://apt.hecavex.com/changes/',
   notice: 'Curated, source-backed public research. Relationships are analytical records, not live indicators or proof of current activity.'
 } as const;

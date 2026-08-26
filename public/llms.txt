@@ -13,7 +13,7 @@ The APT Notes name is a publication identity, not a classification applied to ev
 - [Knowledge](https://apt.hecavex.com/knowledge/): Campaign, software, technique and reference catalogue.
 - [Relationships](https://apt.hecavex.com/relationships/): Explicit actor-to-technique procedure evidence.
 - [Changes](https://apt.hecavex.com/changes/): Chronological substantive change record.
-- [Methodology](https://apt.hecavex.com/about/methodology/): Source hierarchy, attribution, confidence, review and corrections.
+- [Methodology](https://apt.hecavex.com/methodology/): Source hierarchy, attribution, confidence, review and corrections.
 - [About](https://apt.hecavex.com/about/): Purpose, scope, audience, workflow and limitations.
 - [Licence](https://apt.hecavex.com/licence/): Software, research, source and trademark terms.
 
