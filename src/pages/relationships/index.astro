@@ -7,8 +7,12 @@ const knowledge = await loadKnowledge();
 const relationships = knowledge.relationships;
 const sourceMap = knowledge.maps.sources!;
 const techniqueMap = knowledge.maps.techniques!;
-const actors = unique(relationships.map((relationship: any) => relationship.source_entity.name)).sort();
+const actors = [...new Map(relationships.map((relationship: any) => [relationship.source_entity.id, {
+  id: relationship.source_entity.id,
+  name: relationship.source_entity.name
+}])).values()].sort((left, right) => left.name.localeCompare(right.name));
 const tactics = unique(relationships.map((relationship: any) => techniqueMap.get(relationship.target_entity.id)?.data.tactic ?? 'Unknown')).sort();
+const confidences = unique(relationships.map((relationship: any) => relationship.confidence)).sort();
 ---
 <BaseLayout title="Relationships" description="Sourced actor-to-technique procedure relationships published by APT Notes.">
   <section class="shell relationships-page">
@@ -18,24 +22,24 @@ const tactics = unique(relationships.map((relationship: any) => techniqueMap.get
         <h1>Evidence before edges.</h1>
         <p class="lead">A bounded view of actor-to-technique links backed by procedure evidence in the public dossiers. It is not a complete graph of every catalogue association.</p>
       </div>
-      <span class="meta">{relationships.length} evidenced relationships</span>
+      <span class="meta" data-relationship-header-count>{relationships.length} evidenced relationships</span>
     </header>
 
     <div class="relationship-summary stat-grid" aria-label="Relationship coverage">
-      <div class="stat"><strong>{actors.length}</strong><span>Actor dossiers</span></div>
-      <div class="stat"><strong>{unique(relationships.map((item: any) => item.target_entity.id)).length}</strong><span>Techniques</span></div>
-      <div class="stat"><strong>{unique(relationships.flatMap((item: any) => item.references)).length}</strong><span>References</span></div>
-      <div class="stat"><strong>{relationships.filter((item: any) => item.campaign_context).length}</strong><span>Campaign-scoped</span></div>
+      <div class="stat"><strong data-relationship-stat="actors">{actors.length}</strong><span>Actor dossiers</span></div>
+      <div class="stat"><strong data-relationship-stat="techniques">{unique(relationships.map((item: any) => item.target_entity.id)).length}</strong><span>Techniques</span></div>
+      <div class="stat"><strong data-relationship-stat="references">{unique(relationships.flatMap((item: any) => item.references)).length}</strong><span>References</span></div>
+      <div class="stat"><strong data-relationship-stat="campaigns">{relationships.filter((item: any) => item.campaign_context).length}</strong><span>Campaign-scoped</span></div>
     </div>
 
     <form class="controls relationship-controls" data-relationship-controls aria-label="Relationship filters">
       <div class="advanced-filter-grid">
         <label>Search evidence<input type="search" name="q" placeholder="Actor, technique, procedure…" /></label>
-        <label>Actor<select name="actor"><option value="">All actors</option>{actors.map((actor) => <option value={actor}>{actor}</option>)}</select></label>
+        <label>Actor<select name="actor"><option value="">All actors</option>{actors.map((actor) => <option value={actor.id}>{actor.name}</option>)}</select></label>
         <label>Tactic<select name="tactic"><option value="">All tactics</option>{tactics.map((tactic) => <option value={tactic}>{tactic}</option>)}</select></label>
-        <label>Confidence<select name="confidence"><option value="">All confidence</option><option value="high">High</option><option value="moderate">Moderate</option><option value="low">Low</option></select></label>
+        <label>Confidence<select name="confidence"><option value="">All confidence</option>{confidences.map((confidence) => <option value={confidence}>{label(confidence)}</option>)}</select></label>
       </div>
-      <div class="knowledge-control-actions"><button class="filter-reset" type="reset">Reset filters</button><a class="filter-reset" href="/api/relationships.json">JSON</a><a class="filter-reset" href="/data/relationships.csv">CSV</a></div>
+      <div class="knowledge-control-actions"><button class="filter-reset" type="reset">Reset filters</button><button class="filter-reset" type="button" data-relationship-export="json">Filtered JSON</button><button class="filter-reset" type="button" data-relationship-export="csv">Filtered CSV</button></div>
     </form>
     <p class="meta relationship-count" data-relationship-count role="status">{relationships.length} relationships shown</p>
 
@@ -43,9 +47,13 @@ const tactics = unique(relationships.map((relationship: any) => techniqueMap.get
       {relationships.map((relationship: any) => {
         const technique = techniqueMap.get(relationship.target_entity.id);
         return <article id={relationship.id} class="relationship-record" data-relationship-record
+          data-relationship-id={relationship.id}
           data-search={`${relationship.source_entity.name} ${relationship.target_entity.name} ${relationship.target_entity.external_id} ${relationship.evidence} ${relationship.campaign_context?.name ?? ''}`.toLowerCase()}
-          data-actor={relationship.source_entity.name}
+          data-actor={relationship.source_entity.id}
           data-tactic={technique?.data.tactic ?? 'Unknown'}
+          data-technique={relationship.target_entity.id}
+          data-campaign-scoped={relationship.campaign_context ? 'true' : 'false'}
+          data-references={relationship.references.join('|')}
           data-confidence={relationship.confidence}>
           <header>
             <p class="eyebrow"><span class="mono">{relationship.id}</span></p>
@@ -77,26 +85,94 @@ const tactics = unique(relationships.map((relationship: any) => techniqueMap.get
     if (!form) return;
     const rows = [...document.querySelectorAll<HTMLElement>('[data-relationship-record]')];
     const count = document.querySelector<HTMLElement>('[data-relationship-count]')!;
+    const headerCount = document.querySelector<HTMLElement>('[data-relationship-header-count]')!;
     const empty = document.querySelector<HTMLElement>('[data-relationship-empty]')!;
+    const actorField = form.elements.namedItem('actor') as HTMLSelectElement;
+    const tacticField = form.elements.namedItem('tactic') as HTMLSelectElement;
+    const confidenceField = form.elements.namedItem('confidence') as HTMLSelectElement;
+    const searchField = form.elements.namedItem('q') as HTMLInputElement;
+    const exportButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-relationship-export]')];
     const categoricalNames = ['actor', 'tactic', 'confidence'] as const;
+
+    let shownRows = [...rows];
+    let canonicalExport: any;
+
+    const option = (value: string, text: string) => {
+      const item = document.createElement('option');
+      item.value = value;
+      item.textContent = text;
+      return item;
+    };
+
+    const actorRows = () => actorField.value
+      ? rows.filter((row) => row.dataset.actor === actorField.value)
+      : rows;
+
+    const replaceDependentOptions = (field: HTMLSelectElement, values: string[], allLabel: string) => {
+      const previous = field.value;
+      field.replaceChildren(option('', allLabel), ...values.map((value) => option(
+        value,
+        field === confidenceField ? `${value.charAt(0).toUpperCase()}${value.slice(1)}` : value
+      )));
+      field.value = values.includes(previous) ? previous : '';
+    };
+
+    const reconcileDependentOptions = () => {
+      const relevantRows = actorRows();
+      const values = (name: 'tactic' | 'confidence') => [...new Set(relevantRows.map((row) => row.dataset[name] ?? ''))]
+        .filter(Boolean)
+        .sort((left, right) => left.localeCompare(right));
+      replaceDependentOptions(tacticField, values('tactic'), 'All tactics');
+      replaceDependentOptions(confidenceField, values('confidence'), 'All confidence');
+    };
+
+    const resolveOption = (field: HTMLSelectElement, requested: string) => {
+      const normalized = requested.trim().toLowerCase();
+      if (!normalized) return '';
+      return [...field.options].find((item) => item.value.toLowerCase() === normalized || item.text.toLowerCase() === normalized)?.value ?? '';
+    };
+
     const syncFormFromUrl = () => {
       const parameters = new URLSearchParams(location.search);
-      for (const name of categoricalNames) {
-        const field = form.elements.namedItem(name) as HTMLSelectElement | null;
-        if (field) field.value = parameters.get(name) ?? '';
-      }
+      actorField.value = resolveOption(actorField, parameters.get('actor') ?? '');
+      reconcileDependentOptions();
+      tacticField.value = resolveOption(tacticField, parameters.get('tactic') ?? '');
+      confidenceField.value = resolveOption(confidenceField, parameters.get('confidence') ?? '');
     };
+
+    const currentFilters = () => ({
+      actor: actorField.value,
+      tactic: tacticField.value,
+      confidence: confidenceField.value,
+      query: searchField.value.trim()
+    });
+
+    const updateSummary = () => {
+      const setStat = (name: string, value: number) => {
+        const node = document.querySelector<HTMLElement>(`[data-relationship-stat="${name}"]`);
+        if (node) node.textContent = String(value);
+      };
+      setStat('actors', new Set(shownRows.map((row) => row.dataset.actor)).size);
+      setStat('techniques', new Set(shownRows.map((row) => row.dataset.technique)).size);
+      setStat('references', new Set(shownRows.flatMap((row) => (row.dataset.references ?? '').split('|').filter(Boolean))).size);
+      setStat('campaigns', shownRows.filter((row) => row.dataset.campaignScoped === 'true').length);
+    };
+
     const apply = (updateHistory = true) => {
       const data = new FormData(form);
       const q = String(data.get('q') ?? '').trim().toLowerCase();
-      const shown = rows.filter((row) => (!q || row.dataset.search!.includes(q))
+      shownRows = rows.filter((row) => (!q || row.dataset.search!.includes(q))
         && categoricalNames.every((name) => {
           const value = String(data.get(name) ?? '');
           return !value || row.dataset[name] === value;
         }));
-      rows.forEach((row) => { row.hidden = !shown.includes(row); });
-      count.textContent = `${shown.length} ${shown.length === 1 ? 'relationship' : 'relationships'} shown`;
-      empty.hidden = shown.length !== 0;
+      const shownSet = new Set(shownRows);
+      rows.forEach((row) => { row.hidden = !shownSet.has(row); });
+      count.textContent = `${shownRows.length} ${shownRows.length === 1 ? 'relationship' : 'relationships'} shown`;
+      headerCount.textContent = `${shownRows.length} evidenced ${shownRows.length === 1 ? 'relationship' : 'relationships'}`;
+      empty.hidden = shownRows.length !== 0;
+      exportButtons.forEach((button) => { button.disabled = shownRows.length === 0; });
+      updateSummary();
       if (updateHistory) {
         const parameters = new URLSearchParams();
         for (const name of categoricalNames) {
@@ -106,15 +182,98 @@ const tactics = unique(relationships.map((relationship: any) => techniqueMap.get
         history.replaceState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}${location.hash}`);
       }
     };
-    form.addEventListener('input', () => apply());
-    form.addEventListener('change', () => apply());
+
+    const visibleRecords = async () => {
+      if (!canonicalExport) {
+        const response = await fetch('/api/relationships.json', { headers: { Accept: 'application/json' } });
+        if (!response.ok) throw new Error(`Relationship export request failed with HTTP ${response.status}`);
+        canonicalExport = await response.json();
+        if (!Array.isArray(canonicalExport.records)) throw new Error('Relationship export has an unsupported schema');
+      }
+      const byId = new Map<string, any>(canonicalExport.records.map((record: any) => [String(record.id), record]));
+      return shownRows.map((row) => byId.get(row.dataset.relationshipId ?? '')).filter(Boolean);
+    };
+
+    const download = (filename: string, type: string, content: string) => {
+      const url = URL.createObjectURL(new Blob([content], { type }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    };
+
+    const csvCell = (value: unknown) => {
+      let text = Array.isArray(value) ? value.join(' | ') : String(value ?? '');
+      if (/^[=+\-@]/.test(text)) text = `'${text}`;
+      return `"${text.replaceAll('"', '""')}"`;
+    };
+
+    const exportFiltered = async (format: string, button: HTMLButtonElement) => {
+      const originalLabel = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Preparing…';
+      try {
+        const records = await visibleRecords();
+        if (format === 'json') {
+          const release = Object.fromEntries(Object.entries(canonicalExport).filter(([key]) => !['records', 'count'].includes(key)));
+          const payload = {
+            ...release,
+            export_scope: 'current browser filters',
+            generated_at: new Date().toISOString(),
+            filters: currentFilters(),
+            count: records.length,
+            result_count: records.length,
+            records
+          };
+          download('apt-notes-filtered-relationships.json', 'application/json', `${JSON.stringify(payload, null, 2)}\n`);
+          return;
+        }
+        const headers = ['id', 'actor', 'actor_id', 'technique', 'technique_id', 'tactic', 'confidence', 'campaign', 'evidence', 'first_observed', 'last_observed', 'references'];
+        const csvRows = records.map((record) => [
+          record.id,
+          record.source_entity?.name,
+          record.source_entity?.id,
+          record.target_entity?.name,
+          record.target_entity?.external_id,
+          shownRows.find((row) => row.dataset.relationshipId === record.id)?.dataset.tactic,
+          record.confidence,
+          record.campaign_context?.name,
+          record.evidence,
+          record.first_observed,
+          record.last_observed,
+          record.references
+        ]);
+        const csv = [headers, ...csvRows].map((row) => row.map(csvCell).join(',')).join('\r\n');
+        download('apt-notes-filtered-relationships.csv', 'text/csv;charset=utf-8', `\uFEFF${csv}\r\n`);
+      } catch (error) {
+        console.error(error);
+        button.title = 'The filtered export could not be prepared. The canonical JSON and CSV remain available through the data catalogue.';
+      } finally {
+        button.textContent = originalLabel;
+        button.disabled = shownRows.length === 0;
+      }
+    };
+
+    searchField.addEventListener('input', () => apply());
+    form.addEventListener('change', (event) => {
+      if (event.target === actorField) reconcileDependentOptions();
+      apply();
+    });
     form.addEventListener('reset', () => requestAnimationFrame(() => {
       history.replaceState(null, '', location.pathname);
+      reconcileDependentOptions();
       apply(false);
     }));
-    window.addEventListener('popstate', () => { syncFormFromUrl(); apply(false); });
+    exportButtons.forEach((button) => button.addEventListener('click', () => exportFiltered(button.dataset.relationshipExport ?? '', button)));
+    window.addEventListener('popstate', () => {
+      syncFormFromUrl();
+      apply(true);
+    });
     syncFormFromUrl();
-    apply(false);
+    apply(true);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialiseRelationshipFilters, { once: true });
   else initialiseRelationshipFilters();

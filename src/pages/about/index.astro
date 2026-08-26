@@ -37,7 +37,7 @@ const sections = [
 ];
 ---
 <BaseLayout title="About" description="Purpose, audience, ownership, maintenance and limitations of APT Notes by HECAVEX.">
-  <article class="shell about-shell profile-shell">
+  <article id="about-start" class="shell about-shell profile-shell">
     <header class="about-head">
       <div class="about-summary">
         <p class="eyebrow">APT Notes / About</p>
@@ -62,7 +62,7 @@ const sections = [
     </div>
 
     <div class="profile-grid about-grid">
-      <ProfileToc items={sections} contextLabel="On this page" title="About APT Notes" ariaLabel="About APT Notes sections" />
+      <ProfileToc items={sections} contextLabel="On this page" title="About APT Notes" ariaLabel="About APT Notes sections" topHref="#about-start" />
       <div class="prose profile-body about-body">
         <section id="what-it-is">
           <h2>What APT Notes is</h2>

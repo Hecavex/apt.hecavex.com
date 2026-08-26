@@ -9,97 +9,228 @@ interface Props {
   contextLabel?: string;
   title?: string;
   ariaLabel?: string;
+  topHref?: string;
 }
 
 const {
   items,
   contextLabel = 'On this profile',
   title = 'Profile contents',
-  ariaLabel = contextLabel
+  ariaLabel = contextLabel,
+  topHref = '#profile-start'
 } = Astro.props;
+const tocKey = `${title}-${items.map((item) => item.slug).join('-')}`.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
+const count = String(items.length).padStart(2, '0');
 ---
 
-<details class="profile-toc-mobile" data-profile-toc>
+<details class="profile-toc-mobile" data-profile-toc={tocKey}>
   <summary>
-    <span>{contextLabel}</span>
-    <strong data-profile-toc-current>{items[0]?.text ?? title}</strong>
+    <span>
+      <span class="profile-toc-eyebrow">{contextLabel}</span>
+      <strong data-profile-toc-current>{items[0]?.text ?? title}</strong>
+      <small data-profile-toc-mobile-count>{items.length} sections</small>
+    </span>
+    <span class="profile-toc-toggle" aria-hidden="true"></span>
   </summary>
-  <nav class="profile-toc-mobile-list" aria-label={ariaLabel}>
-    {items.map((item, index) => (
-      <a href={`#${item.slug}`} aria-current={index === 0 ? 'location' : undefined}>{item.text}</a>
-    ))}
+  <nav class="profile-toc-mobile-list" aria-label={ariaLabel} data-profile-toc-nav>
+    <ol>
+      {items.map((item, index) => (
+        <li data-profile-toc-item data-profile-toc-slug={item.slug}>
+          <a href={`#${item.slug}`} data-profile-toc-link>
+            <span class="profile-toc-number">{String(index + 1).padStart(2, '0')}</span>
+            <span>{item.text}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
   </nav>
 </details>
 
-<nav class="profile-toc" aria-label={ariaLabel} data-profile-toc>
-  <h2 class="profile-toc-title">{title}</h2>
-  <div class="profile-toc-list">
-    {items.map((item, index) => (
-      <a href={`#${item.slug}`} aria-current={index === 0 ? 'location' : undefined}>{item.text}</a>
-    ))}
+<aside class="profile-toc" aria-label={ariaLabel} data-profile-toc={tocKey}>
+  <div class="profile-toc-frame">
+    <header class="profile-toc-head">
+      <p class="profile-toc-eyebrow">{contextLabel}</p>
+      <h2 class="profile-toc-title">{title}</h2>
+      <div class="profile-toc-status" data-profile-toc-status hidden>
+        <div class="profile-toc-status-line">
+          <span>Reading position</span>
+          <strong data-profile-toc-count>01 / {count}</strong>
+        </div>
+        <div
+          class="profile-toc-progress"
+          role="progressbar"
+          aria-label="Reading position"
+          aria-valuemin="1"
+          aria-valuemax={items.length}
+          aria-valuenow="1"
+          data-profile-toc-progress
+        >
+          <span data-profile-toc-progress-fill></span>
+        </div>
+        <dl class="profile-toc-now-next">
+          <div><dt>Current</dt><dd data-profile-toc-current>{items[0]?.text ?? title}</dd></div>
+          <div><dt>Up next</dt><dd data-profile-toc-next>{items[1]?.text ?? 'End of profile'}</dd></div>
+        </dl>
+      </div>
+    </header>
+    <nav class="profile-toc-list" aria-label={ariaLabel} data-profile-toc-nav>
+      <ol>
+        {items.map((item, index) => (
+          <li data-profile-toc-item data-profile-toc-slug={item.slug}>
+            <a href={`#${item.slug}`} data-profile-toc-link>
+              <span class="profile-toc-number">{String(index + 1).padStart(2, '0')}</span>
+              <span>{item.text}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+    <a class="profile-toc-top" href={topHref}>Back to the beginning <span aria-hidden="true">↑</span></a>
   </div>
-</nav>
+</aside>
 
 <script>
   const initialiseProfileToc = () => {
+    const groupedTocs = new Map<string, HTMLElement[]>();
     document.querySelectorAll<HTMLElement>('[data-profile-toc]').forEach((toc) => {
-      if (toc.dataset.ready === 'true') return;
-      toc.dataset.ready = 'true';
+      const key = toc.dataset.profileToc;
+      if (!key) return;
+      const group = groupedTocs.get(key) ?? [];
+      group.push(toc);
+      groupedTocs.set(key, group);
+    });
 
-      const entries = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'))
-        .map((link) => {
-          const id = decodeURIComponent(link.hash.slice(1));
-          return { link, section: document.getElementById(id) };
-        })
-        .filter((entry): entry is { link: HTMLAnchorElement; section: HTMLElement } => Boolean(entry.section));
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const headerOffset = () => (document.querySelector<HTMLElement>('.site-header')?.getBoundingClientRect().height ?? 0) + 24;
 
-      if (entries.length === 0) return;
+    const scrollToTarget = (target: HTMLElement, updateHistory = true) => {
+      const top = window.scrollY + target.getBoundingClientRect().top - headerOffset();
+      window.scrollTo({ top: Math.max(0, top), behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+      if (updateHistory) history.pushState(null, '', `#${encodeURIComponent(target.id)}`);
+      if (!target.hasAttribute('tabindex')) target.tabIndex = -1;
+      target.focus({ preventScroll: true });
+    };
 
-      const activate = (activeLink: HTMLAnchorElement) => {
-        entries.forEach(({ link }) => {
-          if (link === activeLink) link.setAttribute('aria-current', 'location');
-          else link.removeAttribute('aria-current');
+    const trackers = [...groupedTocs.values()].map((tocs) => {
+      const links = [...tocs[0]!.querySelectorAll<HTMLAnchorElement>('[data-profile-toc-link]')];
+      const targets = links
+        .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+        .filter((target): target is HTMLElement => Boolean(target));
+      if (targets.length === 0) return undefined;
+
+      const targetIndex = new Map(targets.map((target, index) => [target.id, index]));
+      let previousIndex = -1;
+      tocs.forEach((toc) => toc.classList.add('is-enhanced'));
+
+      tocs.forEach((toc) => {
+        toc.querySelectorAll<HTMLAnchorElement>('[data-profile-toc-link]').forEach((link) => {
+          link.addEventListener('click', (event) => {
+            const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+            if (!target) return;
+            event.preventDefault();
+            if (toc instanceof HTMLDetailsElement) toc.open = false;
+            scrollToTarget(target);
+          });
         });
-        const currentLabel = toc.querySelector<HTMLElement>('[data-profile-toc-current]');
-        if (currentLabel) currentLabel.textContent = activeLink.textContent?.trim() || 'Profile contents';
-      };
-
-      entries.forEach(({ link }) => link.addEventListener('click', () => {
-        if (toc instanceof HTMLDetailsElement) toc.open = false;
-      }));
+        const topLink = toc.querySelector<HTMLAnchorElement>('.profile-toc-top');
+        topLink?.addEventListener('click', (event) => {
+          const target = document.getElementById(decodeURIComponent(topLink.hash.slice(1)));
+          if (!target) return;
+          event.preventDefault();
+          scrollToTarget(target);
+        });
+      });
 
       const update = () => {
-        const header = document.querySelector<HTMLElement>('.site-header');
-        const readingLine = (header?.offsetHeight ?? 72) + 40;
-        let current = entries[0]!;
-
-        for (const entry of entries) {
-          if (entry.section.getBoundingClientRect().top <= readingLine) current = entry;
-          else break;
-        }
-
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
-          current = entries[entries.length - 1]!;
-        }
-
-        activate(current.link);
-      };
-
-      let queued = false;
-      const requestUpdate = () => {
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(() => {
-          update();
-          queued = false;
+        const activationLine = headerOffset() + Math.min(72, window.innerHeight * 0.1);
+        let currentIndex = 0;
+        targets.forEach((target, index) => {
+          if (target.getBoundingClientRect().top <= activationLine) currentIndex = index;
         });
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) currentIndex = targets.length - 1;
+
+        const currentLabel = links[currentIndex]?.querySelector('span:last-child')?.textContent?.trim() || 'Section';
+        const nextLabel = links[currentIndex + 1]?.querySelector('span:last-child')?.textContent?.trim() || 'End of profile';
+
+        tocs.forEach((toc) => {
+          const items = [...toc.querySelectorAll<HTMLElement>('[data-profile-toc-item]')];
+          let currentItemIndex = 0;
+          items.forEach((item, index) => {
+            const indexInDocument = targetIndex.get(item.dataset.profileTocSlug ?? '');
+            if (indexInDocument !== undefined && indexInDocument <= currentIndex) currentItemIndex = index;
+          });
+          items.forEach((item, index) => {
+            const state = index < currentItemIndex ? 'past' : index === currentItemIndex ? 'current' : 'upcoming';
+            item.classList.toggle('is-past', state === 'past');
+            item.classList.toggle('is-current', state === 'current');
+            item.classList.toggle('is-upcoming', state === 'upcoming');
+            const link = item.querySelector<HTMLAnchorElement>('[data-profile-toc-link]');
+            if (state === 'current') link?.setAttribute('aria-current', 'location');
+            else link?.removeAttribute('aria-current');
+          });
+
+          const status = toc.querySelector<HTMLElement>('[data-profile-toc-status]');
+          if (status) status.hidden = false;
+          toc.querySelectorAll<HTMLElement>('[data-profile-toc-current]').forEach((node) => { node.textContent = currentLabel; });
+          const next = toc.querySelector<HTMLElement>('[data-profile-toc-next]');
+          if (next) next.textContent = nextLabel;
+          const countNode = toc.querySelector<HTMLElement>('[data-profile-toc-count]');
+          if (countNode) countNode.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(targets.length).padStart(2, '0')}`;
+          const mobileCount = toc.querySelector<HTMLElement>('[data-profile-toc-mobile-count]');
+          if (mobileCount) mobileCount.textContent = `${currentIndex + 1} / ${targets.length}`;
+          const progress = toc.querySelector<HTMLElement>('[data-profile-toc-progress]');
+          progress?.setAttribute('aria-valuemax', String(targets.length));
+          progress?.setAttribute('aria-valuenow', String(currentIndex + 1));
+          const fill = toc.querySelector<HTMLElement>('[data-profile-toc-progress-fill]');
+          if (fill) fill.style.width = `${((currentIndex + 1) / targets.length) * 100}%`;
+
+          if (currentIndex !== previousIndex) {
+            const nav = toc.querySelector<HTMLElement>('[data-profile-toc-nav]');
+            const activeItem = items[currentItemIndex];
+            if (nav && activeItem && nav.offsetParent) {
+              const navRect = nav.getBoundingClientRect();
+              const itemRect = activeItem.getBoundingClientRect();
+              const itemTop = nav.scrollTop + itemRect.top - navRect.top;
+              const itemBottom = itemTop + itemRect.height;
+              if (itemTop < nav.scrollTop || itemBottom > nav.scrollTop + nav.clientHeight) {
+                nav.scrollTo({ top: Math.max(0, itemTop - nav.clientHeight / 3), behavior: 'auto' });
+              }
+            }
+          }
+        });
+        previousIndex = currentIndex;
       };
 
-      window.addEventListener('scroll', requestUpdate, { passive: true });
-      window.addEventListener('resize', requestUpdate, { passive: true });
-      window.addEventListener('hashchange', requestUpdate);
-      update();
+      return { update };
+    }).filter((tracker): tracker is { update: () => void } => Boolean(tracker));
+
+    if (trackers.length === 0) return;
+    let frame = 0;
+    const requestUpdate = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        trackers.forEach((tracker) => tracker.update());
+      });
+    };
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
+    window.addEventListener('hashchange', requestUpdate);
+    window.addEventListener('pageshow', requestUpdate);
+    const revealCurrentHash = () => {
+      if (!location.hash) return;
+      const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      const listed = target && document.querySelector(`[data-profile-toc-slug="${CSS.escape(target.id)}"]`);
+      if (target && listed) requestAnimationFrame(() => scrollToTarget(target, false));
+    };
+    window.addEventListener('hashchange', revealCurrentHash);
+    window.addEventListener('pageshow', revealCurrentHash);
+    document.fonts?.ready.then(() => {
+      requestUpdate();
+      revealCurrentHash();
     });
+    requestUpdate();
+    revealCurrentHash();
   };
 
   if (document.readyState === 'loading') {
