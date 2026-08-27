@@ -23,10 +23,14 @@ const budgets = new Map([
 // transfer-size limits as strict as the general budget while allowing additional
 // uncompressed source text for the in-context record panels and public exports.
 const catalogueBudgets = new Map([
-  ['api/knowledge.json', { raw: kibibytes(160), gzip: kibibytes(24) }],
+  ['api/actors.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
+  ['api/knowledge.json', { raw: kibibytes(192), gzip: kibibytes(28) }],
+  ['api/references.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
   ['api/relationships.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
-  ['knowledge/index.html', { raw: kibibytes(96), gzip: kibibytes(16) }],
-  ['relationships/index.html', { raw: kibibytes(96), gzip: kibibytes(16) }],
+  ['api/sources.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
+  ['changes/index.html', { raw: kibibytes(96), gzip: kibibytes(20) }],
+  ['knowledge/index.html', { raw: kibibytes(112), gzip: kibibytes(20) }],
+  ['relationships/index.html', { raw: kibibytes(128), gzip: kibibytes(20) }],
 ]);
 const pageShellGzipBudget = kibibytes(40);
 const files = [];
