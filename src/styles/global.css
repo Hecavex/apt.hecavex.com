@@ -1,4 +1,4 @@
-/* HECAVEX Cold Signal system — authored for the portfolio, without a theme framework. */
+/* HECAVEX visual system — operational mode. */
 @font-face {
   font-family: Inter;
   font-style: normal;
@@ -163,32 +163,44 @@
 
 :root {
   color-scheme: dark;
-  --page: #05080b;
-  --panel: #0b1117;
-  --panel-strong: #101923;
-  --ink: #f2f8fb;
-  --body: #b6c6cf;
-  --bg: #05080b;
-  --bg-elevated: #0b1117;
-  --surface: #0b1117;
-  --surface-strong: #101923;
-  --surface-cyan: #0c1820;
-  --line: #1e3440;
-  --line-strong: #1e3440;
-  --text: #f2f8fb;
-  --text-soft: #b6c6cf;
-  --muted: #8397a3;
-  --faint: #8397a3;
-  --cyan: #44c7dc;
-  --cyan-bright: #44c7dc;
-  --cyan-soft: rgb(68 199 220 / 11%);
-  --green: #a2da68;
-  --green-soft: rgb(162 218 104 / 10%);
-  --danger: #ff6b6b;
-  --coral: #ff6b6b;
-  --coral-soft: rgb(255 107 107 / 10%);
-  --amber: #ffc857;
-  --amber-soft: rgb(255 200 87 / 10%);
+  --graphite: #111416;
+  --graphite-raised: #171b1d;
+  --graphite-strong: #1d2326;
+  --warm-white: #ece9e1;
+  --ink-on-paper: #151719;
+  --mineral-teal: #55b9b1;
+  --quiet-grey: #8d969a;
+  --rule-grey: #30383b;
+  --status-green: #86b77e;
+  --status-amber: #d2aa62;
+  --status-red: #d06c65;
+  --page: var(--graphite);
+  --panel: var(--graphite-raised);
+  --panel-strong: var(--graphite-strong);
+  --ink: var(--warm-white);
+  --body: var(--warm-white);
+  --bg: var(--graphite);
+  --bg-elevated: var(--graphite-raised);
+  --surface: var(--graphite-raised);
+  --surface-strong: var(--graphite-strong);
+  --surface-cyan: var(--graphite-strong);
+  --line: var(--rule-grey);
+  --line-strong: var(--rule-grey);
+  --text: var(--warm-white);
+  --text-soft: var(--warm-white);
+  --text-muted: var(--quiet-grey);
+  --muted: var(--quiet-grey);
+  --faint: var(--quiet-grey);
+  --cyan: var(--mineral-teal);
+  --cyan-bright: var(--mineral-teal);
+  --cyan-soft: rgb(85 185 177 / 12%);
+  --green: var(--status-green);
+  --green-soft: rgb(134 183 126 / 11%);
+  --danger: var(--status-red);
+  --coral: var(--status-red);
+  --coral-soft: rgb(208 108 101 / 11%);
+  --amber: var(--status-amber);
+  --amber-soft: rgb(210 170 98 / 11%);
   --shadow: rgb(0 0 0 / 45%);
   --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
@@ -221,9 +233,7 @@ body {
   max-width: 100%;
   margin: 0;
   overflow-x: clip;
-  background:
-    radial-gradient(circle at 84% -10%, rgb(68 199 220 / 6%), transparent 32rem),
-    var(--bg);
+  background: var(--bg);
   color: var(--text-soft);
   font: 400 0.95rem/1.66 var(--sans);
   letter-spacing: -0.006em;
@@ -246,7 +256,7 @@ a {
 }
 
 a:hover {
-  color: var(--green);
+  color: var(--cyan-bright);
 }
 
 button,
@@ -304,7 +314,7 @@ code {
   padding: 0.12rem 0.3rem;
   border: 1px solid var(--line);
   background: var(--surface);
-  color: var(--green);
+  color: var(--text-soft);
   font-size: 0.84em;
 }
 
@@ -352,7 +362,7 @@ pre {
   z-index: 100;
   top: 0;
   border-bottom: 0;
-  background: rgb(5 8 11 / 92%);
+  background: rgb(17 20 22 / 94%);
   box-shadow: inset 0 -1px var(--line);
   backdrop-filter: blur(18px);
 }
@@ -449,7 +459,7 @@ pre {
   align-items: center;
   gap: clamp(1.4rem, 3vw, 3rem);
   border-top: 0;
-  box-shadow: inset 0 1px rgb(30 52 64 / 65%);
+  box-shadow: inset 0 1px var(--line);
 }
 
 .product-identity {
@@ -706,26 +716,13 @@ main {
   border-bottom: 1px solid var(--line);
 }
 
-.brand-hero::before {
-  position: absolute;
-  z-index: -1;
-  inset: 0 0 0 53%;
-  opacity: 0.43;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 3.2rem 3.2rem;
-  content: "";
-  mask-image: radial-gradient(circle at 70% 42%, black, transparent 70%);
-}
-
 .brand-hero::after {
   position: absolute;
   right: 0;
   bottom: -1px;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--coral), var(--cyan) 28%, var(--line) 58%, transparent);
+  background: var(--cyan);
   content: "";
 }
 
@@ -760,7 +757,7 @@ main {
   grid-column: 2;
   grid-row: 3;
   margin: 1rem 0 0;
-  color: var(--green);
+  color: var(--muted);
   font: 600 0.66rem var(--mono);
   letter-spacing: 0.1em;
 }
@@ -782,7 +779,7 @@ main {
   bottom: -1px;
   left: 0;
   height: 1px;
-  background: linear-gradient(90deg, var(--cyan), var(--line) 35%, transparent);
+  background: var(--line);
   content: "";
 }
 
@@ -804,7 +801,7 @@ main {
   padding: 0.55rem 0.7rem;
   border: 1px solid var(--line);
   background: var(--surface);
-  color: var(--green);
+  color: var(--muted);
   white-space: nowrap;
 }
 
@@ -828,9 +825,9 @@ main {
 
 .button:hover,
 .search-hero button:hover {
-  border-color: var(--green);
-  background: var(--green);
-  color: var(--bg);
+  border-color: var(--cyan);
+  background: var(--surface-strong);
+  color: var(--cyan);
 }
 
 /* Dashboard summaries */
@@ -872,8 +869,8 @@ main {
   margin: 1rem 0 0;
   padding: 0.95rem 1.1rem;
   border: 1px solid var(--line);
-  border-left: 3px solid var(--green);
-  background: var(--green-soft);
+  border-left: 3px solid var(--cyan);
+  background: var(--cyan-soft);
   color: var(--muted);
   font-size: 0.84rem;
 }
@@ -1145,7 +1142,7 @@ a.panel:hover {
 }
 
 .advanced-filters.has-active-filters .advanced-filter-state {
-  color: var(--green);
+  color: var(--cyan);
 }
 
 .advanced-filter-grid {
@@ -1212,7 +1209,7 @@ a.panel:hover {
   padding: 1.5rem;
   overflow: hidden;
   border: 1px solid var(--line-strong);
-  background: linear-gradient(130deg, var(--surface-cyan), var(--surface));
+  background: var(--surface);
 }
 
 .assessment-strip::before {
@@ -1221,7 +1218,7 @@ a.panel:hover {
   bottom: 0;
   left: 0;
   width: 3px;
-  background: linear-gradient(var(--coral), var(--cyan));
+  background: var(--cyan);
   content: "";
 }
 
@@ -1513,7 +1510,7 @@ a.panel:hover {
 .profile-toc.is-enhanced [data-profile-toc-item].is-past .profile-toc-number::after,
 .profile-toc-mobile.is-enhanced [data-profile-toc-item].is-past .profile-toc-number::after {
   margin-left: 0.18rem;
-  color: var(--green);
+  color: var(--cyan);
   content: "✓";
 }
 
@@ -1628,8 +1625,8 @@ a.panel:hover {
 .callout {
   padding: 1rem 1.1rem;
   border: 1px solid var(--line);
-  border-left: 3px solid var(--amber);
-  background: var(--amber-soft);
+  border-left: 3px solid var(--cyan);
+  background: var(--cyan-soft);
 }
 
 .project-facts {
@@ -1858,8 +1855,8 @@ a.panel:hover {
   margin-top: 1.5rem;
   padding: 1.15rem;
   border: 1px solid var(--line);
-  border-left: 2px solid var(--green);
-  background: var(--green-soft);
+  border-left: 2px solid var(--cyan);
+  background: var(--cyan-soft);
 }
 
 .methodology-note--warning {
@@ -2033,7 +2030,7 @@ tbody tr:hover {
 }
 
 .timeline time {
-  color: var(--green);
+  color: var(--muted);
   font: 500 0.68rem var(--mono);
 }
 
@@ -2105,7 +2102,7 @@ tbody tr:hover {
 }
 
 .entity-card-meta {
-  color: var(--green);
+  color: var(--muted);
   font: 500 0.61rem var(--mono);
   text-transform: uppercase;
 }
@@ -2154,7 +2151,7 @@ tbody tr:hover {
 
 .attribution-panel {
   margin-bottom: 1px;
-  border-left: 3px solid var(--coral);
+  border-left: 3px solid var(--line-strong);
 }
 
 .attribution-panel h3 {
@@ -2239,7 +2236,7 @@ tbody tr:hover {
 /* Portfolio footer */
 .site-footer {
   border-top: 1px solid var(--line);
-  background: var(--bg-elevated);
+  background: var(--bg);
 }
 
 .footer-inner {
@@ -2345,7 +2342,7 @@ tbody tr:hover {
 }
 
 .overview-path-primary {
-  background: linear-gradient(140deg, var(--surface-cyan), var(--surface));
+  background: var(--surface-strong);
 }
 
 .actor-record-state {
@@ -2655,7 +2652,7 @@ tbody tr:hover {
 }
 
 .knowledge-dialog::backdrop {
-  background: rgb(1 4 7 / 82%);
+  background: rgb(17 20 22 / 88%);
   backdrop-filter: blur(3px);
 }
 
@@ -2908,7 +2905,7 @@ tbody tr:hover {
 }
 
 .change-record-meta time {
-  color: var(--green);
+  color: var(--muted);
   font: 600 0.68rem var(--mono);
 }
 

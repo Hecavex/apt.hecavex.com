@@ -30,7 +30,7 @@ The editorial and release requirements are recorded in [docs/EDITORIAL.md](docs/
 | --- | --- |
 | `src/content/` | Reviewed public records and unpublished working drafts |
 | `src/pages/` | Canonical routes, Knowledge and Changes surfaces, JSON/CSV exports and feeds |
-| `src/components/`, `src/layouts/`, `src/styles/` | HECAVEX Cold Signal interface and publication layouts |
+| `src/components/`, `src/layouts/`, `src/styles/` | HECAVEX operational interface and publication layouts |
 | `public/` | Custom-domain, security, font, brand and legal assets |
 | `scripts/` | Content, build, metadata and performance validation |
 | `.github/workflows/pages.yml` | Production build and GitHub Pages deployment |

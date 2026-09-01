@@ -16,6 +16,8 @@ const collections = Object.keys(collectionMetadata);
 const output = path.resolve('public/og/generated');
 const defaultSvgPath = path.resolve('public/og/default.svg');
 const defaultPngPath = path.resolve('public/og/default.png');
+const faviconSvgPath = path.resolve('public/favicon.svg');
+const faviconIcoPath = path.resolve('public/favicon.ico');
 fs.mkdirSync(output, { recursive: true });
 
 const fontFiles = {
@@ -66,24 +68,48 @@ const wrap = (value, width = 28, lines = 3) => {
   return result;
 };
 
-const grid = '<path d="M760 86h440M760 166h440M760 246h440M760 326h440M760 406h440M840 0v630M920 0v630M1000 0v630M1080 0v630M1160 0v630" stroke="#1e3440"/>';
-const mark = '<path d="M94 82V138M146 82V138M94 82L120 110L146 82M94 138L120 110L146 138" stroke="#44c7dc" stroke-width="7" fill="none"/><circle cx="120" cy="110" r="5" fill="#f2f8fb"/>';
+const writePngIco = async (source, destination, sizes = [16, 32, 48]) => {
+  const images = await Promise.all(sizes.map(size => sharp(source).resize(size, size).png().toBuffer()));
+  const directory = Buffer.alloc(6 + images.length * 16);
+  directory.writeUInt16LE(0, 0);
+  directory.writeUInt16LE(1, 2);
+  directory.writeUInt16LE(images.length, 4);
+  let offset = directory.length;
+  images.forEach((image, index) => {
+    const entry = 6 + index * 16;
+    directory.writeUInt8(sizes[index] === 256 ? 0 : sizes[index], entry);
+    directory.writeUInt8(sizes[index] === 256 ? 0 : sizes[index], entry + 1);
+    directory.writeUInt8(0, entry + 2);
+    directory.writeUInt8(0, entry + 3);
+    directory.writeUInt16LE(1, entry + 4);
+    directory.writeUInt16LE(32, entry + 6);
+    directory.writeUInt32LE(image.length, entry + 8);
+    directory.writeUInt32LE(offset, entry + 12);
+    offset += image.length;
+  });
+  fs.writeFileSync(destination, Buffer.concat([directory, ...images]));
+};
+
+const mark = '<path d="M94 82V138M146 82V138M94 82L120 110L146 82M94 138L120 110L146 138" stroke="#55b9b1" stroke-width="7" fill="none"/><circle cx="120" cy="110" r="5" fill="#ece9e1"/>';
 
 const defaultSvg = svgDocument([
-  '<rect width="1200" height="630" fill="#05080b"/>',
-  '<path d="M760 0h440v630H910L760 470Z" fill="#0b1117"/>',
-  grid,
-  '<rect x="64" y="64" width="6" height="502" fill="#44c7dc"/>',
+  '<rect width="1200" height="630" fill="#111416"/>',
+  '<rect x="760" width="440" height="630" fill="#171b1d"/>',
+  '<rect x="64" y="64" width="6" height="502" fill="#55b9b1"/>',
   mark,
-  vectorText('APT NOTES', { x: 170, y: 105, font: fonts.interBold, size: 25, fill: '#f2f8fb', letterSpacing: 5 }),
-  vectorText('BY HECAVEX', { x: 170, y: 134, font: fonts.monoRegular, size: 14, fill: '#8397a3', letterSpacing: 2 }),
-  vectorText('APT NOTES', { x: 92, y: 302, font: fonts.interBold, size: 62, fill: '#f2f8fb', letterSpacing: -4 }),
-  vectorText('STRUCTURED THREAT INTELLIGENCE', { x: 96, y: 356, font: fonts.monoRegular, size: 24, fill: '#a2da68', letterSpacing: 5 }),
-  vectorText('Source-backed threat actor research.', { x: 96, y: 462, font: fonts.interRegular, size: 28, fill: '#b6c6cf' }),
-  vectorText('apt.hecavex.com', { x: 96, y: 540, font: fonts.monoRegular, size: 17, fill: '#44c7dc' })
+  vectorText('APT NOTES', { x: 170, y: 105, font: fonts.interBold, size: 25, fill: '#ece9e1', letterSpacing: 5 }),
+  vectorText('BY HECAVEX', { x: 170, y: 134, font: fonts.monoRegular, size: 14, fill: '#8d969a', letterSpacing: 2 }),
+  vectorText('APT NOTES', { x: 92, y: 302, font: fonts.interBold, size: 62, fill: '#ece9e1', letterSpacing: -4 }),
+  vectorText('STRUCTURED THREAT INTELLIGENCE', { x: 96, y: 356, font: fonts.monoRegular, size: 24, fill: '#55b9b1', letterSpacing: 5 }),
+  vectorText('Source-backed threat actor research.', { x: 96, y: 462, font: fonts.interRegular, size: 28, fill: '#ece9e1' }),
+  vectorText('apt.hecavex.com', { x: 96, y: 540, font: fonts.monoRegular, size: 17, fill: '#55b9b1' })
 ].join(''));
 fs.writeFileSync(defaultSvgPath, `${defaultSvg}\n`, 'utf8');
 await sharp(Buffer.from(defaultSvg)).png({ quality: 92 }).toFile(defaultPngPath);
+await sharp(faviconSvgPath).resize(180, 180).png().toFile(path.resolve('public/apple-touch-icon.png'));
+await sharp(faviconSvgPath).resize(192, 192).png().toFile(path.resolve('public/icon-192.png'));
+await sharp(faviconSvgPath).resize(512, 512).png().toFile(path.resolve('public/icon-512.png'));
+await writePngIco(faviconSvgPath, faviconIcoPath);
 
 for (const collection of collections) {
   const { singular, label } = collectionMetadata[collection];
@@ -92,20 +118,19 @@ for (const collection of collections) {
     const data = frontMatter(path.join(directory, name));
     if (!data || data.draft) continue;
     const title = data.name || data.title;
-    const titleLines = wrap(title).map((line, index) => vectorText(line, { x: 92, y: 302 + index * 72, font: fonts.interBold, size: 62, fill: '#f2f8fb' })).join('');
-    const summary = wrap(data.summary || `${singular} intelligence record`, 66, 2).map((line, index) => vectorText(line, { x: 92, y: 510 + index * 32, font: fonts.interRegular, size: 23, fill: '#b6c6cf' })).join('');
+    const titleLines = wrap(title).map((line, index) => vectorText(line, { x: 92, y: 302 + index * 72, font: fonts.interBold, size: 62, fill: '#ece9e1' })).join('');
+    const summary = wrap(data.summary || `${singular} intelligence record`, 66, 2).map((line, index) => vectorText(line, { x: 92, y: 510 + index * 32, font: fonts.interRegular, size: 23, fill: '#ece9e1' })).join('');
     const svg = svgDocument([
-      '<rect width="1200" height="630" fill="#05080b"/>',
-      '<path d="M760 0H1200V630H910L760 470Z" fill="#0b1117"/>',
-      grid,
-      '<rect x="64" y="64" width="6" height="502" fill="#44c7dc"/>',
+      '<rect width="1200" height="630" fill="#111416"/>',
+      '<rect x="760" width="440" height="630" fill="#171b1d"/>',
+      '<rect x="64" y="64" width="6" height="502" fill="#55b9b1"/>',
       mark,
-      vectorText('APT NOTES', { x: 170, y: 105, font: fonts.interBold, size: 25, fill: '#f2f8fb', letterSpacing: 5 }),
-      vectorText('BY HECAVEX', { x: 170, y: 134, font: fonts.monoRegular, size: 14, fill: '#8397a3', letterSpacing: 2 }),
-      vectorText(label, { x: 92, y: 218, font: fonts.monoBold, size: 17, fill: '#44c7dc', letterSpacing: 3 }),
+      vectorText('APT NOTES', { x: 170, y: 105, font: fonts.interBold, size: 25, fill: '#ece9e1', letterSpacing: 5 }),
+      vectorText('BY HECAVEX', { x: 170, y: 134, font: fonts.monoRegular, size: 14, fill: '#8d969a', letterSpacing: 2 }),
+      vectorText(label, { x: 92, y: 218, font: fonts.monoBold, size: 17, fill: '#55b9b1', letterSpacing: 3 }),
       titleLines,
       summary,
-      vectorText('apt.hecavex.com', { x: 1008, y: 556, font: fonts.monoRegular, size: 16, fill: '#a2da68' })
+      vectorText('apt.hecavex.com', { x: 1008, y: 556, font: fonts.monoRegular, size: 16, fill: '#55b9b1' })
     ].join(''));
     await sharp(Buffer.from(svg)).png({ quality: 92 }).toFile(path.join(output, `${singular}-${data.slug}.png`));
   }
