@@ -207,6 +207,14 @@
   --content: 94rem;
   --reading: 72ch;
   --header-offset: 7.25rem;
+  --page-gutter: clamp(1rem, 3.5vw, 3.5rem);
+  --space-page-top: clamp(3.25rem, 5vw, 4.75rem);
+  --space-page-bottom: clamp(4rem, 8vw, 8rem);
+  --space-major-section: clamp(3.5rem, 7vw, 6.5rem);
+  --frame-product-hero: clamp(21rem, 26.2vw, 23.5625rem);
+  --type-page-title: clamp(2.4rem, 3.6vw, 3.25rem);
+  --type-display-title: clamp(2.5rem, 4.2vw, 4rem);
+  --type-section-title: clamp(1.45rem, 2.4vw, 2rem);
 }
 
 * {
@@ -288,12 +296,13 @@ h4 {
 
 h1 {
   margin: 0.45rem 0;
-  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-size: var(--type-page-title);
+  line-height: 1;
 }
 
 h2 {
   margin-top: 2.7rem;
-  font-size: clamp(1.55rem, 2.7vw, 2.15rem);
+  font-size: var(--type-section-title);
 }
 
 h3 {
@@ -654,16 +663,21 @@ pre {
 main {
   display: flow-root;
   min-height: calc(100vh - var(--header-offset));
-  padding-bottom: clamp(4rem, 7vw, 7rem);
 }
 
 .shell {
-  width: min(var(--content), calc(100% - clamp(2rem, 7vw, 7rem)));
+  width: min(100%, var(--content));
   margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+main > .shell {
+  padding-top: var(--space-page-top);
+  padding-bottom: var(--space-page-bottom);
 }
 
 .narrow {
-  max-width: 75rem;
+  max-width: calc(75rem + (2 * var(--page-gutter)));
 }
 
 .prose.narrow {
@@ -708,7 +722,7 @@ main {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(15rem, 0.55fr);
   grid-template-rows: auto auto auto 1fr;
-  min-height: 25rem;
+  min-height: var(--frame-product-hero);
   gap: 0 4rem;
   align-items: start;
   padding: clamp(2.5rem, 4vw, 3.5rem) 0 clamp(2.25rem, 3.5vw, 3rem);
@@ -735,14 +749,15 @@ main {
 .brand-hero h1 {
   max-width: 20ch;
   margin: 0;
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: var(--type-page-title);
   font-weight: 600;
-  line-height: 0.97;
-  letter-spacing: -0.058em;
+  line-height: 1;
+  letter-spacing: -0.035em;
 }
 
 .brand-hero .lead {
   margin: 1.5rem 0 0;
+  font-size: 1.15rem;
 }
 
 .brand-hero .button {
@@ -766,7 +781,6 @@ main {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  min-height: 15rem;
   align-items: end;
   gap: 2rem;
   padding: clamp(2.75rem, 5vw, 4.5rem) 0 clamp(2.2rem, 3.5vw, 3rem);
@@ -790,6 +804,8 @@ main {
 .page-head h1 {
   max-width: 18ch;
   margin: 0;
+  font-size: var(--type-page-title);
+  line-height: 1;
 }
 
 .page-head .lead {
@@ -880,14 +896,14 @@ main {
   align-items: end;
   justify-content: space-between;
   gap: 1.5rem;
-  margin: clamp(3.5rem, 6vw, 5.5rem) 0 1.3rem;
+  margin: var(--space-major-section) 0 1.3rem;
   padding-bottom: 0.85rem;
   border-bottom: 1px solid var(--line);
 }
 
 .section-head h2 {
   margin: 0;
-  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+  font-size: var(--type-section-title);
 }
 
 .section-head > a {
@@ -1182,17 +1198,18 @@ a.panel:hover {
 
 /* Intelligence profiles */
 .profile-shell {
-  max-width: 86rem;
-  padding-top: clamp(3rem, 6vw, 5rem);
+  max-width: var(--content);
 }
 
 .profile-head {
-  max-width: 58rem;
+  max-width: 64rem;
   padding-bottom: 2rem;
 }
 
 .profile-head h1 {
   margin: 0.35rem 0;
+  font-size: var(--type-display-title);
+  line-height: 1;
 }
 
 .alias-line {
@@ -1285,7 +1302,7 @@ a.panel:hover {
   grid-column: span 3;
 }
 
-@media (min-width: 850px) {
+@media (min-width: 901px) {
   .fact-grid > .fact:last-child:nth-child(4n + 1) {
     grid-column: 1 / -1;
   }
@@ -1579,7 +1596,7 @@ a.panel:hover {
   hyphens: none;
 }
 
-@media (min-width: 850px) {
+@media (min-width: 901px) {
   .profile-shell .profile-body > :is(p, ul, ol, blockquote),
   .profile-shell .profile-body > section > :is(p, ul, ol) {
     max-width: none;
@@ -1652,8 +1669,7 @@ a.panel:hover {
 }
 
 .about-shell {
-  max-width: 86rem;
-  padding-top: clamp(3rem, 6vw, 5rem);
+  max-width: var(--content);
 }
 
 .about-head {
@@ -1668,8 +1684,8 @@ a.panel:hover {
 .about-summary h1 {
   max-width: 14ch;
   margin: 0;
-  font-size: clamp(2.6rem, 4.4vw, 4rem);
-  line-height: 0.98;
+  font-size: var(--type-page-title);
+  line-height: 1;
   letter-spacing: -0.052em;
 }
 
@@ -1723,12 +1739,11 @@ a.panel:hover {
 }
 
 .about-next {
-  margin-top: clamp(3.5rem, 7vw, 6rem);
+  margin-top: var(--space-major-section);
 }
 
 .methodology-page {
-  max-width: 86rem;
-  padding-top: clamp(3rem, 6vw, 5rem);
+  max-width: var(--content);
 }
 
 .methodology-section {
@@ -1750,8 +1765,8 @@ a.panel:hover {
 .methodology-heading h1 {
   max-width: 15ch;
   margin: 0;
-  font-size: clamp(2.6rem, 5vw, 4.35rem);
-  line-height: 0.98;
+  font-size: var(--type-page-title);
+  line-height: 1;
   letter-spacing: -0.052em;
 }
 
@@ -1801,7 +1816,7 @@ a.panel:hover {
 
 .methodology-detail {
   scroll-margin-top: calc(var(--header-offset) + 1.5rem);
-  padding-top: clamp(3.5rem, 7vw, 6rem);
+  padding-top: var(--space-major-section);
 }
 
 .methodology-detail:focus {
@@ -1827,7 +1842,7 @@ a.panel:hover {
 
 .methodology-section-heading > h2 {
   margin: 0;
-  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  font-size: var(--type-section-title);
   line-height: 1.08;
   letter-spacing: -0.035em;
 }
@@ -2464,10 +2479,6 @@ tbody tr:hover {
   font: 500 0.61rem var(--mono);
 }
 
-.knowledge-record-page {
-  padding-top: clamp(1.5rem, 3vw, 2.5rem);
-}
-
 .knowledge-record {
   max-width: 82rem;
   margin-inline: auto;
@@ -2717,7 +2728,6 @@ tbody tr:hover {
 
 .compatibility-page {
   min-height: 52vh;
-  padding-block: clamp(4rem, 10vw, 8rem);
 }
 
 .compatibility-page h1 {
@@ -2940,10 +2950,6 @@ tbody tr:hover {
   font: 600 0.66rem var(--mono);
 }
 
-.compatibility-page {
-  padding-top: clamp(2.5rem, 5vw, 4rem);
-}
-
 .compatibility-page > p {
   max-width: 68ch;
 }
@@ -2973,13 +2979,85 @@ tbody tr:hover {
     white-space: nowrap;
   }
 
+  .profile-grid {
+    display: block;
+  }
+
   .profile-toc {
-    top: calc(var(--header-offset) + 1.2rem);
-    max-height: calc(100vh - var(--header-offset) - 2.4rem);
+    display: none;
+  }
+
+  .profile-toc-mobile {
+    position: sticky;
+    z-index: 80;
+    top: calc(var(--header-offset) + 0.5rem);
+    display: block;
+    margin: 0 0 1rem;
+    box-shadow: 0 0.7rem 1.5rem var(--shadow);
+  }
+
+  .profile-toc-mobile summary {
+    display: flex;
+    min-height: 3.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.72rem 0.8rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .profile-toc-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .profile-toc-toggle::before {
+    color: var(--cyan);
+    content: "+";
+    font: 500 1.05rem var(--mono);
+  }
+
+  .profile-toc-mobile[open] .profile-toc-toggle::before {
+    content: "−";
+  }
+
+  .profile-toc-mobile summary > span:first-child {
+    display: grid;
+    min-width: 0;
+    gap: 0.16rem;
+  }
+
+  .profile-toc-mobile summary strong {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text-soft);
+    font-size: 0.82rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .profile-toc-mobile summary small {
+    color: var(--faint);
+    font: 500 0.55rem var(--mono);
+  }
+
+  .profile-toc-mobile-list {
+    max-height: min(55vh, 26rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .profile-toc-mobile [data-profile-toc-link] {
+    min-height: 2.75rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .profile-release a:first-of-type {
+    margin-left: 0;
   }
 }
 
-@media (max-width: 849px) {
+@media (max-width: 900px) {
   .methodology-heading,
   .methodology-section-heading {
     grid-template-columns: 1fr;
@@ -3024,10 +3102,6 @@ tbody tr:hover {
     grid-column: 1 / -1;
   }
 
-  .shell {
-    width: min(100% - 2rem, var(--content));
-  }
-
   .brand-hero {
     grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.45fr);
     gap: 2rem;
@@ -3039,10 +3113,6 @@ tbody tr:hover {
 
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .profile-grid {
-    display: block;
   }
 
   .about-head {
@@ -3057,50 +3127,6 @@ tbody tr:hover {
 
   .relationship-record footer {
     grid-column: 1 / -1;
-  }
-
-  .profile-toc {
-    display: none;
-  }
-
-  .profile-toc-mobile {
-    position: sticky;
-    z-index: 80;
-    top: calc(var(--header-offset) + 0.5rem);
-    display: block;
-    margin: 0 0 1rem;
-    box-shadow: 0 0.7rem 1.5rem var(--shadow);
-  }
-
-  .profile-toc-mobile summary {
-    display: flex;
-    min-height: 3.5rem;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.72rem 0.8rem;
-    cursor: pointer;
-    list-style: none;
-  }
-
-  .profile-toc-mobile summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .profile-toc-toggle::before {
-    color: var(--cyan);
-    content: "+";
-    font: 500 1.05rem var(--mono);
-  }
-
-  .profile-toc-mobile[open] .profile-toc-toggle::before {
-    content: "−";
-  }
-
-  .profile-toc-mobile summary > span:first-child {
-    display: grid;
-    gap: 0.16rem;
-    min-width: 0;
   }
 
 .change-support {
@@ -3127,31 +3153,6 @@ tbody tr:hover {
   margin-top: 0.35rem;
 }
 
-  .profile-toc-mobile summary strong {
-    display: block;
-    min-width: 0;
-    overflow: hidden;
-    color: var(--text-soft);
-    font-size: 0.82rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .profile-toc-mobile summary small {
-    color: var(--faint);
-    font: 500 0.55rem var(--mono);
-  }
-
-  .profile-toc-mobile-list {
-    max-height: min(55vh, 26rem);
-    border-top: 1px solid var(--line);
-  }
-
-  .profile-toc-mobile [data-profile-toc-link] {
-    min-height: 2.75rem;
-    padding: 0.7rem 0.8rem;
-  }
-
   .fact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3164,9 +3165,6 @@ tbody tr:hover {
     grid-template-columns: 1fr;
   }
 
-  .profile-release a:first-of-type {
-    margin-left: 0;
-  }
 }
 
 @media (max-width: 680px) {
@@ -3176,8 +3174,8 @@ tbody tr:hover {
   }
 
   .brand img {
-    width: 2.125rem;
-    height: 2.125rem;
+    width: 2.25rem;
+    height: 2.25rem;
   }
 
   .brand-copy small {
@@ -3211,7 +3209,11 @@ tbody tr:hover {
   }
 
   .brand-hero h1 {
-    font-size: clamp(2.4rem, 12vw, 3.5rem);
+    font-size: var(--type-page-title);
+  }
+
+  .brand-hero .lead {
+    font-size: 1rem;
   }
 
   .brand-hero .button {
@@ -3371,7 +3373,7 @@ tbody tr:hover {
   }
 
   .profile-head h1 {
-    font-size: clamp(2.5rem, 13vw, 4rem);
+    font-size: var(--type-display-title);
   }
 
   .footer-inner {
@@ -3471,6 +3473,10 @@ tbody tr:hover {
   .shell {
     width: 100%;
     max-width: none;
+  }
+
+  main > .shell {
+    padding: 1rem 0 0;
   }
 
   .brand-hero,
