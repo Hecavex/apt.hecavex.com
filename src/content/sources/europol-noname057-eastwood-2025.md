@@ -8,11 +8,12 @@ authors: [Europol]
 published_at: 2025-07-16
 accessed_at: 2026-08-26
 url: https://www.europol.europa.eu/media-press/newsroom/news/global-operation-targets-noname05716-pro-russian-cybercrime-network
+archived_url: https://web.archive.org/web/20250717014313/https://www.europol.europa.eu/media-press/newsroom/news/global-operation-targets-noname05716-pro-russian-cybercrime-network
 source_type: government
 language: en
 notes: Primary law-enforcement account of Operation Eastwood, the network's organisation, European targeting, DDoS activity, incentives and infrastructure disruption.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

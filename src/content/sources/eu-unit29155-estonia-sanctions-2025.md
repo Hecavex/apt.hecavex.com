@@ -11,11 +11,10 @@ url: https://www.consilium.europa.eu/en/press/press-releases/2025/01/27/cyber-at
 source_type: government
 language: en
 notes: EU restrictive-measures statement concerning three GRU Unit 29155 officers and the 2020 compromise of Estonian government ministries.
-link_status: ok
-link_checked_at: 2026-08-26
-http_status: 200
+link_status: unknown
+link_checked_at: 2026-09-01
+http_status: 403
 draft: false
 ---
 
 The Council's designations are recorded as restrictive measures, not criminal convictions.
-

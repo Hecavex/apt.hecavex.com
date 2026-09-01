@@ -82,7 +82,7 @@ for (const link of knowledgeLinks) {
   if (!fs.existsSync(target)) errors.push(`${link.source}: knowledge fallback does not exist (${url.pathname})`);
 }
 
-for (const required of ['methodology/index.html', 'about/methodology/index.html', 'changes/index.html', 'changes/feed.xml', 'api/index.json', 'api/version.json', 'api/relationships.json', 'api/changes.json', 'favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'site.webmanifest']) {
+for (const required of ['methodology/index.html', 'about/methodology/index.html', 'baltic-relevance/index.html', 'changes/index.html', 'changes/feed.xml', 'api/index.json', 'api/version.json', 'api/relationships.json', 'api/changes.json', 'api/baltic-relevance.json', 'data/baltic-relevance.csv', 'favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'site.webmanifest']) {
   if (!fs.existsSync(path.join(root, required))) errors.push(`missing required publication output: ${required}`);
 }
 

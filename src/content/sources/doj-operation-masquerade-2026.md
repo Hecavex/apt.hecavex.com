@@ -8,9 +8,13 @@ authors: [United States Department of Justice]
 published_at: 2026-04-07
 accessed_at: 2026-08-09
 url: https://www.justice.gov/opa/pr/justice-department-conducts-court-authorized-disruption-dns-hijacking-network-controlled
+archived_url: https://web.archive.org/web/20260408030331/https://www.justice.gov/opa/pr/justice-department-conducts-court-authorized-disruption-dns-hijacking-network-controlled
 source_type: legal
 language: en
 notes: Public legal and disruption record for the US portion of APT28's router-enabled DNS hijacking network.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

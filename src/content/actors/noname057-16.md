@@ -3,9 +3,9 @@ id: noname057-16
 name: NoName057(16)
 slug: noname057-16
 created_at: 2026-08-26
-modified_at: 2026-08-26
-version: 1.0.0
-change_reason: Initial source-backed public profile.
+modified_at: 2026-09-01
+version: 1.1.0
+change_reason: Added source-specific Baltic relevance records that separate reported activity from an actor claim.
 summary: A pro-Russia DDoS network that recruits participants around an automated attack tool and repeatedly targets Ukraine-supporting governments, public services and critical sectors in Europe.
 actor_types: [state-aligned, hacktivist, cybercriminal]
 status: intermittently-active
@@ -80,6 +80,35 @@ targeting:
   countries: [Ukraine, Lithuania, Latvia, Germany, Sweden, Switzerland, Netherlands, Denmark, Belgium]
   sectors: [Government, Financial Services, Energy, Transportation, Telecommunications, Defence, Manufacturing, Public Services]
   organisations: [NATO]
+baltic_relevance:
+  - id: noname057-lithuania-airports-ddos-2023
+    country: Lithuania
+    evidence_type: reported-targeting
+    summary: CERT-EU describes a February 2023 DDoS campaign launched against Lithuanian airports.
+    sectors: [Transportation, Aviation]
+    technologies: [Public-facing web services]
+    campaigns: [noname057-european-ddos]
+    techniques: [network-denial-of-service]
+    first_observed: "2023-02"
+    last_observed: "2023-02"
+    reviewed_at: "2026-09-01"
+    confidence: high
+    sources: [cert-eu-noname057-baltics-2023]
+    why_it_matters: The record establishes direct Lithuania-facing availability targeting while making no unsupported claim about material disruption.
+  - id: noname057-latvia-nda-claim-2023
+    country: Latvia
+    evidence_type: actor-claim
+    summary: CERT-EU records a NoName057(16) claim against Latvia's National Defence Academy without confirming impact.
+    sectors: [Defence, Education]
+    technologies: [Public-facing web services]
+    campaigns: [noname057-european-ddos]
+    techniques: [network-denial-of-service]
+    first_observed: "2023-02"
+    last_observed: "2023-02"
+    reviewed_at: "2026-09-01"
+    confidence: moderate
+    sources: [cert-eu-noname057-baltics-2023]
+    why_it_matters: Keeping the claim distinct from observed impact prevents advertised targeting from being presented as a confirmed Latvian incident.
 campaigns: [noname057-european-ddos, noname057-nato-summit-2025]
 malware: []
 tools: []
@@ -142,7 +171,7 @@ external_identifiers:
   other: [NoName05716, DDoSia participant network]
 related_research: []
 sources: [joint-csa-pro-russia-hacktivists-2025, doj-carr-noname-actions-2025, europol-noname057-eastwood-2025, bka-noname057-eastwood-2025, cert-eu-noname057-baltics-2023, cert-eu-noname057-june-2025, cert-eu-noname057-november-2025]
-updates: [noname057-16-profile-created]
+updates: [noname057-16-profile-created, noname057-16-baltic-relevance-added]
 featured: true
 draft: false
 ---

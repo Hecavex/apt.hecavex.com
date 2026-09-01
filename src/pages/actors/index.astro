@@ -5,6 +5,7 @@ const origins=unique(actors.flatMap(a=>a.data.suspected_origins)).sort(); const 
 ---
 <BaseLayout title="Threat Actors" description="Search and filter source-backed threat actor profiles.">
 <section class="shell"><header class="page-head"><div><p class="eyebrow">Entity catalogue</p><h1>Threat actors</h1><p class="lead">Search source-backed profiles and filter by classification, origin, motivation, status, targeting and confidence.</p></div><span class="meta" id="result-count">{actors.length} profiles</span></header>
+<p class="scope-note"><strong>Baltic evidence:</strong> country-level records with explicit evidence classes, sources and local relevance are available in the <a href="/baltic-relevance/">Baltic relevance view</a>.</p>
 <form class="controls" id="actor-controls" aria-label="Actor filters">
   <div class="filter-essentials">
     <label>Search<input type="search" name="q" placeholder="Name, alias, sector…" /></label>

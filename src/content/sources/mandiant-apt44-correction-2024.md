@@ -8,9 +8,13 @@ authors: [Mandiant Intelligence]
 published_at: 2022-09-23
 accessed_at: 2026-08-09
 url: https://cloud.google.com/blog/topics/threat-intelligence/gru-rise-telegram-minions
+archived_url: https://web.archive.org/web/20240521051911/https://cloud.google.com/blog/topics/threat-intelligence/gru-rise-telegram-minions
 source_type: vendor-research
 language: en
 notes: Includes an April 2024 correction reassigning overlapping activity from APT28 to APT44 after incident reanalysis.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

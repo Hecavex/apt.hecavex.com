@@ -40,13 +40,17 @@ The public Relationships dataset is narrower. It is generated only from explicit
 
 The build rejects duplicate relationship IDs, missing endpoints, draft endpoints and a relationship count that diverges from the reviewed evidence baseline. Broader catalogue associations are not silently promoted to evidence relationships.
 
+The Baltic relevance view is generated only from explicit `baltic_relevance` entries in actor dossiers. Every entry has a globally unique stable ID and identifies Estonia, Latvia or Lithuania, an evidence class, an evidence window, its own review date, confidence, supporting references, affected context and why the record matters locally. Reported compromise, reported targeting, actor claims and reporting connections remain distinct; a country reference is never promoted into an unnamed victim claim.
+
 ## Source durability
 
 The publisher's original URL remains primary while it works. Reference records may also carry an archive URL, final redirected URL, HTTP status, last link-check time and one of four bounded states: `unknown`, `ok`, `redirected` or `unavailable`.
 
 An unavailable source is not deleted if it remains material to a published assessment. The record is marked, an archive is added where one can be verified, and any resulting analytical change is handled through the normal correction process. Validation warns when a public reference has unknown link health or no archive; these warnings are a maintenance queue, not evidence that a source is unreliable.
 
-The monthly source-health workflow checks only the public URLs already present in the catalogue and uploads a read-only JSON report as a GitHub Actions artifact. It does not rewrite frontmatter or publish a status automatically. The operator reviews redirects, failures and archive candidates before updating a record, preventing a temporary network or publisher error from becoming an unsupported editorial claim.
+The monthly source-health workflow checks only the public URLs already present in the catalogue and uploads a read-only JSON report as a GitHub Actions artifact. Authentication barriers, rate limits, common bot blocks and transient server failures are reported as `unknown`, not as proof that a source is unavailable. The workflow does not rewrite frontmatter or publish a status automatically. The operator reviews redirects, failures and archive candidates before updating a record, preventing a temporary network or publisher error from becoming an unsupported editorial claim.
+
+Link-health fields and independently verified archive locations are citation-maintenance metadata. A reviewed batch refresh may update those fields under one dataset-level change event without changing every source record's analytical version or modification date. A source record itself must be versioned when its identity, bibliographic description, cited scope or analytical use changes; a link check alone does not imply that change.
 
 ## Content lifecycle
 
@@ -84,7 +88,7 @@ The human interface and static data release are built from the same public conte
 - a catalogue index and release manifest under `/api/`;
 - compact aggregate indexes and full per-record JSON for every entity type, relationships and Changes;
 - separate malware, tool and combined software datasets;
-- CSV exports under `/data/`;
+- CSV exports under `/data/`, including a one-row-per-evidence Baltic relevance export;
 - a dedicated Changes Atom feed at `/changes/feed.xml` and a compatibility feed at `/feed.xml`.
 
 Every JSON document carries the schema version, dataset version, release ID, release time, publisher, licence, methodology and publication notice. The manifest records expected counts and canonical assets. The build audit compares source records, aggregate data, per-record data, CSV rows and Atom entries, checks relationship and entity references, and rejects any emitted draft.

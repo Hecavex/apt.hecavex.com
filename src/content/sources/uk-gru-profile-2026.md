@@ -8,11 +8,12 @@ authors: [Foreign Commonwealth and Development Office, Home Office, Cabinet Offi
 published_at: 2026-07-13
 accessed_at: 2026-08-26
 url: https://www.gov.uk/government/publications/profile-gru-cyber-and-hybrid-threat-operations/profile-gru-cyber-and-hybrid-threat-operations
+archived_url: https://web.archive.org/web/20260718092919/https://www.gov.uk/government/publications/profile-gru-cyber-and-hybrid-threat-operations/profile-gru-cyber-and-hybrid-threat-operations
 source_type: government
 language: en
 notes: Current UK government synthesis of GRU Units 26165, 74455 and 29155, their European operations, supporting structures and relationships with cybercriminal and hacktivist proxies.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

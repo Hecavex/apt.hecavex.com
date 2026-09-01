@@ -11,6 +11,9 @@ url: https://www.volexity.com/blog/2024/11/22/the-nearest-neighbor-attack-how-a-
 source_type: vendor-research
 language: en
 notes: Incident-response account attributing the activity to GruesomeLarch with high confidence.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

@@ -8,9 +8,13 @@ authors: [UK National Cyber Security Centre]
 published_at: 2026-04-07
 accessed_at: 2026-08-09
 url: https://www.ncsc.gov.uk/news/apt28-exploit-routers-to-enable-dns-hijacking-operations
+archived_url: https://web.archive.org/web/20260407163533/https://www.ncsc.gov.uk/news/apt28-exploit-routers-to-enable-dns-hijacking-operations
 source_type: government
 language: en
 notes: Current government attribution, infrastructure, vulnerability, ATT&CK and mitigation reporting for APT28 router and DNS operations.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

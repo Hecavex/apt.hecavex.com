@@ -12,10 +12,9 @@ source_type: government
 language: en
 notes: Czech national attribution of a long-running campaign against an unclassified Czech Ministry of Foreign Affairs network since at least 2022, attributed to the PRC and assessed as most likely conducted through APT31.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---
 
 The record preserves the source's confidence language. It does not treat the EU statement of support as a separate technical investigation.
-

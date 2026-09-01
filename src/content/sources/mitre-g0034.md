@@ -8,9 +8,13 @@ authors: [MITRE]
 published_at: 2017-05-31
 accessed_at: 2026-08-09
 url: https://attack.mitre.org/groups/G0034/
+archived_url: https://web.archive.org/web/20190416215001/https://attack.mitre.org/groups/G0034/
 source_type: nonprofit
 language: en
 notes: ATT&CK group record and relationship catalogue. Publication date records the displayed Created date; the live page was last modified 4 December 2024 when reviewed.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

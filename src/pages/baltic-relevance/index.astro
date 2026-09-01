@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import KnowledgeLink from '../../components/knowledge/KnowledgeLink.astro';
+import { label, unique } from '../../utils/content';
+import { loadKnowledge } from '../../utils/knowledge';
+
+const knowledge = await loadKnowledge();
+const records = knowledge.balticRelevance;
+const countries = unique(records.map((record: any) => record.evidence.country)).sort();
+const evidenceTypes = unique(records.map((record: any) => record.evidence.evidence_type)).sort();
+const actorCount = new Set(records.map((record: any) => record.actor.data.id)).size;
+const sourceMap = knowledge.maps.sources!;
+---
+<BaseLayout title="Baltic relevance" description="Source-specific Estonia, Latvia and Lithuania relevance records from reviewed APT Notes actor dossiers.">
+  <section class="shell">
+    <header class="page-head">
+      <div><p class="eyebrow">Regional evidence view</p><h1>Baltic relevance</h1><p class="lead">Source-specific Baltic relevance records separated into reported compromises, reported targeting, actor claims and bounded reporting connections.</p></div>
+      <span class="meta" id="baltic-result-count" aria-live="polite">{records.length} records / {actorCount} actors</span>
+    </header>
+
+    <p class="scope-note"><strong>Interpretation boundary:</strong> this is a curated evidence view, not a victim list or prevalence measure. A reporting connection is not targeting, an actor claim is not confirmed impact, and country-level targeting does not establish an unnamed incident.</p>
+
+    <form class="controls" id="baltic-controls" aria-label="Baltic relevance filters">
+      <div class="advanced-filter-grid">
+        <label>Search<input type="search" name="q" placeholder="Actor, sector, technology or evidence..." /></label>
+        <label>Country<select name="country"><option value="">All Baltic countries</option>{countries.map((country) => <option value={country.toLowerCase()}>{country}</option>)}</select></label>
+        <label>Evidence class<select name="evidence"><option value="">All evidence classes</option>{evidenceTypes.map((type) => <option value={type}>{label(type)}</option>)}</select></label>
+      </div>
+      <button class="filter-reset" type="reset">Reset filters</button>
+    </form>
+
+    <div class="database-list" id="baltic-list" data-pagefind-body>
+      {records.map(({ id, actor, evidence }: any) => <article
+        class="db-row baltic-row"
+        data-id={id}
+        data-actor={actor.data.id}
+        data-name={actor.data.name.toLowerCase()}
+        data-country={evidence.country.toLowerCase()}
+        data-evidence={evidence.evidence_type}
+        data-search={[actor.data.name, ...actor.data.aliases.map((alias: any) => alias.name), evidence.country, evidence.evidence_type, evidence.summary, evidence.why_it_matters, ...evidence.sectors, ...evidence.technologies].join(' ').toLowerCase()}
+        data-pagefind-meta="type:Baltic relevance"
+      >
+        <div class="db-cell"><small>{evidence.country}</small><h2><a href={`/actors/${actor.data.slug}/#baltic-relevance`}>{actor.data.name}</a></h2><p>{evidence.summary}</p></div>
+        <div class="db-cell"><small>Evidence class</small><span class="badge">{label(evidence.evidence_type)}</span><span class={`badge ${evidence.confidence}`}>{label(evidence.confidence)}</span><p>{evidence.first_observed}{evidence.last_observed !== evidence.first_observed ? ` - ${evidence.last_observed}` : ''}</p><p>Reviewed {evidence.reviewed_at}</p></div>
+        <div class="db-cell"><small>Exposure context</small><p>{evidence.sectors.join(', ') || 'No affected sector asserted'}</p><p>{evidence.technologies.join(', ') || 'No technology asserted'}</p></div>
+        <div class="db-cell"><small>Local significance</small><p>{evidence.why_it_matters}</p></div>
+        <div class="db-cell"><small>Sources</small>{evidence.sources.map((sourceId: string) => { const source = sourceMap.get(sourceId); return source ? <p><KnowledgeLink collection="sources" slug={source.data.slug}>{source.data.publisher}</KnowledgeLink></p> : <p>{sourceId}</p>; })}</div>
+      </article>)}
+    </div>
+    <div class="empty" id="baltic-empty" hidden><h2>No matching evidence</h2><p>Remove a filter or broaden the search. No inferred country relationships are added to fill an empty result.</p></div>
+  </section>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>('#baltic-controls')!;
+    const rows = [...document.querySelectorAll<HTMLElement>('.baltic-row')];
+    const list = document.querySelector<HTMLElement>('#baltic-list')!;
+    const count = document.querySelector<HTMLElement>('#baltic-result-count')!;
+    const empty = document.querySelector<HTMLElement>('#baltic-empty')!;
+    const apply = () => {
+      const data = new FormData(form);
+      const query = String(data.get('q') || '').trim().toLowerCase();
+      const country = String(data.get('country') || '').toLowerCase();
+      const evidence = String(data.get('evidence') || '');
+      const shown = rows.filter((row) => (!query || row.dataset.search!.includes(query)) && (!country || row.dataset.country === country) && (!evidence || row.dataset.evidence === evidence));
+      rows.forEach((row) => row.hidden = true);
+      shown.forEach((row) => { row.hidden = false; list.append(row); });
+      const shownActors = new Set(shown.map((row) => row.dataset.actor)).size;
+      count.textContent = `${shown.length} ${shown.length === 1 ? 'record' : 'records'} / ${shownActors} ${shownActors === 1 ? 'actor' : 'actors'}`;
+      empty.hidden = shown.length !== 0;
+      const parameters = new URLSearchParams();
+      for (const [key, value] of data) if (String(value).trim()) parameters.set(key, String(value).trim());
+      history.replaceState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}`);
+    };
+    const initial = new URLSearchParams(location.search);
+    for (const [key, value] of initial) {
+      const field = form.elements.namedItem(key) as HTMLInputElement | null;
+      if (field) field.value = value;
+    }
+    form.addEventListener('input', apply);
+    form.addEventListener('change', apply);
+    form.addEventListener('reset', () => requestAnimationFrame(apply));
+    apply();
+  </script>
+</BaseLayout>

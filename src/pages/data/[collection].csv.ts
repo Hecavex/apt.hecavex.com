@@ -27,9 +27,27 @@ export async function getStaticPaths() {
       data.id, data.name, data.slug, data.status, list(data.actor_types),
       list(data.aliases.map((alias: any) => alias.name)), list(data.suspected_origins),
       list(data.motivations), data.active_since, data.last_observed, data.confidence,
-      iso(data.last_reviewed), list(data.campaigns), list(data.malware), list(data.tools),
+      iso(data.last_reviewed),
+      list(data.campaigns), list(data.malware), list(data.tools),
       list(data.techniques), list(data.sources), data.version, data.deprecated, data.revoked,
       `${publication.site}/actors/${data.slug}/`, `${publication.site}/api/actors/${data.slug}.json`
+    ])
+  };
+
+  const balticRelevance: CsvExport = {
+    headers: [
+      'id', 'actor_id', 'actor_name', 'actor_slug', 'country', 'evidence_type',
+      'summary', 'sector_context', 'technology_context', 'campaign_ids', 'technique_ids',
+      'first_observed', 'last_observed', 'reviewed_at', 'confidence', 'source_ids',
+      'why_it_matters', 'url', 'actor_json_url'
+    ],
+    rows: knowledge.balticRelevance.map(({ id, actor, evidence }) => [
+      id, actor.data.id, actor.data.name, actor.data.slug, evidence.country,
+      evidence.evidence_type, evidence.summary, list(evidence.sectors), list(evidence.technologies),
+      list(evidence.campaigns), list(evidence.techniques), evidence.first_observed,
+      evidence.last_observed, evidence.reviewed_at, evidence.confidence, list(evidence.sources),
+      evidence.why_it_matters, `${publication.site}/actors/${actor.data.slug}/#baltic-relevance`,
+      `${publication.site}/api/actors/${actor.data.slug}.json`
     ])
   };
 
@@ -171,7 +189,8 @@ export async function getStaticPaths() {
     sources: references,
     references: referenceAliases,
     relationships,
-    changes
+    changes,
+    'baltic-relevance': balticRelevance
   };
 
   return Object.entries(exports).map(([collection, output]) => ({

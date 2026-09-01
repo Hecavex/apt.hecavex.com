@@ -8,11 +8,12 @@ authors: [Bundeskriminalamt, Generalstaatsanwaltschaft Frankfurt am Main]
 published_at: 2025-07-16
 accessed_at: 2026-08-26
 url: https://www.bka.de/SharedDocs/Pressemitteilungen/DE/Presse_2025/pm250716_noname.pdf?__blob=publicationFile&v=4
+archived_url: https://web.archive.org/web/20250716124718/https://www.bka.de/SharedDocs/Pressemitteilungen/DE/Presse_2025/pm250716_noname.pdf?__blob=publicationFile&v=4
 source_type: legal
 language: de
 notes: German law-enforcement statement on the botnet disruption, warrants, suspected organisation and DDoS infrastructure used by NoName057(16).
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

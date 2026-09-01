@@ -8,11 +8,12 @@ authors: [US Department of Justice]
 published_at: 2023-12-07
 accessed_at: 2026-08-26
 url: https://www.justice.gov/archives/opa/pr/two-russian-nationals-working-russias-federal-security-service-charged-global-computer
+archived_url: https://web.archive.org/web/20250207072951/https://www.justice.gov/archives/opa/pr/two-russian-nationals-working-russias-federal-security-service-charged-global-computer
 source_type: legal
 language: en
 notes: Charges and identity claims concerning Callisto Group activity against the United Kingdom, NATO countries, Ukraine and other targets.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

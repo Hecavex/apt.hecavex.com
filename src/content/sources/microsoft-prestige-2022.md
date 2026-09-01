@@ -11,6 +11,9 @@ url: https://www.microsoft.com/en-us/security/blog/2022/10/14/new-prestige-ranso
 source_type: vendor-research
 language: en
 notes: Campaign reporting and assessed attribution of the Prestige ransomware-style attacks to IRIDIUM, now Seashell Blizzard.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

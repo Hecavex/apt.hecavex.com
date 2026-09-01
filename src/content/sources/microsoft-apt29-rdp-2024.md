@@ -12,7 +12,7 @@ source_type: vendor-research
 language: en
 notes: First-party campaign reporting on signed RDP-file phishing against government, higher education, defence and NGOs, particularly in Europe and the United Kingdom.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

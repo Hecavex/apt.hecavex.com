@@ -8,14 +8,14 @@ authors: [ESET Research]
 published_at: 2025-05-19
 accessed_at: 2026-08-27
 url: https://www.welivesecurity.com/en/eset-research/eset-apt-activity-report-q4-2024-q1-2025/
+archived_url: https://web.archive.org/web/20250519143912/https://www.welivesecurity.com/en/eset-research/eset-apt-activity-report-q4-2024-q1-2025/
 source_type: vendor-research
 language: en
 notes: Reporting on continued European government, diplomatic and maritime targeting associated with Mustang Panda.
 link_status: ok
-link_checked_at: 2026-08-27
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---
 
 Used for current-status and sector context. It is not used to collapse every China-aligned cluster in the report into Mustang Panda.
-

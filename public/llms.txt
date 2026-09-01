@@ -10,6 +10,7 @@ The APT Notes name is a publication identity, not a classification applied to ev
 
 - [Overview](https://apt.hecavex.com/): Product scope and featured dossiers.
 - [Actors](https://apt.hecavex.com/actors/): Reviewed threat-actor dossiers.
+- [Baltic relevance](https://apt.hecavex.com/baltic-relevance/): Source-specific Estonia, Latvia and Lithuania evidence with explicit evidence classes and claim boundaries.
 - [Knowledge](https://apt.hecavex.com/knowledge/): Campaign, software, technique and reference catalogue.
 - [Relationships](https://apt.hecavex.com/relationships/): Explicit actor-to-technique procedure evidence.
 - [Changes](https://apt.hecavex.com/changes/): Chronological substantive change record.
@@ -41,6 +42,7 @@ Every JSON document includes schema version, dataset version, release ID, releas
 - [References](https://apt.hecavex.com/api/references.json): Public alias of the Sources dataset.
 - [Relationships](https://apt.hecavex.com/api/relationships.json)
 - [Changes](https://apt.hecavex.com/api/changes.json)
+- [Baltic relevance](https://apt.hecavex.com/api/baltic-relevance.json): One complete record per reviewed regional evidence item.
 
 Per-record JSON convention: `https://apt.hecavex.com/api/{collection}/{slug}.json`. Relationship records use their stable relationship ID in place of a slug.
 
@@ -56,6 +58,7 @@ Per-record JSON convention: `https://apt.hecavex.com/api/{collection}/{slug}.jso
 - [References CSV](https://apt.hecavex.com/data/references.csv)
 - [Relationships CSV](https://apt.hecavex.com/data/relationships.csv)
 - [Changes CSV](https://apt.hecavex.com/data/changes.csv)
+- [Baltic relevance CSV](https://apt.hecavex.com/data/baltic-relevance.csv): One row per evidence item; use this instead of inferring evidence from actor-level columns.
 
 ## Interpretation boundary
 

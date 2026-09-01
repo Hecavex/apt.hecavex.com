@@ -41,6 +41,14 @@ export const GET: APIRoute = async () => {
       knowledge.sources.length +
       knowledge.updates.length,
     collections,
+    derived_views: {
+      baltic_relevance: {
+        count: knowledge.balticRelevance.length,
+        human: endpoint('/baltic-relevance/'),
+        json: endpoint('/api/baltic-relevance.json'),
+        csv: endpoint('/data/baltic-relevance.csv')
+      }
+    },
     feeds: {
       changes_atom: endpoint('/changes/feed.xml'),
       compatibility_atom: endpoint('/feed.xml')

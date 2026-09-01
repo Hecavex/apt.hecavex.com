@@ -8,9 +8,13 @@ authors: [MITRE ATT&CK]
 published_at: 2022-06-09
 accessed_at: 2026-08-14
 url: https://attack.mitre.org/groups/G1003/
+archived_url: https://web.archive.org/web/20230110215209/https://attack.mitre.org/groups/G1003/
 source_type: nonprofit
 language: en
 notes: Maintained ATT&CK group record, last modified 25 April 2025 when accessed. It explicitly warns that Saint Bear is distinct from Ember Bear.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

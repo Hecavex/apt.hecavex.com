@@ -8,11 +8,12 @@ authors: [UK National Cyber Security Centre and international partners]
 published_at: 2023-12-07
 accessed_at: 2026-08-26
 url: https://www.ncsc.gov.uk/news/star-blizzard-continues-spear-phishing-campaigns
+archived_url: https://web.archive.org/web/20231207121737/https://www.ncsc.gov.uk/news/star-blizzard-continues-spear-phishing-campaigns
 source_type: government
 language: en
 notes: Multinational attribution and procedure-level advisory for Star Blizzard targeting in the UK, NATO countries and neighbouring states.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

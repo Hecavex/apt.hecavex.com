@@ -12,10 +12,9 @@ source_type: vendor-research
 language: en
 notes: Technical account of Secret Blizzard commandeering Amadey footholds to deploy Tavdig and KazuarV2 against Ukrainian military targets.
 link_status: ok
-link_checked_at: 2026-08-27
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---
 
 The source supports the access-brokering procedure and Microsoft cluster name. It does not make every Amadey infection a Secret Blizzard operation.
-

@@ -3,9 +3,9 @@ id: void-blizzard
 name: Void Blizzard
 slug: void-blizzard
 created_at: 2026-08-14
-modified_at: 2026-08-26
-version: 1.1.1
-change_reason: Reviewed against the current government and vendor record; no material analytic change was required.
+modified_at: 2026-09-01
+version: 1.2.0
+change_reason: Added a bounded Estonia reporting connection without converting co-sealing of an advisory into a victim claim.
 summary: A Russia-affiliated espionage cluster using commodity credentials, stolen session cookies and cloud-native collection against NATO, EU and Ukraine-related targets.
 actor_types: [state-sponsored]
 status: active
@@ -73,6 +73,21 @@ targeting:
   countries: [Ukraine, Netherlands, NATO member states, European Union member states]
   sectors: [Government, Defence, Armed Forces, Aerospace, Transportation, Media, NGOs, Healthcare, Education, Information Technology, Telecommunications, High Technology]
   organisations: []
+baltic_relevance:
+  - id: void-blizzard-estonia-advisory-connection-2026
+    country: Estonia
+    evidence_type: reporting-connection
+    summary: Estonia's Foreign Intelligence Service co-sealed the multinational advisory describing Laundry Bear's Zimbra exploitation campaign.
+    sectors: []
+    technologies: [Zimbra Collaboration Suite]
+    campaigns: [laundry-bear-zimbra]
+    techniques: [exploit-client-execution, email-collection]
+    first_observed: "2026-07"
+    last_observed: "2026-07"
+    reviewed_at: "2026-09-01"
+    confidence: high
+    sources: [joint-laundry-bear-zimbra-2026]
+    why_it_matters: The official Estonian reporting connection makes the technical guidance locally relevant but does not establish an Estonian victim.
 campaigns: [laundry-bear-cloud-espionage, laundry-bear-zimbra]
 malware: [ulej]
 tools: [azurehound, evilginx, flowerbed]
@@ -167,7 +182,7 @@ external_identifiers:
   other: [Laundry Bear]
 related_research: []
 sources: [joint-laundry-bear-zimbra-2026, microsoft-void-blizzard-2025, aivd-mivd-laundry-bear-2025]
-updates: [void-blizzard-profile-created, void-blizzard-zimbra-campaign-added, void-blizzard-reviewed-no-change-2026]
+updates: [void-blizzard-profile-created, void-blizzard-zimbra-campaign-added, void-blizzard-reviewed-no-change-2026, void-blizzard-baltic-relevance-added]
 featured: true
 draft: false
 ---

@@ -20,6 +20,8 @@ Records are kept in `src/content/` by entity type. The schemas in `src/content.c
 
 Actor dossiers remain the primary editorial product. Supporting records are browsed through the Knowledge explorer and open in one progressively enhanced detail panel; their canonical fallback pages remain available for direct links, reloads, search indexing and no-JavaScript access. The Relationships view publishes only actor-to-technique links that already carry explicit procedure evidence and supporting references.
 
+The [Baltic relevance view](https://apt.hecavex.com/baltic-relevance/) is a derived regional reading layer over reviewed actor dossiers. Its structured records distinguish reported compromise, reported targeting, actor claims and reporting connections; inclusion never converts a country-level statement into an inferred victim incident. Complete one-row-per-evidence machine exports are available as [JSON](https://apt.hecavex.com/api/baltic-relevance.json) and [CSV](https://apt.hecavex.com/data/baltic-relevance.csv); the actor CSV remains an actor-level discovery table.
+
 The editorial and release requirements are recorded in [docs/EDITORIAL.md](docs/EDITORIAL.md).
 
 ## Repository map
@@ -41,7 +43,7 @@ The production workflow builds and deploys the `main` branch to GitHub Pages. `p
 
 Every deployment validates content references, lifecycle states and sourced relationship endpoints, generates social previews, type-checks and builds the Astro site, creates the Pagefind search index, and audits production metadata, fallback fragments, JSON/CSV/XML data products and asset budgets. The operator release gate is `npm run verify`.
 
-The public data catalogue starts at [`/api/index.json`](https://apt.hecavex.com/api/index.json). It includes deterministic per-type and per-record JSON, canonical CSV exports, 48 sourced relationship objects, a Changes Atom feed and an explicit release/version manifest. Rebuilding the same release does not manufacture a new publication timestamp.
+The public data catalogue starts at [`/api/index.json`](https://apt.hecavex.com/api/index.json). The current release contains 20 actor dossiers, 35 campaigns, 23 software records, 32 techniques, 76 public references and 59 sourced relationship objects. It includes deterministic per-type and per-record JSON, canonical CSV exports, a Changes Atom feed and an explicit release/version manifest. Rebuilding the same release does not manufacture a new publication timestamp.
 
 The site has no accounts, application database or hosted search provider. Production enables Cloudflare Web Analytics once through the shared layout for aggregate audience and page-performance measurement unless Do Not Track is set to `1`. The public site token is supplied at build time through `PUBLIC_HECAVEX_ANALYTICS_TOKEN`; it is deployment metadata rather than a secret. The beacon uses no cookies or browser storage, and the deployed methodology links to the portfolio privacy policy and describes the measurement boundary.
 

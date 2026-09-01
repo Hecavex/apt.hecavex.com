@@ -11,6 +11,9 @@ url: https://www.ncsc.gov.uk/news/apt28-exploits-known-vulnerability-to-carry-ou
 source_type: government
 language: en
 notes: Government advisory covering CVE-2017-6742 and Jaguar Tooth deployment.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

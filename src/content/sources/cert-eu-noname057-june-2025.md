@@ -8,11 +8,12 @@ authors: [CERT-EU]
 published_at: 2025-07-01
 accessed_at: 2026-08-26
 url: https://cert.europa.eu/publications/threat-intelligence/cb25-07/
+archived_url: https://web.archive.org/web/20250905193822/https://cert.europa.eu/publications/threat-intelligence/cb25-07/
 source_type: government
 language: en
 notes: TLP:CLEAR monthly brief recording NoName057(16) DDoS activity against Dutch and NATO websites around the June 2025 NATO summit.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

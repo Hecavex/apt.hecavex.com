@@ -4,6 +4,7 @@ import { confidenceDefinitions } from '../../data/vocabularies';
 
 const sections = [
   { href: '#scope', label: 'Scope' },
+  { href: '#baltic-relevance', label: 'Baltic relevance' },
   { href: '#naming', label: 'Naming' },
   { href: '#references', label: 'References' },
   { href: '#relationships', label: 'Relationships' },
@@ -38,6 +39,17 @@ const sections = [
           <p>APT Notes is a curated dossier publication, not an exhaustive threat-actor directory. The publication name is not an assertion that every included actor is an advanced persistent threat. State-sponsored, state-aligned, hacktivist and cybercriminal records may be included when they have durable relevance to European or Baltic security and enough source-specific reporting to support a defensible dossier.</p>
           <p>A public actor profile requires a durable research purpose, a sufficiently stable identity, explicit actor-type and attribution boundaries, sufficient primary or source-specific reporting, an explicit confidence statement and a substantive review date. Ideology, criminal participation and reported state alignment are recorded as separate claims; one is not treated as proof of another.</p>
           <p>Campaigns, software, techniques and references are supporting records. They are included when they help explain a published actor dossier; a short supporting record is not presented as an independent long-form assessment.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology-detail" id="baltic-relevance" aria-labelledby="baltic-relevance-title" tabindex="-1">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Regional evidence</p>
+        <h2 id="baltic-relevance-title">Baltic relevance</h2>
+        <div class="methodology-section-copy">
+          <p>The <a href="/baltic-relevance/">Baltic relevance view</a> contains only explicit Estonia, Latvia or Lithuania evidence already supported by a public actor dossier. Every row identifies its country, evidence class, evidence window, review date, confidence, sources, affected context and defensive significance.</p>
+          <p>Reported compromise, reported targeting, actor claims and reporting connections remain separate classes. A country named in a targeting statement is not silently turned into an unnamed victim, and participation by a Baltic authority in a joint advisory is not treated as evidence that an organisation in that country was compromised.</p>
         </div>
       </div>
     </section>

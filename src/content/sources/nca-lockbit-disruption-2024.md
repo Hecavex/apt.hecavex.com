@@ -12,10 +12,9 @@ source_type: legal
 language: en
 notes: Primary law-enforcement account of Operation Cronos, LockBit infrastructure, affiliate model, victim impact and disruption.
 link_status: ok
-link_checked_at: 2026-08-27
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---
 
 The operation is recorded as material disruption, not permanent cessation.
-

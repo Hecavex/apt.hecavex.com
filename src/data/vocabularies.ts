@@ -14,6 +14,8 @@ export const updateTypes = [
 ] as const;
 export const sourceTypes = ['government', 'vendor-research', 'academic', 'legal', 'media', 'nonprofit', 'community', 'other'] as const;
 export const linkStatuses = ['unknown', 'ok', 'redirected', 'unavailable'] as const;
+export const balticCountries = ['Estonia', 'Latvia', 'Lithuania'] as const;
+export const balticEvidenceTypes = ['reported-compromise', 'reported-targeting', 'actor-claim', 'reporting-connection'] as const;
 
 export const confidenceDefinitions = {
   low: 'Limited or weakly corroborated public evidence; the assessment may change materially.',

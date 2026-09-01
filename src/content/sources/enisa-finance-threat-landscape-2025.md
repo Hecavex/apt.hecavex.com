@@ -12,10 +12,9 @@ source_type: government
 language: en
 notes: European sector assessment documenting CL0P-related MOVEit supply-chain exposure affecting financial organisations.
 link_status: ok
-link_checked_at: 2026-08-27
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---
 
 Used for European victim and sector context, not for operator-level attribution beyond the cited campaign.
-

@@ -20,6 +20,7 @@ const releaseGroups = [...updates.reduce((groups: Map<string, any[]>, update: an
   return groups;
 }, new Map()).entries()];
 const recordUrl = (update: any) => {
+  if (update.data.entity_type === 'dataset') return '/api/version.json';
   const collection = typeCollections[update.data.entity_type as EntityType];
   const entry = knowledge.maps[collection]!.get(update.data.entity);
   return entry ? entityHref(collection, entry.data.slug) : '/knowledge/';

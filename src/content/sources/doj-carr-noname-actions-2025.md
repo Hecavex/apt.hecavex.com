@@ -12,7 +12,7 @@ source_type: legal
 language: en
 notes: Indictment and disruption announcement describing alleged CARR and NoName057(16) organisation, funding, DDoS and critical-infrastructure activity; updated 22 July 2026.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

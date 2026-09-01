@@ -12,7 +12,7 @@ source_type: nonprofit
 language: en
 notes: ATT&CK definition for network denial-of-service activity. The created date is the date displayed by ATT&CK when reviewed.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

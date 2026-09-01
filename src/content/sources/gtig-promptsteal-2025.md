@@ -11,6 +11,9 @@ url: https://cloud.google.com/blog/topics/threat-intelligence/threat-actor-usage
 source_type: vendor-research
 language: en
 notes: Reports APT28 deployment of PROMPTSTEAL, also reported by CERT-UA as LAMEHUG, against Ukraine.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

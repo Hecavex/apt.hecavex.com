@@ -11,6 +11,9 @@ url: https://cloud.google.com/blog/topics/threat-intelligence/threats-to-defense
 source_type: vendor-research
 language: en
 notes: Current reporting on APT44 attempts to collect messaging data and target battlefield-management and defence-related technology.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

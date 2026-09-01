@@ -342,6 +342,7 @@ const visitSupersession = (record) => {
 };
 for (const record of allRecords) visitSupersession(record);
 
+const balticEvidenceIds = new Set();
 for (const record of recordsByCollection.get('actors') ?? []) {
   const { data } = record;
   parseDate(record, data.last_reviewed, 'last_reviewed', { required: true });
@@ -374,6 +375,33 @@ for (const record of recordsByCollection.get('actors') ?? []) {
   }
   for (const event of data.operational_timeline ?? []) {
     checkReferenceList(record, event.sources ?? [], 'sources', 'timeline source');
+  }
+  for (const [index, relevance] of (data.baltic_relevance ?? []).entries()) {
+    const label = `baltic_relevance[${index}]`;
+    if (typeof relevance.id !== 'string' || !stableReferencePattern.test(relevance.id)) {
+      errors.push(`${describe(record)}: ${label} has invalid stable id "${String(relevance.id)}"`);
+    } else if (balticEvidenceIds.has(relevance.id)) {
+      errors.push(`${describe(record)}: ${label} duplicates Baltic evidence id "${relevance.id}"`);
+    } else {
+      balticEvidenceIds.add(relevance.id);
+    }
+    if (!['Estonia', 'Latvia', 'Lithuania'].includes(relevance.country)) {
+      errors.push(`${describe(record)}: ${label} has invalid country "${relevance.country}"`);
+    }
+    if (!['reported-compromise', 'reported-targeting', 'actor-claim', 'reporting-connection'].includes(relevance.evidence_type)) {
+      errors.push(`${describe(record)}: ${label} has invalid evidence_type "${relevance.evidence_type}"`);
+    }
+    if (!allowed.confidence.has(relevance.confidence)) {
+      errors.push(`${describe(record)}: ${label} has invalid confidence "${relevance.confidence}"`);
+    }
+    if (!String(relevance.summary ?? '').trim()) errors.push(`${describe(record)}: ${label} has empty summary`);
+    if (!String(relevance.first_observed ?? '').trim()) errors.push(`${describe(record)}: ${label} has empty first_observed`);
+    if (!String(relevance.last_observed ?? '').trim()) errors.push(`${describe(record)}: ${label} has empty last_observed`);
+    parseDate(record, relevance.reviewed_at, `${label}.reviewed_at`, { required: true });
+    if (!String(relevance.why_it_matters ?? '').trim()) errors.push(`${describe(record)}: ${label} has empty why_it_matters`);
+    checkReferenceList(record, relevance.campaigns ?? [], 'campaigns', `${label} campaign`);
+    checkReferenceList(record, relevance.techniques ?? [], 'techniques', `${label} technique`);
+    checkReferenceList(record, relevance.sources ?? [], 'sources', `${label} source`);
   }
 
   if (isPublic(record) && (data.sources ?? []).length === 1) {
@@ -509,9 +537,17 @@ if (currentRelationships.length !== expectedCurrentRelationshipCount) {
 const updatesByEntity = new Map();
 for (const update of recordsByCollection.get('updates') ?? []) {
   const { data } = update;
+  const datasetEvent = data.entity_type === 'dataset';
   const expectedCollection = entityCollections[data.entity_type];
   let entity = null;
-  if (!expectedCollection) {
+  if (datasetEvent) {
+    if (data.entity !== 'apt-notes') {
+      errors.push(`${describe(update)}: dataset change event must target "apt-notes"`);
+    }
+    if (data.update_type !== 'dataset-release') {
+      errors.push(`${describe(update)}: dataset change event must use update_type "dataset-release"`);
+    }
+  } else if (!expectedCollection) {
     errors.push(`${describe(update)}: invalid entity_type "${String(data.entity_type)}"`);
   } else {
     entity = checkTypedReference(update, data.entity, expectedCollection, 'update entity');

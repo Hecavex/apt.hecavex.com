@@ -8,9 +8,13 @@ authors: [FBI, CISA, NSA, international partners]
 published_at: 2024-09-05
 accessed_at: 2026-08-14
 url: https://www.cisa.gov/sites/default/files/2024-09/aa24-249a-russian-military-cyber-actors-target-us-and-global-critical-infrastructure.pdf
+archived_url: https://web.archive.org/web/20240905194256/https://www.cisa.gov/sites/default/files/2024-09/aa24-249a-russian-military-cyber-actors-target-us-and-global-critical-infrastructure.pdf
 source_type: government
 language: en
 notes: Joint TLP:CLEAR advisory describing Unit 29155 attribution, targeting, tooling, exploited vulnerabilities, TTPs and indicators.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

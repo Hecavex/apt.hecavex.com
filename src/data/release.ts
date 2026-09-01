@@ -1,9 +1,9 @@
 export const release = {
-  id: 'apt-notes-2026-08-27-europe-targeting-expansion',
-  datasetVersion: '2.2.0',
-  schemaVersion: '2.0.0',
-  releasedAt: '2026-08-27T09:10:00.000Z',
-  previousVersion: '2.1.0'
+  id: 'apt-notes-2026-09-01-baltic-relevance',
+  datasetVersion: '2.3.0',
+  schemaVersion: '2.1.0',
+  releasedAt: '2026-09-01T06:46:41.016Z',
+  previousVersion: '2.2.0'
 } as const;
 
 export const publication = {

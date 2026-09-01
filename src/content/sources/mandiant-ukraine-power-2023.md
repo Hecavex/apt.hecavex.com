@@ -8,9 +8,13 @@ authors: [Ken Proska, John Wolfram, Jared Wilson, Dan Black, Keith Lunden, Danie
 published_at: 2023-11-09
 accessed_at: 2026-08-09
 url: https://cloud.google.com/blog/topics/threat-intelligence/sandworm-disrupts-power-ukraine-operational-technology
+archived_url: https://web.archive.org/web/20240501171218/https://cloud.google.com/blog/topics/threat-intelligence/sandworm-disrupts-power-ukraine-operational-technology/
 source_type: vendor-research
 language: en
 notes: Incident-response analysis of the 2022 MicroSCADA disruption and subsequent CaddyWiper deployment.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

@@ -11,6 +11,9 @@ url: https://www.microsoft.com/en-us/security/blog/2025/02/12/the-badpilot-campa
 source_type: vendor-research
 language: en
 notes: Current reporting on a Seashell Blizzard initial-access subgroup exploiting perimeter systems and maintaining durable access.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

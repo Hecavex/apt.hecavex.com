@@ -33,6 +33,22 @@ export const typeCollections: Record<EntityType, EntityCollection> = {
 export const entityHref = (collection: EntityCollection, slug: string) => `${entityRoutes[collection]}${slug}/`;
 export const recordName = (entry: any) => entry.data.name ?? entry.data.title ?? entry.data.id;
 
+export interface BalticRelevanceRecord {
+  id: string;
+  actor: any;
+  evidence: any;
+}
+
+export const deriveBalticRelevance = (actors: any[]): BalticRelevanceRecord[] => actors
+  .flatMap((actor) => (actor.data.baltic_relevance ?? []).map((evidence: any) => ({
+    id: evidence.id,
+    actor,
+    evidence
+  })))
+  .sort((left, right) => left.evidence.country.localeCompare(right.evidence.country)
+    || left.actor.data.name.localeCompare(right.actor.data.name)
+    || left.id.localeCompare(right.id));
+
 export interface RelationshipRecord {
   id: string;
   relationship_type: 'uses';
@@ -166,6 +182,7 @@ export const buildReferenceUsage = (
       for (const vulnerability of entry.data.vulnerabilities ?? []) addUsage(usage, vulnerability.source, { ...base, usage_kind: 'vulnerability evidence', anchor: 'vulnerabilities' });
       for (const evidence of entry.data.technique_evidence ?? []) for (const source of evidence.sources ?? []) addUsage(usage, source, { ...base, usage_kind: 'procedure evidence', anchor: 'techniques' });
       for (const event of entry.data.operational_timeline ?? []) for (const source of event.sources ?? []) addUsage(usage, source, { ...base, usage_kind: 'timeline evidence', anchor: 'operational-timeline' });
+      for (const relevance of entry.data.baltic_relevance ?? []) for (const source of relevance.sources ?? []) addUsage(usage, source, { ...base, usage_kind: 'Baltic relevance evidence', anchor: 'baltic-relevance' });
     }
   }
 
@@ -203,10 +220,12 @@ export const loadKnowledge = async () => {
   const updates = loaded[6] as any[];
   const collections: Record<EntityCollection, any[]> = { actors, campaigns, malware, tools, techniques, sources };
   const relationships = deriveRelationships(actors, techniques, campaigns, sources);
+  const balticRelevance = deriveBalticRelevance(actors);
   return {
     ...collections,
     updates,
     relationships,
+    balticRelevance,
     maps: Object.fromEntries(Object.entries(collections).map(([key, entries]) => [key, byId(entries)])),
     referenceUsage: buildReferenceUsage(collections, updates, relationships)
   };

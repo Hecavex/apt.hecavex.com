@@ -8,12 +8,13 @@ authors: [Council of the European Union]
 published_at: 2026-07-13
 accessed_at: 2026-08-26
 url: https://www.consilium.europa.eu/en/press/press-releases/2026/07/13/russian-cyber-attacks-and-destabilising-activities-council-sanctions-nine-individuals-and-four-entities/
+archived_url: https://web.archive.org/web/20260714080509/https://www.consilium.europa.eu/en/press/press-releases/2026/07/13/russian-cyber-attacks-and-destabilising-activities-council-sanctions-nine-individuals-and-four-entities/
 source_type: government
 language: en
 notes: EU sanctions statement covering CARR, Z-Pentest, GRU Unit 29155 support infrastructure and cyber activity against EU member states and partners.
-link_status: ok
-link_checked_at: 2026-08-26
-http_status: 200
+link_status: unknown
+link_checked_at: 2026-09-01
+http_status: 403
 draft: false
 ---
 

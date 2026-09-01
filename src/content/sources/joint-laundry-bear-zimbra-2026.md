@@ -11,6 +11,9 @@ url: https://www.aivd.nl/documenten/2026/07/23/russian-state-supported-cyber-act
 source_type: government
 language: en
 notes: Permanent AIVD publication page for TLP:CLEAR joint advisory AA26-204A describing Laundry Bear exploitation of CVE-2025-66376, Ulej, Flowerbed, victimology, persistence, collection and exfiltration. Estonia's Foreign Intelligence Service co-sealed the advisory.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

@@ -12,10 +12,9 @@ source_type: government
 language: en
 notes: Joint advisory documenting the RaaS model, intrusion procedures, tooling and mitigations.
 link_status: ok
-link_checked_at: 2026-08-27
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---
 
 Used for campaign-scoped exploitation and access evidence. Affiliate actions are not automatically assigned to a single central operator.
-

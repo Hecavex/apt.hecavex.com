@@ -23,12 +23,18 @@ const budgets = new Map([
 // transfer-size limits as strict as the general budget while allowing additional
 // uncompressed source text for the in-context record panels and public exports.
 const catalogueBudgets = new Map([
-  ['api/actors.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
+  // The actor index retains the legacy `actors` alias alongside `records` and
+  // now carries source-scoped Baltic relevance statements. Keep the transfer
+  // budget strict while allowing the duplicated, human-readable JSON source.
+  ['api/actors.json', { raw: kibibytes(144), gzip: kibibytes(24) }],
   ['api/knowledge.json', { raw: kibibytes(192), gzip: kibibytes(28) }],
   ['api/references.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
   ['api/relationships.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
   ['api/sources.json', { raw: kibibytes(128), gzip: kibibytes(24) }],
-  ['changes/index.html', { raw: kibibytes(96), gzip: kibibytes(20) }],
+  // The public chronology includes substantive dataset-release boundaries in
+  // addition to record-level changes. Preserve its transfer ceiling while
+  // allowing the uncompressed HTML to carry those inspectable release notes.
+  ['changes/index.html', { raw: kibibytes(104), gzip: kibibytes(20) }],
   ['knowledge/index.html', { raw: kibibytes(112), gzip: kibibytes(20) }],
   ['relationships/index.html', { raw: kibibytes(128), gzip: kibibytes(20) }],
 ]);

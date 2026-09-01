@@ -8,11 +8,12 @@ authors: [CERT-EU]
 published_at: 2023-03-01
 accessed_at: 2026-08-26
 url: https://cert.europa.eu/publications/threat-intelligence/cb23-03/
+archived_url: https://web.archive.org/web/20240227022144/https://cert.europa.eu/publications/threat-intelligence/cb23-03/
 source_type: government
 language: en
 notes: European institutional brief recording a NoName057(16) DDoS campaign against Lithuanian airports and a separate claimed attack against Latvia's National Defence Academy.
 link_status: ok
-link_checked_at: 2026-08-26
+link_checked_at: 2026-09-01
 http_status: 200
 draft: false
 ---

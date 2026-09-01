@@ -11,9 +11,9 @@ url: https://media.defense.gov/2025/Dec/09/2003840175/-1/-1/0/Joint_CSA_Pro-Russ
 source_type: government
 language: en
 notes: Multinational advisory AA25-343A documenting CARR, NoName057(16) and affiliated pro-Russia hacktivist activity against exposed VNC and operational-technology systems.
-link_status: ok
-link_checked_at: 2026-08-26
-http_status: 200
+link_status: unknown
+link_checked_at: 2026-09-01
+http_status: 403
 draft: false
 ---
 

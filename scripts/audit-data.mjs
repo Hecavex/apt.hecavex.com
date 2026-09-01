@@ -177,6 +177,9 @@ const expectedIds = {
   relationships: expectedRelationshipIds,
   changes: [...publicIds.updates].sort()
 };
+const expectedBalticIds = publicSourceRecords.actors
+  .flatMap((actor) => (actor.baltic_relevance ?? []).map((record) => record.id))
+  .sort();
 
 const aggregateNames = Object.keys(expectedIds);
 const aggregates = {};
@@ -237,6 +240,27 @@ if (aggregates.actors) {
     'api/actors.json: compatibility actors array differs from records'
   );
 }
+const balticRelevance = readJson('api/baltic-relevance.json');
+checkEnvelope(balticRelevance, 'api/baltic-relevance.json');
+if (balticRelevance) {
+  assert(balticRelevance.object_type === 'derived-view', 'api/baltic-relevance.json: unexpected object_type');
+  assert(balticRelevance.collection === 'baltic-relevance', 'api/baltic-relevance.json: unexpected collection');
+  assert(Array.isArray(balticRelevance.records), 'api/baltic-relevance.json: records must be an array');
+  const records = Array.isArray(balticRelevance.records) ? balticRelevance.records : [];
+  const ids = records.map((record) => record.id);
+  assert(balticRelevance.count === records.length, 'api/baltic-relevance.json: count differs from records');
+  assert(stableJson([...ids].sort()) === stableJson(expectedBalticIds), 'api/baltic-relevance.json: IDs differ from actor evidence');
+  assert(new Set(ids).size === ids.length, 'api/baltic-relevance.json: duplicate record id');
+  for (const record of records) {
+    assert(record.object_type === 'baltic-relevance', `api/baltic-relevance.json: ${record.id} has unexpected object_type`);
+    assert(publicIds.actors.has(record.actor?.id), `api/baltic-relevance.json: ${record.id} has unknown actor`);
+    assert(['Estonia', 'Latvia', 'Lithuania'].includes(record.country), `api/baltic-relevance.json: ${record.id} has invalid country`);
+    assert(Array.isArray(record.sources) && record.sources.length > 0, `api/baltic-relevance.json: ${record.id} lacks sources`);
+    for (const source of record.sources ?? []) {
+      assert(publicIds.sources.has(source), `api/baltic-relevance.json: ${record.id} has unknown source ${source}`);
+    }
+  }
+}
 if (aggregates.references) {
   assert(
     aggregates.references.canonical_collection === 'sources',
@@ -271,6 +295,13 @@ if (catalogue?.collections) {
     'api/index.json: unexpected collection count'
   );
 }
+if (catalogue) {
+  const view = catalogue.derived_views?.baltic_relevance;
+  assert(view?.count === expectedBalticIds.length, 'api/index.json: Baltic relevance count differs from actor evidence');
+  assert(view?.human === `${site}/baltic-relevance/`, 'api/index.json: invalid Baltic relevance human URL');
+  assert(view?.json === `${site}/api/baltic-relevance.json`, 'api/index.json: invalid Baltic relevance JSON URL');
+  assert(view?.csv === `${site}/data/baltic-relevance.csv`, 'api/index.json: invalid Baltic relevance CSV URL');
+}
 
 const expectedPhysicalCount = ['actors', 'campaigns', 'malware', 'tools', 'techniques', 'sources', 'updates']
   .reduce((sum, name) => sum + publicSourceRecords[name].length, 0);
@@ -295,7 +326,8 @@ if (version?.counts) {
     sources: expectedCounts.sources,
     references: expectedCounts.references,
     relationships: expectedCounts.relationships,
-    changes: expectedCounts.changes
+    changes: expectedCounts.changes,
+    baltic_relevance: expectedBalticIds.length
   };
   for (const [name, count] of Object.entries(manifestCounts)) {
     assert(version.counts[name] === count, `api/version.json: ${name} count is ${version.counts[name]}, expected ${count}`);
@@ -304,6 +336,8 @@ if (version?.counts) {
     Object.keys(version.counts).length === Object.keys(manifestCounts).length,
     'api/version.json: unexpected manifest count keys'
   );
+  assert(version.assets?.baltic_relevance_json === `${site}/api/baltic-relevance.json`, 'api/version.json: invalid Baltic relevance JSON asset');
+  assert(version.assets?.baltic_relevance_csv === `${site}/data/baltic-relevance.csv`, 'api/version.json: invalid Baltic relevance CSV asset');
   assert(version.assets?.index === `${site}/api/index.json`, 'api/version.json: invalid index asset URL');
   assert(version.assets?.changes_atom === `${site}/changes/feed.xml`, 'api/version.json: invalid Atom asset URL');
   assert(version.assets?.changes_json === `${site}/api/changes.json`, 'api/version.json: invalid Changes asset URL');
@@ -382,7 +416,8 @@ const updateTargetCollections = {
   malware: publicIds.malware,
   tool: publicIds.tools,
   technique: publicIds.techniques,
-  source: publicIds.sources
+  source: publicIds.sources,
+  dataset: new Set(['apt-notes'])
 };
 for (const record of aggregates.changes?.records ?? []) {
   requireReference(updateTargetCollections[record.entity_type] ?? new Set(), record.entity, `change ${record.id} entity`);
@@ -438,7 +473,8 @@ const expectedCsvHeaders = {
   sources: ['id', 'title', 'slug', 'publisher', 'authors', 'published_at', 'accessed_at', 'last_reviewed_at', 'source_type', 'language', 'source_url', 'archived_url', 'link_status', 'link_checked_at', 'http_status', 'final_url', 'version', 'deprecated', 'revoked', 'url', 'json_url'],
   references: ['id', 'title', 'slug', 'publisher', 'authors', 'published_at', 'accessed_at', 'last_reviewed_at', 'source_type', 'language', 'source_url', 'archived_url', 'link_status', 'link_checked_at', 'http_status', 'final_url', 'version', 'deprecated', 'revoked', 'url', 'json_url'],
   relationships: ['id', 'relationship_type', 'source_type', 'source_id', 'source_name', 'target_type', 'target_id', 'target_name', 'target_external_id', 'campaign_id', 'campaign_name', 'evidence', 'reference_ids', 'confidence', 'first_observed', 'last_observed', 'created_at', 'modified_at', 'last_reviewed_at', 'version', 'change_reason', 'editorial_note', 'deprecated', 'revoked', 'url', 'json_url'],
-  changes: ['id', 'date', 'update_type', 'entity_type', 'entity_id', 'title', 'summary', 'what_changed', 'why', 'affected_fields', 'affected_relationships', 'source_ids', 'previous_version', 'new_version', 'release_id', 'substantive', 'correction_of', 'editorial_note', 'url', 'json_url']
+  changes: ['id', 'date', 'update_type', 'entity_type', 'entity_id', 'title', 'summary', 'what_changed', 'why', 'affected_fields', 'affected_relationships', 'source_ids', 'previous_version', 'new_version', 'release_id', 'substantive', 'correction_of', 'editorial_note', 'url', 'json_url'],
+  'baltic-relevance': ['id', 'actor_id', 'actor_name', 'actor_slug', 'country', 'evidence_type', 'summary', 'sector_context', 'technology_context', 'campaign_ids', 'technique_ids', 'first_observed', 'last_observed', 'reviewed_at', 'confidence', 'source_ids', 'why_it_matters', 'url', 'actor_json_url']
 };
 
 for (const [name, headers] of Object.entries(expectedCsvHeaders)) {
@@ -454,10 +490,11 @@ for (const [name, headers] of Object.entries(expectedCsvHeaders)) {
     assert(row.length === rows[0].length, `${relativePath}: row ${index + 1} has ${row.length} fields, expected ${rows[0].length}`);
   }
   const dataRows = rows.slice(1);
-  assert(dataRows.length === expectedCounts[name], `${relativePath}: has ${dataRows.length} records, expected ${expectedCounts[name]}`);
+  const expectedCsvIds = name === 'baltic-relevance' ? expectedBalticIds : expectedIds[name];
+  assert(dataRows.length === expectedCsvIds.length, `${relativePath}: has ${dataRows.length} records, expected ${expectedCsvIds.length}`);
   assert(new Set(dataRows.map((row) => row[0])).size === dataRows.length, `${relativePath}: duplicate id`);
   assert(
-    stableJson(dataRows.map((row) => row[0]).sort()) === stableJson(expectedIds[name]),
+    stableJson(dataRows.map((row) => row[0]).sort()) === stableJson(expectedCsvIds),
     `${relativePath}: IDs differ from JSON/source contract`
   );
 }

@@ -24,13 +24,16 @@ export const GET: APIRoute = async () => {
       sources: knowledge.sources.length,
       references: knowledge.sources.length,
       relationships: knowledge.relationships.length,
-      changes: knowledge.updates.length
+      changes: knowledge.updates.length,
+      baltic_relevance: knowledge.balticRelevance.length
     },
     assets: {
       index: `${publication.site}/api/index.json`,
       changes_atom: `${publication.site}/changes/feed.xml`,
       changes_json: `${publication.site}/api/changes.json`,
-      relationships_json: `${publication.site}/api/relationships.json`
+      relationships_json: `${publication.site}/api/relationships.json`,
+      baltic_relevance_json: `${publication.site}/api/baltic-relevance.json`,
+      baltic_relevance_csv: `${publication.site}/data/baltic-relevance.csv`
     }
   }));
 };

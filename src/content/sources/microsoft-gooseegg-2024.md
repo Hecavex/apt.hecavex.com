@@ -11,6 +11,9 @@ url: https://www.microsoft.com/en-us/security/blog/2024/04/22/analyzing-forest-b
 source_type: vendor-research
 language: en
 notes: Primary technical reporting on GooseEgg and its use of CVE-2022-38028.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

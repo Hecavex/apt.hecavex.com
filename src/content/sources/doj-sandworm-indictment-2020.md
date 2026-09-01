@@ -8,9 +8,13 @@ authors: [Office of Public Affairs]
 published_at: 2020-10-19
 accessed_at: 2026-08-09
 url: https://www.justice.gov/archives/opa/pr/six-russian-gru-officers-charged-connection-worldwide-deployment-destructive-malware-and
+archived_url: https://web.archive.org/web/20250207073618/https://www.justice.gov/archives/opa/pr/six-russian-gru-officers-charged-connection-worldwide-deployment-destructive-malware-and
 source_type: legal
 language: en
 notes: Legal attribution of charged activity to GRU Unit 74455, including NotPetya, Ukrainian power attacks and Olympic Destroyer.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

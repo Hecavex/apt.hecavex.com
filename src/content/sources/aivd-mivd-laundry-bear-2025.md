@@ -8,9 +8,13 @@ authors: [Netherlands General Intelligence and Security Service, Netherlands Def
 published_at: 2025-05-27
 accessed_at: 2026-08-14
 url: https://www.aivd.nl/documenten/2025/05/27/aivd-en-mivd-onderkennen-nieuwe-russische-cyberactor
+archived_url: https://web.archive.org/web/20260129145546/https://www.aivd.nl/documenten/2025/05/27/aivd-en-mivd-onderkennen-nieuwe-russische-cyberactor
 source_type: government
 language: en
 notes: Permanent AIVD publication page for the TLP:CLEAR joint intelligence-service advisory describing Laundry Bear attribution, victimology, cloud collection and pass-the-cookie activity.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

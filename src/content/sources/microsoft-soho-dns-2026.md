@@ -8,9 +8,13 @@ authors: [Microsoft Threat Intelligence]
 published_at: 2026-04-07
 accessed_at: 2026-08-09
 url: https://www.microsoft.com/en-us/security/blog/2026/04/07/soho-router-compromise-leads-to-dns-hijacking-and-adversary-in-the-middle-attacks/
+archived_url: https://web.archive.org/web/20260408021114/https://www.microsoft.com/en-us/security/blog/2026/04/07/soho-router-compromise-leads-to-dns-hijacking-and-adversary-in-the-middle-attacks/
 source_type: vendor-research
 language: en
 notes: Microsoft telemetry and cluster analysis covering Forest Blizzard and Storm-2754.
+link_status: ok
+link_checked_at: 2026-09-01
+http_status: 200
 draft: false
 ---
 

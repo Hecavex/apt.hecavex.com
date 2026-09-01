@@ -18,6 +18,7 @@ export const GET: APIRoute = async () => {
         motivations: record.motivations,
         confidence: record.confidence,
         summary: record.summary,
+        baltic_relevance: record.baltic_relevance,
         last_observed: record.last_observed,
         created_at: record.created_at,
         modified_at: record.modified_at,

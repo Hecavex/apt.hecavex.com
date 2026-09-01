@@ -32,6 +32,7 @@ const tocCandidates = [
   ...headings.filter((heading: any) => heading.depth === 2).map((heading: any) => ({ slug: heading.slug, text: heading.text })),
   ...(d.aliases.length > 0 ? [{ slug: 'naming-and-aliases', text: 'Naming and aliases' }] : []),
   ...(d.operational_timeline.length > 0 ? [{ slug: 'operational-timeline', text: 'Operational timeline' }] : []),
+  ...(d.baltic_relevance.length > 0 ? [{ slug: 'baltic-relevance', text: 'Baltic relevance' }] : []),
   ...(d.campaigns.length > 0 ? [{ slug: 'campaigns', text: 'Campaigns' }] : []),
   ...(d.malware.length > 0 || d.tools.length > 0 ? [{ slug: 'capabilities', text: 'Malware and tooling' }] : []),
   ...(d.attribution.length > 0 ? [{ slug: 'attribution-statements', text: 'Attribution statements' }] : []),
@@ -129,6 +130,24 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
             <ol class="timeline evidence-timeline">
               {d.operational_timeline.map((event: any) => <li><time>{event.date}</time><h3>{event.title}</h3><p>{event.summary}</p><p class="evidence-line"><span class={`badge ${event.confidence}`}>{label(event.confidence)}</span>{event.sources.map((id: string) => { const source = maps.sources.get(id); return source ? <KnowledgeLink collection="sources" slug={source.data.slug}>{source.data.publisher}</KnowledgeLink> : <span>{id}</span>; })}</p></li>)}
             </ol>
+          </section>
+        )}
+
+        {d.baltic_relevance.length > 0 && (
+          <section id="baltic-relevance">
+            <h2>Baltic relevance</h2>
+            <p>Each row is a source-specific evidence statement. Reported targeting, reported compromise, actor claims and reporting connections are not interchangeable.</p>
+            <div class="table-wrap profile-table" role="region" aria-label={`${d.name} Baltic relevance evidence`} tabindex="0">
+              <table>
+                <thead><tr><th>Country and class</th><th>Evidence</th><th>Local significance</th><th>Reference</th></tr></thead>
+                <tbody>{d.baltic_relevance.map((relevance: any) => <tr>
+                  <td><strong>{relevance.country}</strong><small>{label(relevance.evidence_type)} / {label(relevance.confidence)} confidence / {relevance.first_observed}{relevance.last_observed !== relevance.first_observed ? ` - ${relevance.last_observed}` : ''} / reviewed {relevance.reviewed_at}</small></td>
+                  <td>{relevance.summary}<small>{[...relevance.sectors, ...relevance.technologies].join(' / ') || 'No sector or technology asserted'}</small></td>
+                  <td>{relevance.why_it_matters}</td>
+                  <td>{relevance.sources.map((id: string) => { const source = maps.sources.get(id); return source ? <KnowledgeLink collection="sources" slug={source.data.slug}>{source.data.publisher}</KnowledgeLink> : <span>{id}</span>; })}</td>
+                </tr>)}</tbody>
+              </table>
+            </div>
           </section>
         )}
 

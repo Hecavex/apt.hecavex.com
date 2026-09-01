@@ -18,6 +18,16 @@
       ]
     },
     {
+      "name": "invalid Baltic relevance evidence",
+      "valid": false,
+      "overlay": "cases/invalid-baltic-relevance",
+      "includes": [
+        "baltic_relevance[0] has invalid country \"Poland\"",
+        "baltic_relevance[0] has invalid evidence_type \"inferred\"",
+        "baltic_relevance[0] source \"actor-one\" resolves to actors, expected sources"
+      ]
+    },
+    {
       "name": "supersession cycle and invalid lifecycle state",
       "valid": false,
       "overlay": "cases/invalid-lifecycle",
