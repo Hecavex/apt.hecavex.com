@@ -12,11 +12,15 @@ const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaig
 <BaseLayout>
   <section class="shell">
     <header class="brand-hero">
-      <p class="eyebrow">Structured threat intelligence</p>
-      <h1>Threat actor intelligence,<br />structured for research.</h1>
-      <p class="lead">A curated collection of deeply sourced threat-actor dossiers and their related campaigns, malware, targeting and attribution.</p>
-      <div class="hero-actions"><a class="button" href="/actors/">Browse actors →</a><a href="/knowledge/">Search Knowledge →</a></div>
-      <p class="hero-meta">APT NOTES · BY HECAVEX · {sources.length} PUBLIC REFERENCES</p>
+      <div class="brand-hero-copy">
+        <p class="eyebrow">Structured threat intelligence</p>
+        <h1>Threat actor intelligence,<br />structured for research.</h1>
+        <p class="lead">A curated collection of deeply sourced threat-actor dossiers and their related campaigns, malware, targeting and attribution.</p>
+      </div>
+      <div class="brand-hero-utility">
+        <div class="hero-actions"><a class="button" href="/actors/">Browse actors →</a><a href="/knowledge/">Search Knowledge →</a></div>
+        <p class="hero-meta">APT NOTES · BY HECAVEX · {sources.length} PUBLIC REFERENCES</p>
+      </div>
     </header>
     <div class="stat-grid" aria-label="Public knowledge base statistics">{stats.map(([name,count]) => <div class="stat"><strong>{count}</strong><span>{name}</span></div>)}</div>
     <p class="scope-note"><strong>Coverage:</strong> selected deep profiles, not an exhaustive actor directory. Actor dossiers are the editorial product; Knowledge records support them, and only procedure-backed links enter <a href="/relationships/">Relationships</a>. Review the <a href="/methodology/">methodology</a> and <a href="/about/">publication boundaries</a>.</p>
