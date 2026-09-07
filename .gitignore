@@ -2,6 +2,7 @@ node_modules/
 dist/
 .astro/
 .codex-tmp/
+.browser-check/
 .venv/
 .DS_Store
 *.log

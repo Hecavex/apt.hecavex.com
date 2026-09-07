@@ -65,7 +65,8 @@ const confidences = unique(relationships.map((relationship: any) => relationship
           <div class="relationship-evidence">
             <p>{relationship.evidence}</p>
             <p class="meta">Claim review: {relationship.claim_review.state}{relationship.claim_review.reviewed_at ? ` · ${relationship.claim_review.reviewed_at}` : ''} · version {relationship.claim_review.version}</p>
-            {relationship.claim_review.state !== 'not-recorded' && <p>{relationship.claim_review.rationale}</p>}
+            {(relationship.claim_review.state !== 'not-recorded' || relationship.source_locators.length > 0) && <p>{relationship.claim_review.rationale}</p>}
+            {relationship.claim_review.correction_note && <p>{relationship.claim_review.correction_note}</p>}
             {relationship.source_locators.length > 0 && <ul>{relationship.source_locators.map((locator: any) => <li><a href={`/sources/${locator.source}/`}>{locator.source}</a>: {locator.locator}</li>)}</ul>}
             {relationship.campaign_context && <p class="meta">Campaign context: <a href={relationship.campaign_context.url} data-knowledge-link>{relationship.campaign_context.name}</a></p>}
           </div>

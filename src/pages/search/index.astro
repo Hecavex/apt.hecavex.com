@@ -7,74 +7,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <form class="search-hero" id="search-form"><label class="sr-only" for="search-q">Search</label><input id="search-q" name="q" type="search" placeholder="Name, alias, MITRE ID or publisher" autofocus/><button>Search</button></form>
     <p class="meta" id="search-status" role="status">Enter a search term.</p>
     <div id="search-results" class="database-list"></div>
+    <button id="search-more" type="button" hidden>Load more results</button>
     <div class="empty" id="search-empty" hidden><h2>No results</h2><p>Try an alias, MITRE ID, campaign, technique or publisher.</p></div>
+    <p>Browse <a href="/actors/">actors</a>, <a href="/knowledge/">supporting records</a> or <a href="/relationships/">relationships</a>.</p>
+    <noscript><p>Search requires JavaScript. Use the catalogue links above to browse the public records.</p></noscript>
   </section>
-  <script>
-    const form = document.querySelector<HTMLFormElement>('#search-form')!;
-    const input = document.querySelector<HTMLInputElement>('#search-q')!;
-    const output = document.querySelector<HTMLElement>('#search-results')!;
-    const status = document.querySelector<HTMLElement>('#search-status')!;
-    const empty = document.querySelector<HTMLElement>('#search-empty')!;
-    let engine: any;
-    const secondaryPath = /^\/(campaigns|malware|tools|techniques|sources)\//;
-    const plainExcerpt = (value: string) => new DOMParser().parseFromString(value, 'text/html').body.textContent?.trim() ?? '';
-    const resultNode = (record: any) => {
-      const article = document.createElement('article');
-      article.className = 'db-row search-result-row';
-      const primary = document.createElement('div');
-      primary.className = 'db-cell';
-      const heading = document.createElement('h2');
-      const link = document.createElement('a');
-      link.href = record.url;
-      link.textContent = record.meta.title || 'Untitled';
-      if (secondaryPath.test(new URL(record.url, location.origin).pathname)) link.dataset.knowledgeLink = '';
-      heading.append(link);
-      const excerpt = document.createElement('p');
-      excerpt.textContent = plainExcerpt(record.excerpt || record.content || '');
-      primary.append(heading, excerpt);
-      const type = document.createElement('div');
-      type.className = 'db-cell';
-      const label = document.createElement('small');
-      label.textContent = 'Record type';
-      type.append(label, document.createTextNode(record.meta.type || 'Record'));
-      article.append(primary, type);
-      return article;
-    };
-    const run = async () => {
-      const query = input.value.trim().slice(0, 160);
-      const parameters = new URLSearchParams();
-      if (query) parameters.set('q', query);
-      history.replaceState(null, '', `${location.pathname}${parameters.size ? `?${parameters}` : ''}`);
-      output.replaceChildren();
-      empty.hidden = true;
-      if (!query) { status.textContent = 'Enter a search term.'; return; }
-      status.textContent = 'Searching…';
-      try {
-        // @ts-expect-error Pagefind creates this browser module after Astro builds the site.
-        engine ??= await import(/* @vite-ignore */ '/pagefind/pagefind.js');
-        await engine.init();
-        const search = await engine.search(query);
-        const data = await Promise.all(search.results.slice(0, 40).map((result: any) => result.data()));
-        const normalized = query.toLowerCase();
-        data.sort((left: any, right: any) => {
-          const rank = (record: any) => {
-            const title = String(record.meta.title || '').toLowerCase();
-            const url = String(record.url || '').toLowerCase();
-            if (title === normalized || url.split('/').filter(Boolean).at(-1) === normalized) return 0;
-            if (title.startsWith(normalized)) return 1;
-            return 2;
-          };
-          return rank(left) - rank(right);
-        });
-        status.textContent = `${search.results.length} ${search.results.length === 1 ? 'result' : 'results'}`;
-        empty.hidden = data.length !== 0;
-        output.replaceChildren(...data.slice(0, 30).map(resultNode));
-      } catch {
-        status.textContent = 'Search is available in the production build and preview.';
-      }
-    };
-    const query = new URLSearchParams(location.search).get('q');
-    if (query) { input.value = query; void run(); }
-    form.addEventListener('submit', (event) => { event.preventDefault(); void run(); });
-  </script>
+  <script is:inline type="module" src="/scripts/search.js"></script>
 </BaseLayout>

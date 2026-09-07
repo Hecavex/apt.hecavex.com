@@ -3,9 +3,9 @@ id: apt28
 name: APT28
 slug: apt28
 created_at: 2026-08-05
-modified_at: 2026-08-26
-version: 2.0.1
-change_reason: Reviewed against current 2025-2026 official reporting; no material analytic change was required.
+modified_at: 2026-09-07
+version: 2.1.0
+change_reason: Added six AI-assisted procedure source comparisons and separated observed activity from publication dates. Independent human review remains unrecorded.
 summary: A Russian military intelligence intrusion set associated with GRU Unit 26165 and persistent espionage against governments, defence, logistics, technology, identity systems and organisations supporting Ukraine.
 actor_types: [state-sponsored]
 status: active
@@ -278,6 +278,18 @@ vulnerabilities:
     notes: Akamai linked the sample to APT28-associated infrastructure; APT Notes does not elevate that to direct government attribution.
 technique_evidence:
   - technique: exploit-public-facing-application
+    source_locators:
+      - source: ncsc-apt28-dns-2026
+        locator: "NCSC, 7 April 2026 edition; TP-Link router exploitation, paragraphs 1-3; MITRE ATT&CK table, T1190 row."
+        basis: procedure-evidence
+        checked_at: "2026-09-07"
+    review:
+      version: "1.1.0"
+      reviewed_at: null
+      state: not-recorded
+      rationale: "T1190 follows the source's explicit router-exploitation mapping. CVE-2023-50224 remains likely, not confirmed. 2024-2026 is the reported campaign interval, not a dated event for every router."
+      correction_note: "AI-assisted source comparison on 2026-09-07; independent human claim review remains unrecorded."
+    editorial_note: "Source passage and mapping compared by an AI assistant on 2026-09-07. This is not an independent human review."
     campaign: apt28-dns-hijacking
     first_observed: "2024"
     last_observed: "2026"
@@ -285,6 +297,18 @@ technique_evidence:
     sources: [ncsc-apt28-dns-2026]
     notes: Exploitation of internet-facing routers to create operational infrastructure.
   - technique: adversary-in-the-middle
+    source_locators:
+      - source: ncsc-apt28-dns-2026
+        locator: "NCSC, 7 April 2026 edition; APT28 malicious DNS activity / Cluster one, paragraphs 1-3; MITRE ATT&CK table, T1557 row."
+        basis: procedure-evidence
+        checked_at: "2026-09-07"
+    review:
+      version: "1.1.0"
+      reviewed_at: null
+      state: not-recorded
+      rationale: "T1557 follows selective DNS redirection and attempted credential interception. Password and OAuth-token theft is the reported capability; success for every victim is not established. 2024-2026 is the campaign interval."
+      correction_note: "AI-assisted source comparison on 2026-09-07; independent human claim review remains unrecorded."
+    editorial_note: "Source passage and mapping compared by an AI assistant on 2026-09-07. This is not an independent human review."
     campaign: apt28-dns-hijacking
     first_observed: "2024"
     last_observed: "2026"
@@ -292,13 +316,37 @@ technique_evidence:
     sources: [ncsc-apt28-dns-2026, microsoft-soho-dns-2026]
     notes: Selective DNS resolution enabled interception of passwords and OAuth tokens.
   - technique: spearphishing-attachment
+    source_locators:
+      - source: zscaler-operation-neusploit
+        locator: "Zscaler ThreatLabz, 2 February 2026 edition; Introduction and Technical Analysis opening paragraphs; MITRE ATT&CK Framework table. English article text was retrieved on the publisher's /de/blogs/security-research/apt28-leverages-cve-2026-21509-operation-neusploit route."
+        basis: procedure-evidence
+        checked_at: "2026-09-07"
+    review:
+      version: "1.1.0"
+      reviewed_at: null
+      state: not-recorded
+      rationale: "Weaponised RTF lures support the attachment mapping. Attribution remains ThreatLabz's high-confidence assessment. January 2026 is the observed activity month; February is publication time, not a separately established last observation."
+      correction_note: "AI-assisted source comparison on 2026-09-07; independent human claim review remains unrecorded."
+    editorial_note: "Source passage and mapping compared by an AI assistant on 2026-09-07. This is not an independent human review."
     campaign: operation-neusploit
     first_observed: "2026-01"
-    last_observed: "2026-02"
+    last_observed: "2026-01"
     confidence: high
     sources: [zscaler-operation-neusploit]
     notes: Weaponised RTF documents exploited CVE-2026-21509.
   - technique: remote-email-collection
+    source_locators:
+      - source: cisa-aa25-141a
+        locator: "Joint CSA, April 2026 version 1.1; printed pages 8-9, Exfiltration; page 29, Table 13, T1114.002. Official co-author copy: https://media.defense.gov/2025/May/21/2003719846/-1/-1/0/CSA_RUSSIAN_GRU_TARGET_LOGISTICS.PDF#page=8"
+        basis: procedure-evidence
+        checked_at: "2026-09-07"
+    review:
+      version: "1.1.0"
+      reviewed_at: null
+      state: not-recorded
+      rationale: "EWS/IMAP collection and periodic EWS queries directly support T1114.002. 2022-2025 is the original reporting window, not exact per-mailbox observation dates. The April 2026 edition updates indicators; it does not establish new collection in 2026."
+      correction_note: "AI-assisted source comparison on 2026-09-07; independent human claim review remains unrecorded."
+    editorial_note: "Source passage and mapping compared by an AI assistant on 2026-09-07. This is not an independent human review."
     campaign: western-logistics-targeting
     first_observed: "2022"
     last_observed: "2025"
@@ -306,13 +354,37 @@ technique_evidence:
     sources: [cisa-aa25-141a]
     notes: EWS and IMAP supported periodic, long-term collection.
   - technique: steal-application-access-token
+    source_locators:
+      - source: ncsc-authentic-antics-2025
+        locator: "NCSC AUTHENTIC ANTICS Malware Analysis Report, version 1, 6 May 2025; printed page 3 Introduction and pages 9-12 Outlook Credential and Token Stealing / Token Retrieval and Validation."
+        basis: procedure-evidence
+        checked_at: "2026-09-07"
+    review:
+      version: "1.1.0"
+      reviewed_at: null
+      state: not-recorded
+      rationale: "Intercepted authorization codes redeemed for access and refresh tokens support T1528. The report explicitly places observed use in 2023. Its 2025 publication date does not extend observed use through 2025."
+      correction_note: "AI-assisted source comparison on 2026-09-07; independent human claim review remains unrecorded."
+    editorial_note: "Source passage and mapping compared by an AI assistant on 2026-09-07. This is not an independent human review."
     campaign: outlook-identity-collection
     first_observed: "2023"
-    last_observed: "2025"
+    last_observed: "2023"
     confidence: high
     sources: [ncsc-authentic-antics-2025]
     notes: AUTHENTIC ANTICS intercepted OAuth authorization flows from within Outlook.
   - technique: video-capture
+    source_locators:
+      - source: cisa-aa25-141a
+        locator: "Joint CSA, April 2026 version 1.1; printed pages 9-10, Connections to Targeting of IP Cameras; page 29, Table 13, T1125. Official co-author copy: https://media.defense.gov/2025/May/21/2003719846/-1/-1/0/CSA_RUSSIAN_GRU_TARGET_LOGISTICS.PDF#page=9"
+        basis: procedure-evidence
+        checked_at: "2026-09-07"
+    review:
+      version: "1.1.0"
+      reviewed_at: null
+      state: not-recorded
+      rationale: "T1125 is the source's mapping for attempted access to camera feeds. March 2022 is the stated earliest targeting; 2025 is the original report boundary, not a last confirmed camera access. Targeting counts do not equal successful compromises."
+      correction_note: "AI-assisted source comparison on 2026-09-07; independent human claim review remains unrecorded."
+    editorial_note: "Source passage and mapping compared by an AI assistant on 2026-09-07. This is not an independent human review."
     campaign: western-logistics-targeting
     first_observed: "2022"
     last_observed: "2025"
@@ -365,7 +437,7 @@ external_identifiers:
   other: [GRU Unit 26165]
 related_research: []
 sources: [uk-gru-profile-2026, ncsc-apt28-dns-2026, microsoft-soho-dns-2026, doj-operation-masquerade-2026, zscaler-operation-neusploit, akamai-cve-2026-21513, gtig-promptsteal-2025, ncsc-authentic-antics-2025, eset-operation-roundpress-2025, cisa-aa25-141a, volexity-nearest-neighbor-2024, microsoft-gooseegg-2024, microsoft-cve-2023-23397, doj-soho-botnet-2024, mandiant-apt44-correction-2024, ncsc-jaguar-tooth-2023, doj-gru-indictment-2018, mitre-g0007]
-updates: [apt28-profile-created, apt28-major-review-2026, apt28-reviewed-no-change-2026]
+updates: [apt28-profile-created, apt28-major-review-2026, apt28-reviewed-no-change-2026, apt28-procedure-provenance-2026]
 featured: true
 draft: false
 ---
