@@ -9,7 +9,7 @@
   "packageManager": "npm@10.9.2",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run validate && npm run build:og && astro check && astro build && pagefind --site dist",
+    "build": "npm run validate && npm run build:og && astro check && astro build && pagefind --site dist && node scripts/apply-csp.mjs",
     "build:og": "node scripts/generate-og.mjs",
     "preview": "astro preview",
     "check": "astro check",

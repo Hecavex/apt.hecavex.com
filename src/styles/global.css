@@ -2813,6 +2813,14 @@ tbody tr:hover {
   text-transform: uppercase;
 }
 
+.relationship-record footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.25rem;
+  overflow-wrap: anywhere;
+}
+
 .change-subscriptions {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

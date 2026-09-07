@@ -17,6 +17,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      release_digest: ${{ steps.release.outputs.digest }}
     timeout-minutes: 30
     env:
       PUBLIC_HECAVEX_ANALYTICS_TOKEN: ${{ vars.HECAVEX_ANALYTICS_TOKEN }}
@@ -44,6 +46,13 @@ jobs:
         run: npm run build
       - name: Audit production output
         run: npm run audit
+      - name: Install bounded browser smoke dependency
+        run: npm install --prefix .browser-check --no-save --package-lock=false playwright-core@1.62.1
+      - name: Test production search and CSP in Chrome
+        run: node scripts/smoke-release.mjs dist apt
+      - name: Record publication manifest
+        id: release
+        run: node scripts/release.mjs create dist apt
       - name: Verify configured analytics in production output
         if: github.event_name != 'pull_request'
         shell: bash
@@ -81,6 +90,20 @@ jobs:
       pages: write
       id-token: write
     steps:
+      - name: Check out release verifier
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+      - name: Verify live revision and artifact hashes
+        env:
+          EXPECTED_DIGEST: ${{ needs.build.outputs.release_digest }}
+        run: node scripts/release.mjs verify https://apt.hecavex.com/ "$EXPECTED_DIGEST" "$GITHUB_SHA"
+      - name: Install bounded browser smoke dependency
+        run: npm install --prefix .browser-check --no-save --package-lock=false playwright-core@1.62.1
+      - name: Verify live search interaction
+        run: node scripts/smoke-release.mjs https://apt.hecavex.com/ apt
