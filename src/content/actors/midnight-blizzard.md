@@ -27,6 +27,11 @@ parent_entities:
     notes: The NCSC and international partners assess APT29 is almost certainly part of the SVR.
 aliases:
   - name: APT29
+    source_refs:
+      - source: ncsc-apt29-cloud-2024
+        locator: "Find the literal name \"APT29\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC and international partners
     relationship: government-designation
     confidence: high
@@ -35,6 +40,11 @@ aliases:
     last_seen: "2024 advisory"
     notes: Canonical government name for the attribution statement used by this dossier.
   - name: The Dukes
+    source_refs:
+      - source: ncsc-apt29-cloud-2024
+        locator: "Find the literal name \"The Dukes\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC and international partners
     relationship: common-alias
     confidence: high
@@ -43,6 +53,11 @@ aliases:
     last_seen: "2024 advisory"
     notes: Retained for discovery of older reporting.
   - name: Cozy Bear
+    source_refs:
+      - source: ncsc-apt29-cloud-2024
+        locator: "Find the literal name \"Cozy Bear\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC, international partners and Microsoft
     relationship: common-alias
     confidence: high
@@ -51,6 +66,11 @@ aliases:
     last_seen: "2024 reporting"
     notes: Individual publishers may apply different historical cluster boundaries.
   - name: NOBELIUM
+    source_refs:
+      - source: microsoft-apt29-rdp-2024
+        locator: "Find the literal name \"NOBELIUM\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Microsoft Threat Intelligence
     relationship: historical-designation
     confidence: high
@@ -59,6 +79,11 @@ aliases:
     last_seen: "2023 naming transition"
     notes: Retained for search and historical tool reporting.
   - name: UNC2452
+    source_refs:
+      - source: microsoft-apt29-rdp-2024
+        locator: "Find the literal name \"UNC2452\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Microsoft Threat Intelligence
     relationship: vendor-tracking-cluster
     confidence: moderate

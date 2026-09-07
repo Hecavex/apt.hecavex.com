@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250519143912/https://www.welivesecur
 source_type: vendor-research
 language: en
 notes: Reporting on continued European government, diplomatic and maritime targeting associated with Mustang Panda.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:55.620Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for current-status and sector context. It is not used to collapse every China-aligned cluster in the report into Mustang Panda.

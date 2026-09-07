@@ -5,6 +5,9 @@ slug: forced-authentication
 summary: Coercion of a target system into authenticating to actor-controlled infrastructure, exposing reusable or relayable material.
 mitre_id: T1187
 tactic: Credential Access
+tactics: ["Credential Access"]
+tactic_ids: ["TA0006"]
+framework_version: "19.2"
 sources: [microsoft-cve-2023-23397, cisa-aa25-141a]
 draft: false
 ---

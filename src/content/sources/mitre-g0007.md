@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20190416215009/https://attack.mitre.or
 source_type: nonprofit
 language: en
 notes: ATT&CK group page and relationship catalogue. Publication date records ATT&CK's displayed Created date; the live page was last modified 12 May 2026 when reviewed.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:59.220Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 MITRE ATT&CK group record used for names, external identifiers and technique relationships.

@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20240521051911/https://cloud.google.co
 source_type: vendor-research
 language: en
 notes: Includes an April 2024 correction reassigning overlapping activity from APT28 to APT44 after incident reanalysis.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:58.372Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used as a documented example of why shared victim access does not establish exact actor equivalence.

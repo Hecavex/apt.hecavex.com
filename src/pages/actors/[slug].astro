@@ -111,7 +111,7 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
                   {d.aliases.map((alias: any) => (
                     <tr>
                       <td>{alias.name}</td>
-                      <td>{alias.source}</td>
+                      <td>{alias.source}{alias.source_refs.length ? alias.source_refs.map((ref: any) => <small><a href={`/sources/${maps.sources.get(ref.source)?.data.slug ?? ref.source}/`} data-knowledge-link>{ref.source}</a> · {ref.locator} · {label(ref.basis)}</small>) : <small>Claim-specific source locator not recorded. The legacy source label is not a verified identity assertion.</small>}</td>
                       <td>{label(alias.relationship)}</td>
                       <td><span class={`badge ${alias.confidence}`}>{label(alias.confidence)}</span></td>
                       <td>{alias.scope}{alias.notes ? ` ${alias.notes}` : ''}</td>
@@ -120,7 +120,7 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
                 </tbody>
               </table>
             </div>
-            {d.subclusters.length > 0 && <div class="subcluster-note"><span class="eyebrow">Related sub-cluster</span>{d.subclusters.map((cluster: any) => <p><strong>{cluster.name}</strong> · {cluster.source} · {cluster.notes}</p>)}</div>}
+            {d.subclusters.length > 0 && <div class="subcluster-note"><span class="eyebrow">Related sub-cluster</span>{d.subclusters.map((cluster: any) => <div><p><strong>{cluster.name}</strong> · {cluster.source} · {cluster.notes}</p>{cluster.source_refs.length ? cluster.source_refs.map((ref: any) => <p><a href={`/sources/${maps.sources.get(ref.source)?.data.slug ?? ref.source}/`} data-knowledge-link>{ref.source}</a> · {ref.locator} · {label(ref.basis)}</p>) : <p>Claim-specific source locator not recorded. This is a source-scoped relationship, not an identical-identity assertion.</p>}</div>)}</div>}
           </section>
         )}
 

@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20230110215209/https://attack.mitre.or
 source_type: nonprofit
 language: en
 notes: Maintained ATT&CK group record, last modified 25 April 2025 when accessed. It explicitly warns that Saint Bear is distinct from Ember Bear.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:59.252Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for the ATT&CK identifier, alias mapping and technique context. It is not treated as independent proof of every underlying attribution claim.

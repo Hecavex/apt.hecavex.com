@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250702184700/https://www.welivesecur
 source_type: vendor-research
 language: en
 notes: Technical campaign research documenting high-volume Ukrainian targeting, spearphishing and execution procedures during 2024.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:54.057Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for campaign-scoped procedure evidence. ESET's statement that the observed 2024 focus was Ukraine is retained rather than expanded into unsupported current EU-wide victimology.

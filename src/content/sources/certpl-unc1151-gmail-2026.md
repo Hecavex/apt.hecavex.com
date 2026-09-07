@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260614075413/https://cert.pl/en/post
 source_type: government
 language: en
 notes: Current Polish campaign reporting documenting credential and two-factor-code phishing against public-life targets.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:49.429Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for current status, Polish targeting and spearphishing procedure evidence.

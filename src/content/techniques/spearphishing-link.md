@@ -5,6 +5,9 @@ slug: spearphishing-link
 summary: Targeted email containing a link to credential-harvesting, redirector or malware-delivery infrastructure.
 mitre_id: T1566.002
 tactic: Initial Access
+tactics: ["Initial Access"]
+tactic_ids: ["TA0001"]
+framework_version: "19.2"
 sources: [cisa-aa25-141a]
 draft: false
 ---

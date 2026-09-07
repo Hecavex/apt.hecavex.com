@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260714080509/https://www.consilium.e
 source_type: government
 language: en
 notes: EU sanctions statement covering CARR, Z-Pentest, GRU Unit 29155 support infrastructure and cyber activity against EU member states and partners.
-link_status: unknown
-link_checked_at: 2026-09-01
+link_status: "unknown"
+link_checked_at: "2026-09-07T09:55:52.479Z"
 http_status: 403
 draft: false
+link_check_note: "HTTP 403 or request failure is inconclusive. Existing citation retained. This is a retrieval check, not a truth or availability verdict."
 ---
 
 Primary EU statement. It supports a link between CARR and the GRU but does not establish that every public CARR claim was directed or executed by a specific GRU unit.

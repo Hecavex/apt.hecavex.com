@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20230711182955/https://www.microsoft.c
 source_type: vendor-research
 language: en
 notes: Hybrid cybercrime and espionage assessment documenting European and North American targeting and exploitation of CVE-2023-36884.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:59.543Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 The source supports the hybrid operating model but does not establish formal Russian state control.

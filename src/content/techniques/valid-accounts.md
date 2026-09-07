@@ -4,7 +4,10 @@ name: Valid Accounts
 slug: valid-accounts
 summary: Use of legitimate credentials to access victim services, networks or devices.
 mitre_id: T1078
-tactic: Defense Evasion
+tactic: Initial Access / Persistence / Privilege Escalation / Stealth
+tactics: ["Initial Access","Persistence","Privilege Escalation","Stealth"]
+tactic_ids: ["TA0001","TA0003","TA0004","TA0005"]
+framework_version: "19.2"
 sources: [volexity-nearest-neighbor-2024, cisa-aa25-141a, microsoft-badpilot-2025, microsoft-prestige-2022]
 draft: false
 ---

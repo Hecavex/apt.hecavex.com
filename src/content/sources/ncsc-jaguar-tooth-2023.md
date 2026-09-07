@@ -11,10 +11,14 @@ url: https://www.ncsc.gov.uk/news/apt28-exploits-known-vulnerability-to-carry-ou
 source_type: government
 language: en
 notes: Government advisory covering CVE-2017-6742 and Jaguar Tooth deployment.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:00.856Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+archive_checked_at: "2026-09-07T10:06:12.410Z"
+archive_check_note: "Availability API identified a post-publication capture and its archive response returned HTTP 200. Source content equivalence still requires editorial review."
+archived_url: "https://web.archive.org/web/20260720154004/https://www.ncsc.gov.uk/news/apt28-exploits-known-vulnerability-to-carry-out-reconnaissance-and-deploy-malware-on-cisco-routers"
 ---
 
 Primary source for the Cisco router exploitation and Jaguar Tooth relationship.

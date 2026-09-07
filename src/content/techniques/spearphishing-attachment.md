@@ -5,6 +5,9 @@ slug: spearphishing-attachment
 summary: Delivery of a targeted malicious file through email to obtain execution or exploit a client application.
 mitre_id: T1566.001
 tactic: Initial Access
+tactics: ["Initial Access"]
+tactic_ids: ["TA0001"]
+framework_version: "19.2"
 sources: [zscaler-operation-neusploit, eset-operation-roundpress-2025, cisa-aa25-141a]
 draft: false
 ---

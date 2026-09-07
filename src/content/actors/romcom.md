@@ -20,6 +20,11 @@ mission: Conduct conventional cybercrime and targeted intelligence collection th
 current_assessment: TA829/RomCom is best described as a Russia-aligned hybrid actor. Microsoft and ESET document both financially motivated activity and espionage against Ukraine-aligned and European targets. Alignment with Russian interests is supported, but the public record does not establish formal state control or explain whether tasking, co-option or informal cooperation drives the espionage branch.
 aliases:
   - name: Storm-0978
+    source_refs:
+      - source: microsoft-storm0978-romcom-2023
+        locator: "Find the literal name \"Storm-0978\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: vendor-tracking-cluster
     confidence: high
@@ -28,6 +33,11 @@ aliases:
     last_seen: "2024"
     notes: Microsoft nomenclature is retained as a source-scoped mapping.
   - name: Void Rabisu
+    source_refs:
+      - source: microsoft-storm0978-romcom-2023
+        locator: "Find the literal name \"Void Rabisu\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: vendor-tracking-cluster
     confidence: high
@@ -36,6 +46,11 @@ aliases:
     last_seen: "2025"
     notes: Unrelated to the separately catalogued actor Void Blizzard.
   - name: Tropical Scorpius
+    source_refs:
+      - source: eset-romcom-zero-days-2024
+        locator: "Find the literal name \"Tropical Scorpius\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: possible-overlap
     confidence: moderate

@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250207073618/https://www.justice.gov
 source_type: legal
 language: en
 notes: Legal attribution of charged activity to GRU Unit 74455, including NotPetya, Ukrainian power attacks and Olympic Destroyer.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:50.920Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 The charges are allegations unless adjudicated. The record is used for the United States government's attribution and the operations described in the charging announcement.

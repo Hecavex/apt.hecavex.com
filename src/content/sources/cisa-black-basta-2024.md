@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20240513205227/https://www.cisa.gov/si
 source_type: government
 language: en
 notes: Joint advisory documenting more than 500 affected organisations across North America, Europe and Australia and the Black Basta affiliate model and procedures.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:50.225Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for European reach and relationship evidence. The service, affiliates and initial-access partners remain separate attribution layers.

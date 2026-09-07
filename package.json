@@ -17,9 +17,11 @@
     "audit:data": "node scripts/audit-data.mjs",
     "audit:performance": "node scripts/audit-performance.mjs",
     "check:sources": "node scripts/check-source-links.mjs",
+    "check:archives": "node scripts/check-source-archives.mjs",
+    "check:alias-locators": "node scripts/check-alias-locators.mjs",
     "lint": "node scripts/lint.mjs",
     "test:content": "node scripts/test-content-validation.mjs",
-    "validate": "node scripts/validate-content.mjs",
+    "validate": "node scripts/sync-attack-framework.mjs && node scripts/validate-content.mjs",
     "verify": "npm run lint && npm run test:content && npm run build && npm run audit"
   },
   "dependencies": {

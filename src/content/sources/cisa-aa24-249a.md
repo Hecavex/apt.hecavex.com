@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20240905194256/https://www.cisa.gov/si
 source_type: government
 language: en
 notes: Joint TLP:CLEAR advisory describing Unit 29155 attribution, targeting, tooling, exploited vulnerabilities, TTPs and indicators.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:49.363Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 The profile preserves the advisory's distinction between observed exploitation and exploit code merely obtained by the actor.

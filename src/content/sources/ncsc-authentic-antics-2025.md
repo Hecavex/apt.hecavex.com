@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260315192122/https://www.ncsc.gov.uk
 source_type: government
 language: en
 notes: Detailed malware analysis covering Outlook execution, credential and OAuth token theft, defence evasion and exfiltration.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:04.719Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Primary technical source for AUTHENTIC ANTICS.

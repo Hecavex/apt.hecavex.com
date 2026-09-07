@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260408021114/https://www.microsoft.c
 source_type: vendor-research
 language: en
 notes: Microsoft telemetry and cluster analysis covering Forest Blizzard and Storm-2754.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:58.560Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Vendor telemetry supporting the scale, targeting and sub-cluster assessment for recent DNS hijacking operations.

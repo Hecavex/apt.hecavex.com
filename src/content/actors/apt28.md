@@ -27,6 +27,11 @@ parent_entities:
     notes: The NCSC assesses APT28 is almost certainly the GRU 85th GTsSS, Military Unit 26165.
 aliases:
   - name: Fancy Bear
+    source_refs:
+      - source: ncsc-apt28-dns-2026
+        locator: "Find the literal name \"Fancy Bear\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Industry and government reporting
     relationship: common-alias
     confidence: high
@@ -35,6 +40,11 @@ aliases:
     last_seen: "2026"
     notes: Widely used, but individual publishers may apply different cluster boundaries.
   - name: Forest Blizzard
+    source_refs:
+      - source: ncsc-apt28-dns-2026
+        locator: "Find the literal name \"Forest Blizzard\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: vendor-tracking-cluster
     confidence: high
@@ -43,6 +53,11 @@ aliases:
     last_seen: "2026"
     notes: Previously tracked by Microsoft as STRONTIUM.
   - name: Sednit
+    source_refs:
+      - source: ncsc-apt28-dns-2026
+        locator: "Find the literal name \"Sednit\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: ESET
     relationship: vendor-tracking-cluster
     confidence: high
@@ -51,6 +66,11 @@ aliases:
     last_seen: "2025"
     notes: Operation RoundPress is linked to Sednit with medium, not high, confidence.
   - name: Sofacy
+    source_refs:
+      - source: ncsc-apt28-dns-2026
+        locator: "Find the literal name \"Sofacy\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Industry reporting
     relationship: historical-designation
     confidence: high
@@ -59,6 +79,11 @@ aliases:
     last_seen: "2026"
     notes: Ambiguous usage requires source context.
   - name: STRONTIUM
+    source_refs:
+      - source: ncsc-apt28-dns-2026
+        locator: "Find the literal name \"STRONTIUM\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: historical-designation
     confidence: high
@@ -67,6 +92,11 @@ aliases:
     last_seen: "2023"
     notes: Retained for searching older reporting.
   - name: Pawn Storm
+    source_refs:
+      - source: doj-operation-masquerade-2026
+        locator: "Find the literal name \"Pawn Storm\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Trend Micro
     relationship: vendor-tracking-cluster
     confidence: high
@@ -75,6 +105,11 @@ aliases:
     last_seen: "2026"
     notes: Do not assume exact campaign boundaries match other vendors.
   - name: FROZENLAKE
+    source_refs:
+      - source: gtig-promptsteal-2025
+        locator: "Find the literal name \"FROZENLAKE\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Google Threat Intelligence Group
     relationship: vendor-tracking-cluster
     confidence: high
@@ -83,6 +118,11 @@ aliases:
     last_seen: "2025"
     notes: Used by GTIG in reporting on PROMPTSTEAL.
   - name: BlueDelta
+    source_refs:
+      - source: cisa-aa25-141a
+        locator: "Find the literal name \"BlueDelta\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Recorded Future
     relationship: vendor-tracking-cluster
     confidence: high
@@ -91,6 +131,11 @@ aliases:
     last_seen: "2025"
     notes: Recorded as an overlapping industry cluster.
   - name: GruesomeLarch
+    source_refs:
+      - source: volexity-nearest-neighbor-2024
+        locator: "Find the literal name \"GruesomeLarch\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Volexity
     relationship: vendor-tracking-cluster
     confidence: high
@@ -100,6 +145,11 @@ aliases:
     notes: High-confidence attribution within Volexity's investigated incident.
 subclusters:
   - name: Storm-2754
+    source_refs:
+      - source: microsoft-soho-dns-2026
+        locator: "Find the literal name \"Storm-2754\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: subgroup
     confidence: high

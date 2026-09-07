@@ -33,6 +33,19 @@ const lifecycleFields = {
 };
 
 const relatedResearch = z.array(z.object({ title: z.string(), url: z.url() })).default([]);
+const claimSources = z.array(z.object({
+  source: ref,
+  locator: z.string().min(1),
+  basis: z.enum(['explicit-statement', 'source-mentions-name', 'procedure-evidence']),
+  checked_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
+})).default([]);
+const claimReview = z.object({
+  version: semanticVersion,
+  reviewed_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable(),
+  state: z.enum(['not-recorded', 'reviewed', 'corrected', 'withdrawn']),
+  rationale: z.string().min(1),
+  correction_note: z.string().default('')
+}).default({ version: '1.0.0', reviewed_at: null, state: 'not-recorded', rationale: 'The source dossier predates claim-level review tracking. No independent claim review date is recorded.', correction_note: '' });
 const base = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -59,6 +72,7 @@ const actors = defineCollection({
     aliases: z.array(z.object({
       name: z.string(),
       source: z.string(),
+      source_refs: claimSources,
       relationship: z.enum(aliasRelationships),
       confidence,
       scope: z.string().default(''),
@@ -77,6 +91,7 @@ const actors = defineCollection({
     subclusters: z.array(z.object({
       name: z.string(),
       source: z.string(),
+      source_refs: claimSources,
       relationship: z.enum(aliasRelationships),
       confidence,
       notes: z.string().default('')
@@ -135,6 +150,8 @@ const actors = defineCollection({
       confidence,
       sources: z.array(ref).min(1),
       notes: z.string().min(1),
+      source_locators: claimSources,
+      review: claimReview,
       editorial_note: z.string().default(
         'Derived from explicit procedure evidence in the actor dossier; broader catalogue mappings are not included.'
       )
@@ -202,7 +219,10 @@ const techniques = defineCollection({
   loader: glob({ base: './src/content/techniques', pattern: '**/*.{md,mdx}' }),
   schema: base.extend({
     mitre_id: z.string().regex(/^T\d{4}(?:\.\d{3})?$/),
-    tactic: z.string(),
+    tactic: z.string(), // Compatibility display field, validated against tactics.
+    tactics: z.array(z.string()).min(1),
+    tactic_ids: z.array(z.string().regex(/^TA\d{4}$/)).min(1),
+    framework_version: z.literal('19.2'),
     sources: z.array(ref).min(1)
   })
 });
@@ -234,6 +254,9 @@ const sources = defineCollection({
     notes: z.string().default(''),
     link_status: z.enum(linkStatuses).default('unknown'),
     link_checked_at: z.coerce.date().optional(),
+    link_check_note: z.string().default(''),
+    archive_checked_at: z.coerce.date().optional(),
+    archive_check_note: z.string().default(''),
     http_status: z.number().int().min(100).max(599).optional(),
     final_url: z.url().optional()
   })

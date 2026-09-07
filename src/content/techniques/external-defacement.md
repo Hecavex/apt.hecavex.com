@@ -5,6 +5,9 @@ slug: external-defacement
 summary: Modification of externally visible content to deliver a message, damage trust or amplify the perceived effect of an intrusion.
 mitre_id: T1491.002
 tactic: Impact
+tactics: ["Impact"]
+tactic_ids: ["TA0040"]
+framework_version: "19.2"
 sources: [cisa-aa24-249a, doj-unit-29155-2024, mitre-g1003]
 draft: false
 ---

@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260129145546/https://www.aivd.nl/doc
 source_type: government
 language: en
 notes: Permanent AIVD publication page for the TLP:CLEAR joint intelligence-service advisory describing Laundry Bear attribution, victimology, cloud collection and pass-the-cookie activity.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:49.325Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used as the principal government assessment for Laundry Bear and as corroboration of the Void Blizzard overlap.

@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="APT Notes metodika" description="Kaip skaityti APT Notes šaltinius, veikėjų pavadinimus, pasitikėjimą, ATT&CK metaduomenis ir Baltijos šalių kontekstą.">
+  <section class="shell prose">
+    <header class="page-head"><div><p class="eyebrow">LT / metodikos santrauka</p><h1>Kaip vertinti įrašą</h1><p class="lead">Nuoroda yra tik pradžia. Svarbu, ką šaltinis iš tikrųjų teigia ir kokių išvadų jis nepagrindžia.</p></div></header>
+    <h2>Šaltinis, teiginys ir vertinimas</h2><p>"Reported" reiškia, kad teiginį pateikė nurodytas šaltinis. "Assessed" žymi analitinį vertinimą. "Inferred" žymi išvadą iš netiesioginių duomenų. Tai nėra tarpusavyje pakeičiamos būsenos. Pasitikėjimas teiginiu nėra atakos tikimybė ar gynybos aprėpties procentas.</p>
+    <h2>Pavadinimai nėra tapatumo įrodymas</h2><p>Skirtingų tiekėjų grupių ribos gali tik iš dalies sutapti. Istorinis pavadinimas, pogrupis ir bendras sinonimas turi skirtingą reikšmę. Jei konkreti aliaso šaltinio vieta neįrašyta, katalogas tai nurodo. Tokį ryšį prieš pernaudojant būtina patikrinti.</p>
+    <h2>ATT&amp;CK ir procedūrų įrodymai</h2><p>Technikų metaduomenys susieti su tiksliai fiksuota Enterprise ATT&amp;CK 19.2 versija. Viena technika gali priklausyti kelioms taktikoms. Tai bendroji sistemos klasifikacija, ne įrodymas, kad konkretaus incidento metu pademonstruotos visos tos taktikos. Ryšių puslapyje skelbiami tik dosjė aprašyti procedūrų įrodymai.</p>
+    <h2>Laikas ir pataisymai</h2><p>Šaltinio paskelbimo data, įrašo versija, techninis leidimas ir atskiro teiginio peržiūra skiriasi. Senas įrašas neįgyja naujos analitinės peržiūros vien perkompiliavus svetainę. Jei individuali peržiūra neregistruota, jos data paliekama nežinoma. Pataisymai turi išsaugoti priežastį ir ankstesnio teiginio atsekamumą.</p>
+    <h2>Ką daryti praktiškai</h2><p>Patikrinkite šaltinio apimtį, laikotarpį, aukų kontekstą ir alternatyvius paaiškinimus. Tik tada lyginkite aprašytą procedūrą su savo telemetrija. Įtraukimas į katalogą nėra nurodymas blokuoti ar priskirti incidentą veikėjui.</p>
+    <p><a href="/methodology/" lang="en">Visa kanoninė metodika (EN)</a> · <a href="/lt/">Lietuviška apžvalga</a> · <a href="/api/index.json">Duomenų katalogas</a></p>
+  </section>
+</BaseLayout>

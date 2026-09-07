@@ -11,10 +11,14 @@ url: https://cloud.google.com/blog/topics/threat-intelligence/threats-to-defense
 source_type: vendor-research
 language: en
 notes: Current reporting on APT44 attempts to collect messaging data and target battlefield-management and defence-related technology.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:00.910Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+archive_checked_at: "2026-09-07T10:05:46.959Z"
+archive_check_note: "Availability API identified a post-publication capture and its archive response returned HTTP 200. Source content equivalence still requires editorial review."
+archived_url: "https://web.archive.org/web/20260815181537/https://cloud.google.com/blog/topics/threat-intelligence/threats-to-defense-industrial-base"
 ---
 
 Used to bound the current 2026 threat picture without generalising the observations to every APT44 operation.

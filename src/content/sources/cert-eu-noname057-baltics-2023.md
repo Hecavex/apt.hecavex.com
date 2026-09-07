@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20240227022144/https://cert.europa.eu/
 source_type: government
 language: en
 notes: European institutional brief recording a NoName057(16) DDoS campaign against Lithuanian airports and a separate claimed attack against Latvia's National Defence Academy.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:49.710Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 CERT-EU describes the Lithuanian airport activity as a launched DDoS campaign and separately preserves the Latvia event as an actor claim. The two evidence statements are not treated as equivalent levels of confirmation.

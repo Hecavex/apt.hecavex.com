@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20231207121737/https://www.ncsc.gov.uk
 source_type: government
 language: en
 notes: Multinational attribution and procedure-level advisory for Star Blizzard targeting in the UK, NATO countries and neighbouring states.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:00.819Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Primary government source for attribution to FSB Centre 18 and the actor's spear-phishing, session-cookie theft and mailbox collection procedures.

@@ -1,7 +1,15 @@
 ---
 const path = Astro.url.pathname;
+const lithuanian = path.startsWith('/lt/');
 
-const productNavigation = [
+const productNavigation = lithuanian ? [
+  { name: 'Apžvalga', href: '/lt/' },
+  { name: 'Veikėjai (EN)', href: '/actors/' },
+  { name: 'Žinynas (EN)', href: '/knowledge/' },
+  { name: 'Ryšiai (EN)', href: '/relationships/' },
+  { name: 'Pakeitimai (EN)', href: '/changes/' },
+  { name: 'Metodika', href: '/lt/metodika/' }
+] : [
   { name: 'Overview', href: '/' },
   { name: 'Actors', href: '/actors/' },
   { name: 'Knowledge', href: '/knowledge/' },
@@ -58,6 +66,7 @@ const active = (href: string) => {
             <a href={item.href} aria-current={active(item.href) ? 'page' : undefined}>{item.name}</a>
           ))}
           <a href="/search/">Search</a>
+          <a href={lithuanian ? '/' : '/lt/'} hreflang={lithuanian ? 'en' : 'lt'}>{lithuanian ? 'English' : 'Lietuviškai'}</a>
         </nav>
         <nav class="mobile-portfolio-navigation" aria-label="HECAVEX projects">
           <span class="navigation-label">HECAVEX network</span>
@@ -80,6 +89,7 @@ const active = (href: string) => {
       ))}
     </nav>
     <form class="header-search" action="/search/" role="search">
+      <a href={lithuanian ? '/' : '/lt/'} hreflang={lithuanian ? 'en' : 'lt'} aria-label={lithuanian ? 'English edition' : 'Lietuviška apžvalga'}>{lithuanian ? 'EN' : 'LT'}</a>
       <label class="sr-only" for="global-q">Search APT Notes</label>
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
       <input id="global-q" name="q" type="search" placeholder="Search" autocomplete="off" />

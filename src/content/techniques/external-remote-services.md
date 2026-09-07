@@ -4,7 +4,10 @@ name: External Remote Services
 slug: external-remote-services
 summary: Use of externally reachable management, remote-access or tunnelling services to enter or maintain access to victim systems.
 mitre_id: T1133
-tactic: Persistence and Initial Access
+tactic: Initial Access / Persistence
+tactics: ["Initial Access","Persistence"]
+tactic_ids: ["TA0001","TA0003"]
+framework_version: "19.2"
 sources: [microsoft-badpilot-2025, ncsc-cyclops-blink-2022]
 draft: false
 ---

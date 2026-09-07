@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250524031440/https://cert.europa.eu/
 source_type: government
 language: en
 notes: European current-activity context for Black Basta social-engineering and ransomware operations.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:49.653Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used to bound continued public reporting through March 2025; it does not establish uninterrupted 2026 continuity.

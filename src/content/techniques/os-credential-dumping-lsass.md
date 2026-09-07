@@ -5,6 +5,9 @@ slug: os-credential-dumping-lsass
 summary: Access to LSASS process memory to recover credentials that can support lateral movement and persistence.
 mitre_id: T1003.001
 tactic: Credential Access
+tactics: ["Credential Access"]
+tactic_ids: ["TA0006"]
+framework_version: "19.2"
 sources: [microsoft-badpilot-2025]
 draft: false
 ---

@@ -360,6 +360,14 @@ for (const record of recordsByCollection.get('actors') ?? []) {
 
   const aliases = (data.aliases ?? []).map((alias) => String(alias.name).toLowerCase());
   if (new Set(aliases).size !== aliases.length) errors.push(`${describe(record)}: duplicate alias name`);
+  for (const alias of [...(data.aliases ?? []), ...(data.subclusters ?? [])]) {
+    for (const citation of alias.source_refs ?? []) {
+      checkTypedReference(record, citation.source, 'sources', 'alias source');
+      if (!String(citation.locator ?? '').trim()) errors.push(`${describe(record)}: alias locator is empty`);
+      if (!(data.sources ?? []).includes(citation.source)) errors.push(`${describe(record)}: alias locator must refer to a dossier source`);
+      parseDate(record, citation.checked_at, 'alias locator checked_at', { required: true });
+    }
+  }
 
   for (const statement of data.attribution ?? []) {
     checkTypedReference(record, statement.source, 'sources', 'attribution source');
@@ -458,6 +466,15 @@ for (const actor of recordsByCollection.get('actors') ?? []) {
   }
 
   for (const [index, evidence] of evidenceRows.entries()) {
+    for (const locator of evidence.source_locators ?? []) {
+      checkTypedReference(actor, locator.source, 'sources', 'procedure locator source');
+      if (!(evidence.sources ?? []).includes(locator.source)) errors.push(`${describe(actor)}: procedure locator must refer to its supporting source`);
+      if (!String(locator.locator ?? '').trim()) errors.push(`${describe(actor)}: procedure locator is empty`);
+      parseDate(actor, locator.checked_at, 'procedure locator checked_at', { required: true });
+    }
+    if (evidence.review && evidence.review.state !== 'not-recorded' && (!evidence.review.reviewed_at || !String(evidence.review.rationale ?? '').trim())) errors.push(`${describe(actor)}: claim review needs date and rationale`);
+    if (evidence.review?.state === 'not-recorded' && evidence.review.reviewed_at) errors.push(`${describe(actor)}: unrecorded claim review must not invent a review date`);
+    if (['corrected', 'withdrawn'].includes(evidence.review?.state) && !String(evidence.review.correction_note ?? '').trim()) errors.push(`${describe(actor)}: corrected or withdrawn claim needs a correction note`);
     const label = `technique_evidence[${index}]`;
     if (!String(evidence.notes ?? '').trim()) errors.push(`${describe(actor)}: ${label} has empty notes`);
     if (!allowed.confidence.has(evidence.confidence)) {

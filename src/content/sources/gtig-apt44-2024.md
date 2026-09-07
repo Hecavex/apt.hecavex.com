@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20240417233826/https://cloud.google.co
 source_type: vendor-research
 language: en
 notes: Primary vendor assessment defining APT44 and reviewing its espionage, destructive and influence operations.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:53.103Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used as the principal source for the APT44 analytic scope, mission evolution and alias relationships.

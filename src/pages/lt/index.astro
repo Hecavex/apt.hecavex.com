@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { loadKnowledge } from '../../utils/knowledge';
+const { balticRelevance } = await loadKnowledge();
+const summaries: Record<string, string> = {
+  'noname057-lithuania-airports-ddos-2023': 'CERT-EU aprašo 2023 m. vasario DDoS kampaniją, nukreiptą prieš Lietuvos oro uostus. Tai pranešimas apie taikinius, o ne patvirtinto veiklos sutrikimo masto įrodymas.',
+  'noname057-latvia-nda-claim-2023': 'CERT-EU užfiksavo NoName057(16) teiginį apie Latvijos nacionalinę gynybos akademiją. Poveikis nepatvirtintas. Veikėjo pareiškimas nėra patvirtintas incidentas.',
+  'unc1151-lithuania-targeting': 'Mandiant vertinime Lietuva įtraukta į UNC1151 ir su Ghostwriter siejamos įsilaužimų veiklos regioninių taikinių sąrašą. Aktualu institucijų, žiniasklaidos ir pilietinės visuomenės paskyrų apsaugai.',
+  'unc1151-latvia-targeting': 'Mandiant vertinime Latvija įtraukta į UNC1151 ir su Ghostwriter siejamos įsilaužimų veiklos regioninių taikinių sąrašą. Tai taikinių kontekstas, ne naujo incidento patvirtinimas.',
+  'unit29155-estonia-ministries-compromise-2020': 'ES Taryba nurodo neteisėtą prieigą prie Estijos ministerijų ir konfidencialių dokumentų vagystę 2020 m. Teiginys apribotas šaltinyje aprašytomis institucijomis ir pasekmėmis.',
+  'void-blizzard-estonia-advisory-connection-2026': 'Estijos užsienio žvalgybos tarnyba prisidėjo prie daugiašalio perspėjimo apie Laundry Bear Zimbra kampaniją. Dalyvavimas skelbiant perspėjimą neįrodo aukos Estijoje.'
+};
+---
+<BaseLayout title="APT Notes lietuviškai" description="Lietuviška įrodymais pagrįsto grėsmių veikėjų katalogo apžvalga, metodika ir Baltijos šalių kontekstas.">
+  <section class="shell">
+    <header class="page-head"><div><p class="eyebrow">LT / prieigos ir konteksto santrauka</p><h1>Grėsmių veikėjai. Šaltiniai ir ribos.</h1><p class="lead">APT Notes sieja viešai aprašytus veikėjus, kampanijas ir elgseną. Katalogas nėra realaus laiko perspėjimų sistema ir neapima visų grėsmių.</p></div></header>
+    <p class="callout">Tai lietuviška orientacinė santrauka, ne visų dosjė vertimas. Originalūs anglų kalbos įrašai, stabilūs identifikatoriai ir juose cituojami šaltiniai išlieka kanoniniai. Vertimo data nekeičia tyrimo ar analitiko peržiūros datos.</p>
+    <p><a href="/actors/" lang="en">Actor dossiers (EN)</a> · <a href="/relationships/" lang="en">Procedure evidence (EN)</a> · <a href="/lt/metodika/">Metodika ir terminai</a></p>
+    <h2>Baltijos šalių reikšmė</h2>
+    <p>Šie šeši įrašai išvesti tik iš jau paskelbtų šaltiniais pagrįstų dosjė. Europos kontekstas savaime neįrodo veiklos Lietuvoje, Latvijoje ar Estijoje.</p>
+    <div class="relationship-list">{balticRelevance.map(({ actor, evidence }) => <article class="relationship-record" id={evidence.id}><h3><a href={`/actors/${actor.data.slug}/#baltic-relevance`}>{actor.data.name} (EN)</a></h3><p>{summaries[evidence.id] ?? 'Šio įrašo lietuviška santrauka dar neparengta. Skaitykite kanoninį įrašą anglų kalba.'}</p><p class="meta">Įrašo ID: {evidence.id} · pirminė peržiūra: {evidence.reviewed_at} · laikotarpis: {evidence.first_observed} – {evidence.last_observed}</p><p><a href={`/api/actors/${actor.data.slug}.json`}>Kanoninis JSON (EN)</a></p></article>)}</div>
+  </section>
+</BaseLayout>

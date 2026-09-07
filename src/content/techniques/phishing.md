@@ -5,6 +5,9 @@ slug: phishing
 summary: Delivery of a malicious message intended to obtain access, execute content or capture authentication material.
 mitre_id: T1566
 tactic: Initial Access
+tactics: ["Initial Access"]
+tactic_ids: ["TA0001"]
+framework_version: "19.2"
 sources: [joint-laundry-bear-zimbra-2026]
 draft: false
 ---

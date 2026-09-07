@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260125002454/https://cert.europa.eu/
 source_type: government
 language: en
 notes: European institutional threat-intelligence brief recording claimed NoName057(16) DDoS activity against Danish political and Belgian telecommunications sites after Operation Eastwood.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:49.621Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 CERT-EU distinguishes the actor's claims from independently observed impact. A claim is not treated as proof of every named target, but the brief supports post-disruption activity and limited confirmed availability effects.

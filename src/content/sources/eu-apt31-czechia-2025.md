@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250528152402/https://www.consilium.e
 source_type: government
 language: en
 notes: EU statement of solidarity that restates Czechia's determination that APT31, associated with the Chinese Ministry of State Security, perpetrated the campaign against its Ministry of Foreign Affairs.
-link_status: unknown
-link_checked_at: 2026-09-01
+link_status: "unknown"
+link_checked_at: "2026-09-07T09:55:52.521Z"
 http_status: 403
 draft: false
+link_check_note: "HTTP 403 or request failure is inconclusive. Existing citation retained. This is a retrieval check, not a truth or availability verdict."
 ---
 
 This is diplomatic corroboration of Czechia's national attribution, not an independent technical attribution report.

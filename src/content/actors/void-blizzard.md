@@ -20,6 +20,11 @@ mission: Collect government, defence, logistics, technology, policy and Ukraine-
 current_assessment: Void Blizzard combines scalable identity abuse with a growing technical collection capability. Purchased credentials, stolen cookies, password spraying and legitimate cloud APIs remain central, while the 2025–2026 Zimbra campaign demonstrates access to a novel exploit and custom collection infrastructure.
 aliases:
   - name: Laundry Bear
+    source_refs:
+      - source: joint-laundry-bear-zimbra-2026
+        locator: "Find the literal name \"Laundry Bear\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: AIVD and MIVD
     relationship: government-designation
     confidence: high

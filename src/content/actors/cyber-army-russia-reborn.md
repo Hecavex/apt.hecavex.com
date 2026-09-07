@@ -20,6 +20,11 @@ mission: Disrupt and publicise attacks against Ukraine and supporting countries 
 current_assessment: CARR has a strong official record for sustained DDoS activity and a smaller set of industrial-control-system compromises with real but bounded physical effects. US and EU authorities describe the group as Russian government-aligned or GRU-linked. The current standalone status of the CARR identity is uncertain because 2026 EU reporting distinguishes Z-Pentest while identifying its leaders as CARR members.
 aliases:
   - name: CARR
+    source_refs:
+      - source: doj-carr-noname-actions-2025
+        locator: "Find the literal name \"CARR\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: US Department of the Treasury
     relationship: common-alias
     confidence: high
@@ -28,6 +33,11 @@ aliases:
     last_seen: "2026"
     notes: Primary short name used throughout the dossier.
   - name: Cyber Army of Russia
+    source_refs:
+      - source: doj-carr-noname-actions-2025
+        locator: "Find the literal name \"Cyber Army of Russia\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: US Department of the Treasury
     relationship: common-alias
     confidence: high
@@ -58,6 +68,11 @@ parent_entities:
     notes: The Council of the EU describes CARR as linked to the GRU. This is not expanded into a claim that every public target was selected by a named GRU unit.
 subclusters:
   - name: Z-Pentest
+    source_refs:
+      - source: doj-carr-noname-actions-2025
+        locator: "Find the literal name \"Z-Pentest\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Council of the European Union
     relationship: disputed-equivalence
     confidence: high

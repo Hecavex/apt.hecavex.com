@@ -64,6 +64,8 @@ export interface RelationshipRecord {
   created_at: string;
   modified_at: string;
   last_reviewed_at: string;
+  claim_review: { version: string; reviewed_at: string | null; state: string; rationale: string; correction_note: string };
+  source_locators: { source: string; locator: string; basis: string; checked_at: string }[];
   version: string;
   change_reason: string;
   editorial_note: string;
@@ -129,6 +131,8 @@ export const deriveRelationships = (
         created_at: iso(actor.data.created_at),
         modified_at: iso(actor.data.modified_at),
         last_reviewed_at: iso(actor.data.last_reviewed),
+        claim_review: evidence.review ?? { version: '1.0.0', reviewed_at: null, state: 'not-recorded', rationale: 'Legacy mapping has no independent claim review record.', correction_note: '' },
+        source_locators: evidence.source_locators ?? [],
         version: actor.data.version,
         change_reason: actor.data.change_reason,
         editorial_note: evidence.editorial_note,
@@ -179,6 +183,7 @@ export const buildReferenceUsage = (
       for (const source of entry.data.sources ?? []) addUsage(usage, source, { ...base, usage_kind: 'record source', anchor: 'sources' });
       for (const statement of entry.data.attribution ?? []) addUsage(usage, statement.source, { ...base, usage_kind: 'attribution statement', anchor: 'attribution-statements' });
       for (const parent of entry.data.parent_entities ?? []) addUsage(usage, parent.source, { ...base, usage_kind: 'parent-entity claim', anchor: 'naming-and-aliases' });
+      for (const alias of [...(entry.data.aliases ?? []), ...(entry.data.subclusters ?? [])]) for (const source of alias.source_refs ?? []) addUsage(usage, source.source, { ...base, usage_kind: `name locator: ${alias.name}`, anchor: 'naming-and-aliases' });
       for (const vulnerability of entry.data.vulnerabilities ?? []) addUsage(usage, vulnerability.source, { ...base, usage_kind: 'vulnerability evidence', anchor: 'vulnerabilities' });
       for (const evidence of entry.data.technique_evidence ?? []) for (const source of evidence.sources ?? []) addUsage(usage, source, { ...base, usage_kind: 'procedure evidence', anchor: 'techniques' });
       for (const event of entry.data.operational_timeline ?? []) for (const source of event.sources ?? []) addUsage(usage, source, { ...base, usage_kind: 'timeline evidence', anchor: 'operational-timeline' });

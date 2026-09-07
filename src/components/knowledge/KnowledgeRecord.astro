@@ -193,6 +193,7 @@ const techniqueUrl = collection === 'techniques'
     <h2>{collection === 'sources' ? 'Source context' : 'What the record supports'}</h2>
     {hasBody ? <div class="prose knowledge-record__body"><Content /></div> : <p>No additional public assessment is recorded.</p>}
     {collection === 'sources' && d.notes && <div class="knowledge-record__editorial-note"><h3>Editorial note</h3><p>{d.notes}</p></div>}
+    {collection === 'sources' && <div class="knowledge-record__editorial-note"><h3>Citation maintenance</h3><p>{d.link_check_note || 'No explanatory retrieval note recorded.'}</p>{d.archive_checked_at && <p>Archive checked {formatDate(d.archive_checked_at)}. {d.archive_check_note}</p>}</div>}
   </section>
 
   <section class="knowledge-record__section knowledge-record__relationships" data-knowledge-section="relationships">

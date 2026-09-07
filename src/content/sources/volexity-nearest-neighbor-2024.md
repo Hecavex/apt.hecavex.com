@@ -11,10 +11,13 @@ url: https://www.volexity.com/blog/2024/11/22/the-nearest-neighbor-attack-how-a-
 source_type: vendor-research
 language: en
 notes: Incident-response account attributing the activity to GruesomeLarch with high confidence.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:01.589Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+archive_checked_at: "2026-09-07T10:06:17.677Z"
+archive_check_note: "No capture returned by archive availability API."
 ---
 
 Primary source for the nearby-organisation and enterprise Wi-Fi access chain.

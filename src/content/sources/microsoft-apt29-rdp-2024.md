@@ -11,10 +11,14 @@ url: https://www.microsoft.com/en-us/security/blog/2024/10/29/midnight-blizzard-
 source_type: vendor-research
 language: en
 notes: First-party campaign reporting on signed RDP-file phishing against government, higher education, defence and NGOs, particularly in Europe and the United Kingdom.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:55.811Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+archive_checked_at: "2026-09-07T10:05:55.617Z"
+archive_check_note: "Availability API identified a post-publication capture and its archive response returned HTTP 200. Source content equivalence still requires editorial review."
+archived_url: "https://web.archive.org/web/20260724010112/https://www.microsoft.com/en-us/security/blog/2024/10/29/midnight-blizzard-conducts-large-scale-spear-phishing-campaign-using-rdp-files/"
 ---
 
 Supports the campaign-specific RDP attachment procedure and targeting record; it does not replace the government attribution source.

@@ -20,6 +20,11 @@ mission: Acquire long-term strategic intelligence from government, diplomatic, d
 current_assessment: Secret Blizzard is a mature Russian espionage cluster with a long public lineage and a demonstrated willingness to reuse another actor's access. Microsoft documented a 2024 operation against Ukrainian military devices, while multinational reporting associates the Snake platform with FSB Centre 16. Turla is retained as an overlapping public umbrella rather than an assumption that every Turla-labelled incident shares one operator and toolchain.
 aliases:
   - name: Turla
+    source_refs:
+      - source: microsoft-secret-blizzard-freeloader-2024
+        locator: "Find the literal name \"Turla\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Multiple government and vendor sources
     relationship: umbrella-group
     confidence: high
@@ -28,6 +33,11 @@ aliases:
     last_seen: "2026"
     notes: Broader than any single Microsoft cluster definition.
   - name: Waterbug
+    source_refs:
+      - source: microsoft-secret-blizzard-freeloader-2024
+        locator: "Find the literal name \"Waterbug\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: vendor-tracking-cluster
     confidence: moderate
@@ -36,6 +46,11 @@ aliases:
     last_seen: "2024"
     notes: Retained as an overlap, not an exact global synonym.
   - name: Venomous Bear
+    source_refs:
+      - source: microsoft-secret-blizzard-freeloader-2024
+        locator: "Find the literal name \"Venomous Bear\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: vendor-tracking-cluster
     confidence: moderate

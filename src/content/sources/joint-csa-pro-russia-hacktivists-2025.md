@@ -11,10 +11,14 @@ url: https://media.defense.gov/2025/Dec/09/2003840175/-1/-1/0/Joint_CSA_Pro-Russ
 source_type: government
 language: en
 notes: Multinational advisory AA25-343A documenting CARR, NoName057(16) and affiliated pro-Russia hacktivist activity against exposed VNC and operational-technology systems.
-link_status: unknown
-link_checked_at: 2026-09-01
+link_status: "unknown"
+link_checked_at: "2026-09-07T09:55:54.070Z"
 http_status: 403
 draft: false
+link_check_note: "HTTP 403 or request failure is inconclusive. Existing citation retained. This is a retrieval check, not a truth or availability verdict."
+archive_checked_at: "2026-09-07T10:05:51.865Z"
+archive_check_note: "Availability API identified a post-publication capture and its archive response returned HTTP 200. Source content equivalence still requires editorial review."
+archived_url: "https://web.archive.org/web/20260206055621/https://media.defense.gov/2025/Dec/09/2003840175/-1/-1/0/JOINT_CSA_PRO-RUSSIA_HACKTIVISTS_CONDUCT_ATTACKS_AGAINST_CRITICAL_INFRASTRUCTURE.PDF"
 ---
 
 The advisory separates lower-sophistication opportunistic access from advanced persistent-threat activity and distinguishes observed methods from actor claims. Shared cohort behaviour is not automatically assigned to every named group.

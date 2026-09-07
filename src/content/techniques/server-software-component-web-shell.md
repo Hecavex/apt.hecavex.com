@@ -5,6 +5,9 @@ slug: server-software-component-web-shell
 summary: Deployment of server-side scripts that provide persistent remote command execution through an exposed web service.
 mitre_id: T1505.003
 tactic: Persistence
+tactics: ["Persistence"]
+tactic_ids: ["TA0003"]
+framework_version: "19.2"
 sources: [microsoft-badpilot-2025, mandiant-ukraine-power-2023]
 draft: false
 ---

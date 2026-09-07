@@ -1,9 +1,9 @@
 export const release = {
-  id: 'apt-notes-2026-09-01-baltic-relevance',
-  datasetVersion: '2.3.0',
-  schemaVersion: '2.1.0',
-  releasedAt: '2026-09-01T06:46:41.016Z',
-  previousVersion: '2.2.0'
+  id: 'apt-notes-2026-09-07-provenance-framework',
+  datasetVersion: '2.4.0',
+  schemaVersion: '2.2.0',
+  releasedAt: '2026-09-07T10:00:33.000Z',
+  previousVersion: '2.3.0'
 } as const;
 
 export const publication = {

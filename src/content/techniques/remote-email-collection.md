@@ -5,6 +5,9 @@ slug: remote-email-collection
 summary: Collection of messages from remote email services through protocols or service APIs.
 mitre_id: T1114.002
 tactic: Collection
+tactics: ["Collection"]
+tactic_ids: ["TA0009"]
+framework_version: "19.2"
 sources: [cisa-aa25-141a]
 draft: false
 ---

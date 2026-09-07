@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250207072951/https://www.justice.gov
 source_type: legal
 language: en
 notes: Charges and identity claims concerning Callisto Group activity against the United Kingdom, NATO countries, Ukraine and other targets.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:51.159Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 The indictment and press release contain allegations. The dossier preserves the presumption of innocence and does not treat every alias as a mathematically exact cluster boundary.

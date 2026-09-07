@@ -5,6 +5,9 @@ slug: supply-chain-compromise
 summary: Manipulation of trusted software distribution so malicious code reaches downstream users through a legitimate supplier relationship.
 mitre_id: T1195.002
 tactic: Initial Access
+tactics: ["Initial Access"]
+tactic_ids: ["TA0001"]
+framework_version: "19.2"
 sources: [doj-sandworm-indictment-2020, gtig-apt44-2024, mitre-g0034]
 draft: false
 ---

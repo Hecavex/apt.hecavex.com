@@ -5,6 +5,9 @@ slug: network-denial-of-service
 summary: Traffic or protocol exhaustion intended to reduce or deny the availability of a network-facing service.
 mitre_id: T1498
 tactic: Impact
+tactics: ["Impact"]
+tactic_ids: ["TA0040"]
+framework_version: "19.2"
 sources: [mitre-t1498]
 draft: false
 ---

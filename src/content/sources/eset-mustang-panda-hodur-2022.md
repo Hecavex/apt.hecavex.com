@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20220323154317/https://www.welivesecur
 source_type: vendor-research
 language: en
 notes: Technical account of a Mustang Panda campaign against European diplomatic missions and other targets using themed spearphishing and a Korplug variant.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:53.666Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for high-confidence European targeting and spearphishing procedure evidence.

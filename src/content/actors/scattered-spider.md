@@ -106,4 +106,3 @@ The TfL case provides a source-backed European campaign with legal findings and 
 ## Status and limitations
 
 The original group is assessed as disrupted. That does not make the techniques obsolete or prevent unrelated actors from reusing the name. Separate 2025 UK retail incidents are deliberately not attributed here because the authoritative public statement described that attribution as speculation.
-

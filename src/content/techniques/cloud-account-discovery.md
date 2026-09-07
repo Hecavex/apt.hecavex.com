@@ -5,6 +5,9 @@ slug: cloud-account-discovery
 summary: Enumeration of identities, roles, groups, applications and related objects in a cloud tenant.
 mitre_id: T1087.004
 tactic: Discovery
+tactics: ["Discovery"]
+tactic_ids: ["TA0007"]
+framework_version: "19.2"
 sources: [microsoft-void-blizzard-2025]
 draft: false
 ---

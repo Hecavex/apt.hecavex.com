@@ -5,6 +5,9 @@ slug: data-destruction
 summary: Destruction or corruption of data to impair recovery, disrupt operations or remove evidence.
 mitre_id: T1485
 tactic: Impact
+tactics: ["Impact"]
+tactic_ids: ["TA0040"]
+framework_version: "19.2"
 sources: [doj-sandworm-indictment-2020, mandiant-ukraine-power-2023, microsoft-prestige-2022]
 draft: false
 ---

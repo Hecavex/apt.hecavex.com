@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250521193701/https://www.cisa.gov/ne
 source_type: government
 language: en
 notes: Joint advisory describing activity attributed to GRU Unit 26165.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:49.771Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Joint government advisory used for source-specific attribution, targeting and tradecraft claims.

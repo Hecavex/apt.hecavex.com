@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250717014313/https://www.europol.eur
 source_type: government
 language: en
 notes: Primary law-enforcement account of Operation Eastwood, the network's organisation, European targeting, DDoS activity, incentives and infrastructure disruption.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:53.737Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Europol's public account of the July 2025 action against NoName057(16). Arrest warrants and investigative statements are recorded as law-enforcement claims rather than criminal findings.

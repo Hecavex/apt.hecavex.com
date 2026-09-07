@@ -3,10 +3,16 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { parse, stringify } from 'yaml';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixtureRoot = path.join(projectRoot, 'tests', 'fixtures', 'content-validation');
 const manifest = JSON.parse(fs.readFileSync(path.join(fixtureRoot, 'cases.json'), 'utf8'));
+manifest.cases.push(
+  { name: 'valid source-scoped claim locator', valid: true, claimFixture: 'valid' },
+  { name: 'invalid source scope and invented review date', valid: false, claimFixture: 'invalid', includes: ['alias locator must refer to a dossier source', 'procedure locator must refer to its supporting source', 'unrecorded claim review must not invent a review date'] },
+  { name: 'correction requires explicit rationale', valid: false, claimFixture: 'correction', includes: ['claim review needs date and rationale', 'corrected or withdrawn claim needs a correction note'] }
+);
 const validator = path.join(projectRoot, 'scripts', 'validate-content.mjs');
 const failures = [];
 
@@ -41,6 +47,15 @@ for (const fixture of manifest.cases) {
   try {
     fs.cpSync(path.join(fixtureRoot, 'base'), contentRoot, { recursive: true });
     if (fixture.overlay) copyOverlay(path.join(fixtureRoot, fixture.overlay), contentRoot);
+    if (fixture.claimFixture) {
+      const actorPath = path.join(contentRoot, 'actors', 'europe', 'actor-one.md');
+      const actor = parse(fs.readFileSync(actorPath, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/)[1]);
+      const citation = { source: fixture.claimFixture === 'invalid' ? 'actor-one' : 'source-one', locator: 'Procedure section, bounded fixture behaviour', basis: 'procedure-evidence', checked_at: '2026-08-02' };
+      actor.aliases = [{ name: 'Fixture alias', source_refs: [citation] }];
+      actor.technique_evidence[0].source_locators = [citation];
+      actor.technique_evidence[0].review = { version: '1.0.0', state: fixture.claimFixture === 'correction' ? 'corrected' : 'not-recorded', reviewed_at: fixture.claimFixture === 'invalid' ? '2026-08-02' : null, rationale: '', correction_note: null };
+      fs.writeFileSync(actorPath, `---\n${stringify(actor)}---\nFixture claim provenance.\n`);
+    }
 
     const result = spawnSync(process.execPath, [
       validator,

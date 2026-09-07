@@ -31,6 +31,7 @@ roots.forEach(walk);
 const cssPath = path.join("src", "styles", "global.css");
 const css = fs.readFileSync(cssPath, "utf8");
 const cssContract = [
+  [/\.site-footer nav a\s*\{[^}]*min-height:\s*2rem;/s, "footer links must retain accessible touch-target height"],
   [/--page-gutter:\s*clamp\(1rem,\s*3\.5vw,\s*3\.5rem\);/, "missing shared page gutter token"],
   [/--space-page-top:\s*clamp\(3\.25rem,\s*5vw,\s*4\.75rem\);/, "missing shared page-top token"],
   [/--space-page-bottom:\s*clamp\(4rem,\s*8vw,\s*8rem\);/, "missing shared page-bottom token"],

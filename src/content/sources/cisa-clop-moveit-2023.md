@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250202000118/https://www.cisa.gov/si
 source_type: government
 language: en
 notes: Joint technical advisory on mass MOVEit exploitation, CVE-2023-34362, LEMURLOOT and the CL0P-branded extortion campaign.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:50.229Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 TA505 and FIN11 are retained as historical or vendor-specific overlaps rather than exact actor synonyms.

@@ -28,6 +28,11 @@ aliases:
     last_seen: "2025"
     notes: Search aid only; it does not describe a separate cluster.
   - name: NoName
+    source_refs:
+      - source: doj-carr-noname-actions-2025
+        locator: "Find the literal name \"NoName\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: CERT-EU
     relationship: common-alias
     confidence: moderate

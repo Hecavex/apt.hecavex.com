@@ -5,6 +5,9 @@ slug: remote-access-software
 summary: Use of legitimate remote-management software to preserve interactive access and reduce the visibility associated with custom malware.
 mitre_id: T1219
 tactic: Command and Control
+tactics: ["Command and Control"]
+tactic_ids: ["TA0011"]
+framework_version: "19.2"
 sources: [microsoft-badpilot-2025]
 draft: false
 ---

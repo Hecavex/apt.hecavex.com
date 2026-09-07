@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260718092919/https://www.gov.uk/gove
 source_type: government
 language: en
 notes: Current UK government synthesis of GRU Units 26165, 74455 and 29155, their European operations, supporting structures and relationships with cybercriminal and hacktivist proxies.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:02.183Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used to update the identity and European threat picture of APT28, APT44 and Unit 29155, and to bound the reported CARR-GRU relationship.

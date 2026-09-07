@@ -5,6 +5,9 @@ slug: sharepoint-data
 summary: Collection of files and other information available through a compromised identity's SharePoint permissions.
 mitre_id: T1213.002
 tactic: Collection
+tactics: ["Collection"]
+tactic_ids: ["TA0009"]
+framework_version: "19.2"
 sources: [microsoft-void-blizzard-2025, aivd-mivd-laundry-bear-2025]
 draft: false
 ---

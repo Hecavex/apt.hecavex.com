@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250527104421/https://www.microsoft.c
 source_type: vendor-research
 language: en
 notes: Technical reporting on targeting, credential acquisition, cloud collection, AiTM phishing and observed tooling.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:59.452Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Microsoft identifies its Void Blizzard cluster as the same actor the Dutch services named Laundry Bear while preserving Microsoft's own cluster boundaries.

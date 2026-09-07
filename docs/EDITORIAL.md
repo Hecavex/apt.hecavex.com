@@ -2,7 +2,7 @@
 
 This policy governs records published at [apt.hecavex.com](https://apt.hecavex.com). It is an operator control for the HECAVEX publication, not contributor onboarding for a reusable software product.
 
-APT Notes is a curated English-language catalogue. It is not an exhaustive actor directory, a live intelligence feed or a substitute for the cited source. A small, reviewable record set is preferable to an unsupported one.
+APT Notes is a curated catalogue with canonical English evidence and bounded Lithuanian access and methodology summaries. Lithuanian navigation marks English destinations. Summaries preserve the canonical IDs and do not imply full dossier translation. It is not an exhaustive actor directory, a live intelligence feed or a substitute for the cited source. A small, reviewable record set is preferable to an unsupported one.
 
 ## Evidence boundary
 
@@ -68,6 +68,12 @@ Before a record becomes public, the operator confirms that:
 Published actor profiles are reviewed at least annually. A review may confirm that the existing assessment remains valid; it does not need to manufacture a content change. Material corrections identify what changed instead of silently rewriting analytical history.
 
 Technique records inherit freshness from their cited references. A procedure relationship is reviewed again whenever its actor, campaign, technique or supporting reference changes materially.
+
+Technique framework membership uses the commit-pinned Enterprise ATT&CK 19.2 projection in `src/data/attack-framework.json`. `npm run validate` verifies all tactic IDs and names. The legacy `tactic` string is a display/compatibility field. Filters use the canonical `tactics` array, never compound pseudo-tactics. Membership is not evidence that every tactic was demonstrated in a particular procedure.
+
+Alias `source_refs` and procedure `source_locators` name a typed source, a searchable section or locator, the verification basis and the locator-check date. A source mentioning a name does not establish exact cluster identity. Existing overlap boundaries remain authoritative. Procedure `review` tracks an independent version, review date, state, rationale and correction note. Legacy dates remain null with `not-recorded` state until a substantive review is actually performed. Dossier-level compatibility timestamps are not independent mapping reviews.
+
+Filtered-view sharing is opt-in. The copy action stores free-text search in the URL fragment, which is not part of the HTTP request. Ordinary typing does not write it to the URL. A copied link can still disclose its contents to its recipient and should be inspected before sharing.
 
 ## Changes, corrections and versioning
 

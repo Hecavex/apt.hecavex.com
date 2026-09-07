@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20241126221120/https://www.welivesecur
 source_type: vendor-research
 language: en
 notes: Technical research on a RomCom exploitation chain affecting targets in Europe and North America.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:54.117Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for exploit-chain relationship evidence and continuing European relevance.

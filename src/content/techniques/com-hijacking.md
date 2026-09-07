@@ -4,7 +4,10 @@ name: Component Object Model Hijacking
 slug: com-hijacking
 summary: Modification of COM registration so a trusted application loads actor-controlled code for execution or persistence.
 mitre_id: T1546.015
-tactic: Persistence
+tactic: Persistence / Privilege Escalation
+tactics: ["Persistence","Privilege Escalation"]
+tactic_ids: ["TA0003","TA0004"]
+framework_version: "19.2"
 sources: [ncsc-authentic-antics-2025, zscaler-operation-neusploit]
 draft: false
 ---

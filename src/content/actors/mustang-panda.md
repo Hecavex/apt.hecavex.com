@@ -20,6 +20,11 @@ mission: Collect political, diplomatic and strategic information from government
 current_assessment: Mustang Panda continues to target Europe alongside a wider global victim set. European diplomatic and maritime operations are well supported by first-party technical research. Vendor labels such as RedDelta and Earth Preta are retained as scoped overlaps because public taxonomies do not establish that every record has identical operators and infrastructure.
 aliases:
   - name: RedDelta
+    source_refs:
+      - source: eset-mustang-panda-hodur-2022
+        locator: "Find the literal name \"RedDelta\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: possible-overlap
     confidence: moderate
@@ -28,6 +33,11 @@ aliases:
     last_seen: "2025"
     notes: Not treated as exact equivalence across all publishers.
   - name: TA416
+    source_refs:
+      - source: eset-mustang-panda-hodur-2022
+        locator: "Find the literal name \"TA416\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: vendor-tracking-cluster
     confidence: high
@@ -106,4 +116,3 @@ The Hodur campaign combined spearphishing with a Korplug variant and familiar lo
 ## Attribution limitations
 
 Public evidence strongly supports the actor and European targeting. It is less complete on formal state tasking and the exact boundaries between Mustang Panda, RedDelta, Earth Preta and related labels. MQsTTang is deliberately excluded after ESET's later reattribution to CeranaKeeper.
-

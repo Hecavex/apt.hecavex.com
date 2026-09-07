@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260407163533/https://www.ncsc.gov.uk
 source_type: government
 language: en
 notes: Current government attribution, infrastructure, vulnerability, ATT&CK and mitigation reporting for APT28 router and DNS operations.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:00.492Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Primary source for the 2024–2026 router exploitation, DNS hijacking and adversary-in-the-middle campaign.

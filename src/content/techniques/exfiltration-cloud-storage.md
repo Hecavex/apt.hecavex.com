@@ -5,6 +5,9 @@ slug: exfiltration-cloud-storage
 summary: Transfer of collected data to a cloud-storage service controlled or accessible by the operator.
 mitre_id: T1567.002
 tactic: Exfiltration
+tactics: ["Exfiltration"]
+tactic_ids: ["TA0010"]
+framework_version: "19.2"
 sources: [cisa-aa24-249a, mitre-g1003]
 draft: false
 ---

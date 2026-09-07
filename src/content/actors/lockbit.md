@@ -20,6 +20,11 @@ mission: Scale data theft, extortion and ransomware deployment through a shared 
 current_assessment: LockBit was one of the most consequential ransomware services affecting Europe before Operation Cronos seized infrastructure and exposed administration in 2024. The operation materially degraded the ecosystem but did not prove permanent cessation. Central administrators, affiliates and individual intrusions are separate attribution layers and should not be described as one hands-on-keyboard crew.
 aliases:
   - name: LockBitSupp
+    source_refs:
+      - source: cisa-lockbit-advisory-2023
+        locator: "Find the literal name \"LockBitSupp\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK National Crime Agency
     relationship: subgroup
     confidence: high
@@ -98,4 +103,3 @@ Joint reporting documents exploitation of exposed applications, phishing, compro
 ## Disruption and limitations
 
 Operation Cronos was material: it seized infrastructure, recovered data and identified administration. The correct status is disrupted, not eradicated. Later use of the LockBit name may involve surviving affiliates, rebuilt infrastructure or brand reuse, so post-operation claims require fresh evidence.
-

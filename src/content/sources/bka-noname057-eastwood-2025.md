@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250716124718/https://www.bka.de/Shar
 source_type: legal
 language: de
 notes: German law-enforcement statement on the botnet disruption, warrants, suspected organisation and DDoS infrastructure used by NoName057(16).
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:51.953Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Primary German account of the coordinated infrastructure disruption and criminal investigation. Allegations remain allegations unless resolved by a court.

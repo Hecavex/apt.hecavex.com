@@ -4,7 +4,10 @@ name: Use Alternate Authentication Material — Web Session Cookie
 slug: web-session-cookie
 summary: Use of a stolen web session cookie to impersonate an authenticated user without replaying the user's password.
 mitre_id: T1550.004
-tactic: Defense Evasion, Lateral Movement
+tactic: Lateral Movement
+tactics: ["Lateral Movement"]
+tactic_ids: ["TA0008"]
+framework_version: "19.2"
 sources: [aivd-mivd-laundry-bear-2025, microsoft-void-blizzard-2025]
 draft: false
 ---

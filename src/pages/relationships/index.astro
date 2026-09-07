@@ -11,7 +11,7 @@ const actors = [...new Map(relationships.map((relationship: any) => [relationshi
   id: relationship.source_entity.id,
   name: relationship.source_entity.name
 }])).values()].sort((left, right) => left.name.localeCompare(right.name));
-const tactics = unique(relationships.map((relationship: any) => techniqueMap.get(relationship.target_entity.id)?.data.tactic ?? 'Unknown')).sort();
+const tactics = unique(relationships.flatMap((relationship: any) => techniqueMap.get(relationship.target_entity.id)?.data.tactics ?? [])).sort();
 const confidences = unique(relationships.map((relationship: any) => relationship.confidence)).sort();
 ---
 <BaseLayout title="Relationships" description="Sourced actor-to-technique procedure relationships published by APT Notes.">
@@ -41,7 +41,9 @@ const confidences = unique(relationships.map((relationship: any) => relationship
       </div>
       <div class="knowledge-control-actions"><button class="filter-reset" type="reset">Reset filters</button><button class="filter-reset" type="button" data-relationship-export="json">Filtered JSON</button><button class="filter-reset" type="button" data-relationship-export="csv">Filtered CSV</button></div>
     </form>
+    <p><button type="button" class="filter-reset" data-copy-view>Copy filtered view</button> <span class="meta" data-copy-view-status role="status">Includes search text only when you copy. Review the link before sharing.</span></p>
     <p class="meta relationship-count" data-relationship-count role="status">{relationships.length} relationships shown</p>
+    <p class="meta">Independent claim review dates and precise source locators are not recorded for most legacy mappings. Dossier review dates are not separate procedure reviews. Compare each procedure with its cited publication before reuse.</p>
 
     <div class="relationship-list" data-relationship-list data-pagefind-body>
       {relationships.map((relationship: any) => {
@@ -50,7 +52,7 @@ const confidences = unique(relationships.map((relationship: any) => relationship
           data-relationship-id={relationship.id}
           data-search={`${relationship.source_entity.name} ${relationship.target_entity.name} ${relationship.target_entity.external_id} ${relationship.evidence} ${relationship.campaign_context?.name ?? ''}`.toLowerCase()}
           data-actor={relationship.source_entity.id}
-          data-tactic={technique?.data.tactic ?? 'Unknown'}
+          data-tactic={(technique?.data.tactics ?? []).join('|')}
           data-technique={relationship.target_entity.id}
           data-campaign-scoped={relationship.campaign_context ? 'true' : 'false'}
           data-references={relationship.references.join('|')}
@@ -62,6 +64,9 @@ const confidences = unique(relationships.map((relationship: any) => relationship
           </header>
           <div class="relationship-evidence">
             <p>{relationship.evidence}</p>
+            <p class="meta">Claim review: {relationship.claim_review.state}{relationship.claim_review.reviewed_at ? ` · ${relationship.claim_review.reviewed_at}` : ''} · version {relationship.claim_review.version}</p>
+            {relationship.claim_review.state !== 'not-recorded' && <p>{relationship.claim_review.rationale}</p>}
+            {relationship.source_locators.length > 0 && <ul>{relationship.source_locators.map((locator: any) => <li><a href={`/sources/${locator.source}/`}>{locator.source}</a>: {locator.locator}</li>)}</ul>}
             {relationship.campaign_context && <p class="meta">Campaign context: <a href={relationship.campaign_context.url} data-knowledge-link>{relationship.campaign_context.name}</a></p>}
           </div>
           <footer>
@@ -119,7 +124,7 @@ const confidences = unique(relationships.map((relationship: any) => relationship
 
     const reconcileDependentOptions = () => {
       const relevantRows = actorRows();
-      const values = (name: 'tactic' | 'confidence') => [...new Set(relevantRows.map((row) => row.dataset[name] ?? ''))]
+      const values = (name: 'tactic' | 'confidence') => [...new Set(relevantRows.flatMap((row) => (row.dataset[name] ?? '').split('|')))]
         .filter(Boolean)
         .sort((left, right) => left.localeCompare(right));
       replaceDependentOptions(tacticField, values('tactic'), 'All tactics');
@@ -134,6 +139,10 @@ const confidences = unique(relationships.map((relationship: any) => relationship
 
     const syncFormFromUrl = () => {
       const parameters = new URLSearchParams(location.search);
+      let shared = new URLSearchParams();
+      try { if (location.hash.startsWith('#view=')) shared = new URLSearchParams(decodeURIComponent(location.hash.slice(6))); } catch { /* Ignore malformed shared state. */ }
+      for (const name of categoricalNames) if (shared.has(name)) parameters.set(name, shared.get(name)!);
+      searchField.value = shared.get('q') ?? '';
       actorField.value = resolveOption(actorField, parameters.get('actor') ?? '');
       reconcileDependentOptions();
       tacticField.value = resolveOption(tacticField, parameters.get('tactic') ?? '');
@@ -164,7 +173,7 @@ const confidences = unique(relationships.map((relationship: any) => relationship
       shownRows = rows.filter((row) => (!q || row.dataset.search!.includes(q))
         && categoricalNames.every((name) => {
           const value = String(data.get(name) ?? '');
-          return !value || row.dataset[name] === value;
+          return !value || (row.dataset[name] ?? '').split('|').includes(value);
         }));
       const shownSet = new Set(shownRows);
       rows.forEach((row) => { row.hidden = !shownSet.has(row); });
@@ -258,6 +267,30 @@ const confidences = unique(relationships.map((relationship: any) => relationship
     };
 
     searchField.addEventListener('input', () => apply());
+    document.querySelector<HTMLButtonElement>('[data-copy-view]')?.addEventListener('click', async () => {
+      const parameters = new URLSearchParams();
+      for (const name of [...categoricalNames, 'q']) {
+        const value = String(new FormData(form).get(name) ?? '').trim();
+        if (value) parameters.set(name, value);
+      }
+      const sharedUrl = new URL(location.pathname, location.origin);
+      sharedUrl.hash = `view=${encodeURIComponent(parameters.toString())}`;
+      const status = document.querySelector<HTMLElement>('[data-copy-view-status]')!;
+      try {
+        await navigator.clipboard.writeText(sharedUrl.href);
+        status.textContent = 'Filtered view copied. Search text is in the fragment, not sent in the HTTP request.';
+      } catch {
+        status.textContent = 'Clipboard unavailable. Select and copy this link: ';
+        const field = document.createElement('input');
+        field.readOnly = true;
+        field.value = sharedUrl.href;
+        field.setAttribute('aria-label', 'Filtered view link');
+        status.append(field);
+        field.focus();
+        field.select();
+      }
+    });
+    window.addEventListener('hashchange', () => { syncFormFromUrl(); apply(false); });
     form.addEventListener('change', (event) => {
       if (event.target === actorField) reconcileDependentOptions();
       apply();

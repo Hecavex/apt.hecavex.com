@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250207205605/https://www.justice.gov
 source_type: legal
 language: en
 notes: Legal record covering remote and close-access operations against anti-doping, sporting and chemical-analysis organisations.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:50.461Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Historical source for operational scope and Unit 26165 attribution.

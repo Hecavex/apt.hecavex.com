@@ -27,6 +27,11 @@ parent_entities:
     notes: The NCSC and international partners assess that Star Blizzard is almost certainly subordinate to FSB Centre 18.
 aliases:
   - name: SEABORGIUM
+    source_refs:
+      - source: ncsc-star-blizzard-2023
+        locator: "Find the literal name \"SEABORGIUM\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC and international partners
     relationship: historical-designation
     confidence: high
@@ -35,6 +40,11 @@ aliases:
     last_seen: "2023 naming transition"
     notes: Retained for discovery of older reporting.
   - name: Callisto Group
+    source_refs:
+      - source: ncsc-star-blizzard-2023
+        locator: "Find the literal name \"Callisto Group\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC and US Department of Justice
     relationship: government-designation
     confidence: high
@@ -43,6 +53,11 @@ aliases:
     last_seen: "2024 legal action"
     notes: DOJ claims concerning named defendants and alleged co-conspirators must not be extended automatically to every artifact carrying another alias.
   - name: COLDRIVER
+    source_refs:
+      - source: ncsc-star-blizzard-2023
+        locator: "Find the literal name \"COLDRIVER\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC and US Department of Justice
     relationship: vendor-tracking-cluster
     confidence: high
@@ -51,6 +66,11 @@ aliases:
     last_seen: "2025 reporting"
     notes: Reported overlap does not make every provider's complete historical dataset coextensive.
   - name: TA446
+    source_refs:
+      - source: ncsc-star-blizzard-2023
+        locator: "Find the literal name \"TA446\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC and international partners
     relationship: vendor-tracking-cluster
     confidence: moderate
@@ -59,6 +79,11 @@ aliases:
     last_seen: "2023 advisory"
     notes: Preserved as a search pivot rather than an exact cross-vendor equivalence claim.
   - name: TAG-53
+    source_refs:
+      - source: ncsc-star-blizzard-2023
+        locator: "Find the literal name \"TAG-53\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC and international partners
     relationship: vendor-tracking-cluster
     confidence: moderate
@@ -67,6 +92,11 @@ aliases:
     last_seen: "2023 advisory"
     notes: Preserved as a search pivot rather than an exact cross-vendor equivalence claim.
   - name: BlueCharlie
+    source_refs:
+      - source: ncsc-star-blizzard-2023
+        locator: "Find the literal name \"BlueCharlie\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: UK NCSC and international partners
     relationship: vendor-tracking-cluster
     confidence: moderate

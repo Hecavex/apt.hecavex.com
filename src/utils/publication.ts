@@ -52,7 +52,9 @@ export const serializeRelationship = (record: RelationshipRecord) => normalize({
   campaign_context: record.campaign_context ? { ...record.campaign_context, url: `${publication.site}${record.campaign_context.url}` } : undefined
 });
 
-export const jsonResponse = (body: unknown) => new Response(JSON.stringify(body, null, 2), {
+// Preserve the complete schema while avoiding repeated indentation bytes in
+// aggregate exports. Per-response transfer budgets remain unchanged.
+export const jsonResponse = (body: unknown) => new Response(JSON.stringify(body), {
   headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }
 });
 

@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20240523041606/https://cloud.google.co
 source_type: vendor-research
 language: en
 notes: Attribution assessment and identity boundary for UNC1151 and the broader Ghostwriter influence campaign.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:58.918Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 The source supports a high-confidence Belarus-government link. It also explains why UNC1151 and all Ghostwriter activity should not be treated as exact equivalents.

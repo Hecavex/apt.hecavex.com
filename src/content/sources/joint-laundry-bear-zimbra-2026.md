@@ -11,10 +11,13 @@ url: https://www.aivd.nl/documenten/2026/07/23/russian-state-supported-cyber-act
 source_type: government
 language: en
 notes: Permanent AIVD publication page for TLP:CLEAR joint advisory AA26-204A describing Laundry Bear exploitation of CVE-2025-66376, Ulej, Flowerbed, victimology, persistence, collection and exfiltration. Estonia's Foreign Intelligence Service co-sealed the advisory.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:55.007Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+archive_checked_at: "2026-09-07T10:05:55.232Z"
+archive_check_note: "No capture returned by archive availability API."
 ---
 
 The advisory states that exploitation began while the Zimbra vulnerability was a zero-day and cautions that industry tracking names may not map one-to-one to the government activity grouping.

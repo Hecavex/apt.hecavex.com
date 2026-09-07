@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260716180645/https://www.nationalcri
 source_type: legal
 language: en
 notes: Court and law-enforcement account of the TfL intrusion, operational effects, losses and disruption of the original collective.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:00.077Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 The NCA's assessment that arrests halted the original group does not rule out later reuse of the public brand by different people.

@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20220223150413/https://www.ncsc.gov.uk
 source_type: government
 language: en
 notes: Joint government attribution, malware analysis, ATT&CK mapping and mitigation guidance for Cyclops Blink.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:00.530Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for the Cyclops Blink record and network-device persistence evidence.

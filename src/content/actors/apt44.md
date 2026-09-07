@@ -27,6 +27,11 @@ parent_entities:
     notes: The United States charged Unit 74455 officers in connection with destructive and disruptive operations publicly tracked as Sandworm activity.
 aliases:
   - name: Sandworm Team
+    source_refs:
+      - source: mitre-g0034
+        locator: "Page heading and Associated Groups list identifying APT44"
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Government and industry reporting
     relationship: common-alias
     confidence: high
@@ -35,6 +40,11 @@ aliases:
     last_seen: "2026"
     notes: The name predates Mandiant's APT44 designation and remains widely used.
   - name: Seashell Blizzard
+    source_refs:
+      - source: mitre-g0034
+        locator: "Associated Group Descriptions: Seashell Blizzard"
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: vendor-tracking-cluster
     confidence: high
@@ -43,6 +53,11 @@ aliases:
     last_seen: "2025"
     notes: Previously tracked by Microsoft as IRIDIUM.
   - name: FROZENBARENTS
+    source_refs:
+      - source: mitre-g0034
+        locator: "Associated Group Descriptions: FROZENBARENTS"
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Google Threat Intelligence Group
     relationship: vendor-tracking-cluster
     confidence: high
@@ -51,6 +66,11 @@ aliases:
     last_seen: "2026"
     notes: Vendor boundaries may be narrower than the complete analytic record.
   - name: IRIDIUM
+    source_refs:
+      - source: mitre-g0034
+        locator: "Associated Group Descriptions: IRIDIUM"
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: historical-designation
     confidence: high
@@ -59,6 +79,11 @@ aliases:
     last_seen: "2023"
     notes: Retained for searching historical Microsoft reporting.
   - name: Voodoo Bear
+    source_refs:
+      - source: mitre-g0034
+        locator: "Associated Group Descriptions: Voodoo Bear"
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Government and industry reporting
     relationship: common-alias
     confidence: high
@@ -67,6 +92,11 @@ aliases:
     last_seen: "2022"
     notes: Used in joint government reporting on Cyclops Blink.
   - name: TeleBots
+    source_refs:
+      - source: mitre-g0034
+        locator: "Associated Group Descriptions: Telebots"
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: ESET and industry reporting
     relationship: vendor-tracking-cluster
     confidence: high
@@ -75,6 +105,11 @@ aliases:
     last_seen: "2024"
     notes: Some reporting uses the name for a subset of the broader activity.
   - name: BlackEnergy Group
+    source_refs:
+      - source: mitre-g0034
+        locator: "Associated Group Descriptions: BlackEnergy (Group)"
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Industry reporting
     relationship: historical-designation
     confidence: high
@@ -83,6 +118,11 @@ aliases:
     last_seen: "2016"
     notes: The BlackEnergy malware family and actor label should not be treated as interchangeable in every source.
   - name: ELECTRUM
+    source_refs:
+      - source: mitre-g0034
+        locator: "Associated Group Descriptions: ELECTRUM"
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Dragos
     relationship: research-cluster
     confidence: high
@@ -287,6 +327,11 @@ technique_evidence:
     sources: [doj-sandworm-indictment-2020, mandiant-ukraine-power-2023, microsoft-prestige-2022]
     notes: The profile separates destructive payload deployment from the mechanism that caused each operational outage.
   - technique: lateral-tool-transfer
+    source_locators:
+      - source: mitre-g0034
+        locator: "Techniques Used table, T1570 Lateral Tool Transfer row. Follow the numbered references for campaign-specific procedures."
+        basis: procedure-evidence
+        checked_at: "2026-09-07"
     campaign: prestige-ransomware
     first_observed: "2015"
     last_observed: "2022"

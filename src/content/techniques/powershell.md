@@ -5,6 +5,9 @@ slug: powershell
 summary: Use of PowerShell for execution, collection, credential interaction or supporting post-compromise activity.
 mitre_id: T1059.001
 tactic: Execution
+tactics: ["Execution"]
+tactic_ids: ["TA0002"]
+framework_version: "19.2"
 sources: [cisa-aa25-141a, volexity-nearest-neighbor-2024, gtig-promptsteal-2025, mandiant-ukraine-power-2023, microsoft-prestige-2022, mitre-g0034]
 draft: false
 ---

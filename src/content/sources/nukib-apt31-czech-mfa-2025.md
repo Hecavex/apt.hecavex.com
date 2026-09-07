@@ -11,10 +11,14 @@ url: https://nukib.gov.cz/en/infoservis-en/news/2263-the-czech-government-has-pu
 source_type: government
 language: en
 notes: Czech national attribution of a long-running campaign against an unclassified Czech Ministry of Foreign Affairs network since at least 2022, attributed to the PRC and assessed as most likely conducted through APT31.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:01.300Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+archive_checked_at: "2026-09-07T10:06:15.988Z"
+archive_check_note: "Availability API identified a post-publication capture and its archive response returned HTTP 200. Source content equivalence still requires editorial review."
+archived_url: "https://web.archive.org/web/20260516234548/https://nukib.gov.cz/en/infoservis-en/news/2263-the-czech-government-has-publicly-attributed-cyberattacks-to-china-actor-apt31-linked-to-the-chinese-ministry-of-state-security-has-targeted-the-infrastructure-of-the-czech-ministry-of-foreign-affairs/"
 ---
 
 The record preserves the source's confidence language. It does not treat the EU statement of support as a separate technical investigation.

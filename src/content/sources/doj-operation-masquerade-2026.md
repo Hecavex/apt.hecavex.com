@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20260408030331/https://www.justice.gov
 source_type: legal
 language: en
 notes: Public legal and disruption record for the US portion of APT28's router-enabled DNS hijacking network.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:51.353Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for government attribution and disruption context, not as proof that the wider infrastructure was eliminated.

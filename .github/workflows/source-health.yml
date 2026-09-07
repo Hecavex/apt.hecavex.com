@@ -24,9 +24,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check:sources -- --output source-health-report.json
+      - run: npm run check:archives
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: apt-notes-source-health
-          path: source-health-report.json
+          include-hidden-files: true
+          path: |
+            source-health-report.json
+            .codex-tmp/archive-health-report.json
           if-no-files-found: error
           retention-days: 90

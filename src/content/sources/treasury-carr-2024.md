@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20240719181037/https://home.treasury.g
 source_type: government
 language: en
 notes: Government identification of CARR leadership and reporting on DDoS and industrial-control-system activity in the United States and Europe.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:10.147Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Primary sanctions statement for the named CARR members and the activity attributed to the group by the US government.

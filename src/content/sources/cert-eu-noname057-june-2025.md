@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20250905193822/https://cert.europa.eu/
 source_type: government
 language: en
 notes: TLP:CLEAR monthly brief recording NoName057(16) DDoS activity against Dutch and NATO websites around the June 2025 NATO summit.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:55:49.733Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Used for the bounded June 2025 European activity record. The brief distinguishes reported DDoS activity from an unproven suggestion about physical rail sabotage.

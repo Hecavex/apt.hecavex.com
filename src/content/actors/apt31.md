@@ -27,6 +27,11 @@ parent_entities:
     notes: The US Department of Justice alleges that the charged defendants operated as part of an APT31 programme run by this department. The allegation has not been adjudicated.
 aliases:
   - name: Zirconium
+    source_refs:
+      - source: nukib-apt31-czech-mfa-2025
+        locator: "Find the literal name \"Zirconium\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Czech National Cyber and Information Security Agency
     relationship: common-alias
     confidence: high
@@ -35,6 +40,11 @@ aliases:
     last_seen: "2025"
     notes: Publisher boundaries may differ across individual campaigns.
   - name: Judgment Panda
+    source_refs:
+      - source: nukib-apt31-czech-mfa-2025
+        locator: "Find the literal name \"Judgment Panda\" in the publication. This establishes that the name is mentioned, not identical cluster boundaries."
+        basis: source-mentions-name
+        checked_at: "2026-09-07"
     source: Czech National Cyber and Information Security Agency
     relationship: common-alias
     confidence: high

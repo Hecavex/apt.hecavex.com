@@ -12,10 +12,11 @@ archived_url: https://web.archive.org/web/20240226140049/https://www.ncsc.gov.uk
 source_type: government
 language: en
 notes: Multinational attribution and procedure-level reporting on APT29 cloud access, service accounts, tokens, device registration, MFA fatigue and residential proxies.
-link_status: ok
-link_checked_at: 2026-09-01
+link_status: "ok"
+link_checked_at: "2026-09-07T09:56:00.488Z"
 http_status: 200
 draft: false
+link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
 ---
 
 Primary government source for the public APT29-to-SVR attribution and its evolving cloud-access procedures.
