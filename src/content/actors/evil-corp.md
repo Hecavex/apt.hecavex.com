@@ -20,6 +20,11 @@ mission: Monetise credential theft and enterprise access through financial fraud
 current_assessment: Evil Corp is a durable criminal organisation whose core identity is stronger than any one malware or ransomware brand. UK authorities describe leadership, Russian state relationships and long-running harm to UK victims. Later branding and affiliate activity require caution because Dridex, SocGholish, WastedLocker and LockBit are tools, delivery relationships or service brands rather than automatic actor synonyms.
 aliases:
   - name: Indrik Spider
+    source_refs:
+      - source: mitre-g0119
+        locator: "Group G0119, title, opening description and Associated Group Descriptions table, Evil Corp row. This locates the reported naming relationship, not universal equivalence between all historical tooling users."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: vendor-tracking-cluster
     confidence: high
@@ -28,6 +33,15 @@ aliases:
     last_seen: "2024"
     notes: Does not make every related malware deployment a core-operator intrusion.
   - name: Dridex gang
+    source_refs:
+      - source: ncsc-evil-corp-2019
+        locator: "Opening two paragraphs and Dridex background paragraph. NCSC discusses the criminal group behind Dridex financial theft. Dridex gang is an editorial historical shorthand, not a quoted official designation and not an assertion that the malware itself is an actor. The G0119 reference supplies the Evil Corp naming bridge."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
+      - source: mitre-g0119
+        locator: "Group G0119, opening description and Evil Corp associated-name row. Read with the NCSC criminal-group account, this supports the historical Dridex context, not equivalence of every Dridex deployment with Evil Corp."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: UK government reporting
     relationship: historical-designation
     confidence: high
@@ -84,7 +98,7 @@ external_identifiers:
   mitre_attack: G0119
   other: [Indrik Spider, Dridex gang]
 related_research: []
-sources: [uk-evil-corp-sanctions-2024, ncsc-evil-corp-2019]
+sources: [uk-evil-corp-sanctions-2024, ncsc-evil-corp-2019, mitre-g0119]
 updates: [evil-corp-profile-created]
 featured: true
 draft: false
@@ -105,4 +119,3 @@ Sanctions and law enforcement changed the operating environment but did not remo
 ## Attribution limitations
 
 Official reporting is strong for the core organisation and named leadership. It is weaker for the current boundary between the original group, associates and service partners. The dossier distinguishes those layers so defensive users can rely on the historical evidence without overstating a modern campaign attribution.
-

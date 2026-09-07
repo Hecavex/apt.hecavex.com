@@ -46,6 +46,11 @@ aliases:
     last_seen: "2024"
     notes: The name is retained for discovery but is not treated as a separate actor.
   - name: The People's Cyber Army of Russia
+    source_refs:
+      - source: joint-csa-pro-russia-hacktivists-2025
+        locator: "AA25-343A, printed page 5, Cyber Army of Russia Reborn, first paragraph. The advisory explicitly supplies this alternative name. This citation does not expand the separately qualified state-support assessment."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Joint advisory AA25-343A
     relationship: common-alias
     confidence: high

@@ -33,6 +33,11 @@ aliases:
     last_seen: "2024"
     notes: Administrator identity is not an alias for every affiliate.
   - name: Bitwise Spider
+    source_refs:
+      - source: crowdstrike-healthcare-2025
+        locator: "Unique Threats Facing Healthcare, paragraph beginning According to investigations led by CrowdStrike Services in 2024. The listed ransomware adversaries include BITWISE SPIDER and LockBit variants. The vendor tracking boundary is retained."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: vendor-tracking-cluster
     confidence: moderate
@@ -82,7 +87,7 @@ external_identifiers:
   mitre_attack: ""
   other: [LockBit 2.0, LockBit 3.0, LockBit Black, LockBitSupp]
 related_research: []
-sources: [nca-lockbit-disruption-2024, cisa-lockbit-advisory-2023]
+sources: [nca-lockbit-disruption-2024, cisa-lockbit-advisory-2023, crowdstrike-healthcare-2025]
 updates: [lockbit-profile-created]
 featured: true
 draft: false

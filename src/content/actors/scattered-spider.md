@@ -20,6 +20,11 @@ mission: Defeat enterprise identity controls through social engineering and insi
 current_assessment: Scattered Spider was a loose collective rather than a fixed company-style hierarchy. The NCA attributes the Transport for London intrusion to leading members and assesses that arrests effectively halted the original group's activity, while warning that others may reuse the brand. The Com, all SIM-swapping actors and every ALPHV affiliate are outside the record unless a source connects them directly.
 aliases:
   - name: UNC3944
+    source_refs:
+      - source: microsoft-octo-tempest-2025
+        locator: "Overview of Octo Tempest, opening paragraph. Microsoft lists industry names including Scattered Spider and UNC3944. This documents its reported overlap and does not erase different vendor clustering criteria."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Mandiant
     relationship: vendor-tracking-cluster
     confidence: high
@@ -28,6 +33,11 @@ aliases:
     last_seen: "2025"
     notes: Vendor visibility can include activity beyond the publicly prosecuted core members.
   - name: Octo Tempest
+    source_refs:
+      - source: microsoft-octo-tempest-2025
+        locator: "Overview of Octo Tempest, opening paragraph. Microsoft describes its Octo Tempest tracking cluster and lists Scattered Spider among industry names. Existing vendor-scoped relationship is retained."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: vendor-tracking-cluster
     confidence: high
@@ -36,6 +46,11 @@ aliases:
     last_seen: "2024"
     notes: Retained as a source-scoped mapping.
   - name: The Com
+    source_refs:
+      - source: sans-scattered-spider-com-2024
+        locator: "Introduction to The Com and SCATTERED SPIDER, paragraphs describing evolution from the broader community and disagreement between vendor clusters. SANS explicitly distinguishes the broader community from Scattered Spider. This supports the umbrella relationship, not an alias equivalence."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Law enforcement and vendor reporting
     relationship: umbrella-group
     confidence: moderate
@@ -85,7 +100,7 @@ external_identifiers:
   mitre_attack: G1015
   other: [UNC3944, Octo Tempest, 0ktapus]
 related_research: []
-sources: [cisa-scattered-spider-2025, nca-scattered-spider-tfl-2026]
+sources: [cisa-scattered-spider-2025, nca-scattered-spider-tfl-2026, microsoft-octo-tempest-2025, sans-scattered-spider-com-2024]
 updates: [scattered-spider-profile-created]
 featured: true
 draft: false

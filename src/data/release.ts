@@ -1,9 +1,9 @@
 export const release = {
-  id: 'apt-notes-2026-09-07-provenance-framework',
-  datasetVersion: '2.4.0',
+  id: 'apt-notes-2026-09-07-name-provenance',
+  datasetVersion: '2.4.1',
   schemaVersion: '2.2.0',
-  releasedAt: '2026-09-07T10:00:33.000Z',
-  previousVersion: '2.3.0'
+  releasedAt: '2026-09-07T10:54:54.000Z',
+  previousVersion: '2.4.0'
 } as const;
 
 export const publication = {

@@ -1,5 +1,6 @@
 ---
 id: volexity-nearest-neighbor-2024
+archived_url: "https://web.archive.org/web/20260801131313/https://www.volexity.com/blog/2024/11/22/the-nearest-neighbor-attack-how-a-russian-apt-weaponized-nearby-wi-fi-networks-for-covert-access/"
 name: Volexity Nearest Neighbor investigation
 slug: volexity-nearest-neighbor-2024
 title: "The Nearest Neighbor Attack: How A Russian APT Weaponized Nearby Wi-Fi Networks for Covert Access"
@@ -15,9 +16,9 @@ link_status: "ok"
 link_checked_at: "2026-09-07T09:56:01.589Z"
 http_status: 200
 draft: false
-link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
-archive_checked_at: "2026-09-07T10:06:17.677Z"
-archive_check_note: "No capture returned by archive availability API."
+link_check_note: "Retrieval only, not claim verification."
+archive_checked_at: "2026-09-07T10:54:55.232Z"
+archive_check_note: "Post-publication archive: HTTP 200. Content unreviewed."
 ---
 
 Primary source for the nearby-organisation and enterprise Wi-Fi access chain.

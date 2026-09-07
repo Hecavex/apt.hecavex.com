@@ -16,7 +16,7 @@ link_status: "ok"
 link_checked_at: "2026-09-07T09:56:00.077Z"
 http_status: 200
 draft: false
-link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+link_check_note: "Retrieval only, not claim verification."
 ---
 
 The NCA's assessment that arrests halted the original group does not rule out later reuse of the public brand by different people.

@@ -20,6 +20,11 @@ mission: Monetise enterprise access through data theft and ransomware deployment
 current_assessment: Black Basta had extensive European reach and a mature affiliate playbook by 2024. CERT-EU documented continued public activity into March 2025. The precise 2026 structure and continuity are unresolved, so the actor is marked uncertain rather than automatically active. Service administrators, affiliates and initial-access partners remain distinct.
 aliases:
   - name: BlackBasta
+    source_refs:
+      - source: cisa-black-basta-2024
+        locator: "AA24-131A, title and Summary. BlackBasta is the editorial whitespace-normalized display variant of the Black Basta name used by the advisory, not a separate actor identity."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Joint advisory AA24-131A
     relationship: common-alias
     confidence: high
@@ -95,4 +100,3 @@ The operation combined exploitation and credential access with remote administra
 ## Current-status limitation
 
 Public evidence supports activity into March 2025 but does not cleanly establish the 2026 service structure. The catalogue uses uncertain status to avoid translating an old leak-site name or affiliate claim into current operational certainty.
-

@@ -33,6 +33,11 @@ aliases:
     last_seen: "2026"
     notes: The two investigations were conducted in collaboration and explicitly cross-reference the names.
   - name: CL-STA-1114
+    source_refs:
+      - source: joint-laundry-bear-zimbra-2026
+        locator: "Download the English joint advisory, printed page 4, Cybersecurity industry tracking, CL-STA-1114 bullet [3] and the following non-1:1 correlation note. The note explicitly preserves different tracking methods. Reference [3] identifies the Unit 42 source."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Palo Alto Networks Unit 42, as cited in the 2026 joint advisory
     relationship: vendor-tracking-cluster
     confidence: moderate
@@ -41,6 +46,11 @@ aliases:
     last_seen: "2026 advisory"
     notes: The joint advisory explicitly cautions that industry names may not correlate one-to-one.
   - name: TA488
+    source_refs:
+      - source: joint-laundry-bear-zimbra-2026
+        locator: "Download the English joint advisory, printed page 4, Cybersecurity industry tracking, TA488 bullet [4] and the following non-1:1 correlation note. The note explicitly preserves different tracking methods. Reference [4] identifies the Proofpoint source."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Proofpoint, as cited in the 2026 joint advisory
     relationship: vendor-tracking-cluster
     confidence: moderate

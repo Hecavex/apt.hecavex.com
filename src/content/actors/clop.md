@@ -20,6 +20,11 @@ mission: Exploit widely deployed enterprise platforms at scale, steal data and c
 current_assessment: CL0P remains a durable extortion brand with a demonstrated pattern of exploiting managed-transfer and enterprise applications. The MOVEit campaign produced direct and supply-chain exposure across Europe. FIN11, TA505 and Lace Tempest overlap parts of the public history but are not treated as exact equivalents to the current CL0P operator set.
 aliases:
   - name: Clop
+    source_refs:
+      - source: cisa-clop-moveit-2023
+        locator: "AA23-158A, Summary and Technical Details, opening paragraphs. Clop is the editorial case and letter-O display variant of the CL0P brand, not an additional operator set. The same advisory is readable in CISA bulletin 35ecb08."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: CISA and FBI
     relationship: common-alias
     confidence: high
@@ -28,6 +33,11 @@ aliases:
     last_seen: "2026"
     notes: Same brand label.
   - name: TA505
+    source_refs:
+      - source: cisa-clop-moveit-2023
+        locator: "AA23-158A, Summary and Technical Details, paragraphs beginning In 2019 and Beyond CL0P ransomware. The advisory connects TA505 to CL0P delivery but also describes broader TA505 roles. Retained as disputed equivalence, not an exact identity mapping. CISA bulletin 35ecb08 reproduces these sections."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Joint and vendor reporting
     relationship: disputed-equivalence
     confidence: moderate
@@ -36,6 +46,11 @@ aliases:
     last_seen: "2023"
     notes: Not an exact alias for every CL0P campaign.
   - name: FIN11
+    source_refs:
+      - source: gtig-clop-brand-boundaries-2025
+        locator: "Background and Attribution: Overlaps with Confirmed and Suspected FIN11 Activity. GTIG describes historical FIN11 use of the CL0P brand but explicitly states that CL0P ransomware and the leak site are not exclusive to FIN11. This supports the existing possible-overlap boundary only."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Vendor reporting
     relationship: possible-overlap
     confidence: moderate
@@ -94,7 +109,7 @@ external_identifiers:
   mitre_attack: ""
   other: [Clop, CL0P ransomware gang]
 related_research: []
-sources: [cisa-clop-moveit-2023, enisa-finance-threat-landscape-2025]
+sources: [cisa-clop-moveit-2023, enisa-finance-threat-landscape-2025, gtig-clop-brand-boundaries-2025]
 updates: [clop-profile-created]
 featured: true
 draft: false

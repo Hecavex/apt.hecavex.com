@@ -361,6 +361,7 @@ for (const record of recordsByCollection.get('actors') ?? []) {
   const aliases = (data.aliases ?? []).map((alias) => String(alias.name).toLowerCase());
   if (new Set(aliases).size !== aliases.length) errors.push(`${describe(record)}: duplicate alias name`);
   for (const alias of [...(data.aliases ?? []), ...(data.subclusters ?? [])]) {
+    if (!(alias.source_refs ?? []).length) errors.push(`${describe(record)}: alias or subcluster requires a source locator`);
     for (const citation of alias.source_refs ?? []) {
       checkTypedReference(record, citation.source, 'sources', 'alias source');
       if (!String(citation.locator ?? '').trim()) errors.push(`${describe(record)}: alias locator is empty`);
