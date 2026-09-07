@@ -16,7 +16,9 @@ link_status: "ok"
 link_checked_at: "2026-09-07T09:55:50.229Z"
 http_status: 200
 draft: false
-link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+link_check_note: "Retrieval only, not claim verification."
 ---
 
 TA505 and FIN11 are retained as historical or vendor-specific overlaps rather than exact actor synonyms.
+
+CISA's [official HTML bulletin for the same advisory](https://content.govdelivery.com/accounts/USDHSCISA/bulletins/35ecb08) provides an accessible reading alternative. The Summary and Technical Details sections contain the TA505 wording. CISA's broad label is preserved as a source statement, not silently adopted as exact equivalence across all vendor clusters.

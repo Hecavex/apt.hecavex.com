@@ -111,10 +111,15 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
                   {d.aliases.map((alias: any) => (
                     <tr>
                       <td>{alias.name}</td>
-                      <td>{alias.source}{alias.source_refs.length ? alias.source_refs.map((ref: any) => <small><a href={`/sources/${maps.sources.get(ref.source)?.data.slug ?? ref.source}/`} data-knowledge-link>{ref.source}</a> · {ref.locator} · {label(ref.basis)}</small>) : <small>Claim-specific source locator not recorded. The legacy source label is not a verified identity assertion.</small>}</td>
+                      <td>{alias.source}</td>
                       <td>{label(alias.relationship)}</td>
                       <td><span class={`badge ${alias.confidence}`}>{label(alias.confidence)}</span></td>
-                      <td>{alias.scope}{alias.notes ? ` ${alias.notes}` : ''}</td>
+                      <td>{alias.scope}{alias.notes ? ` ${alias.notes}` : ''}
+                        <details class="alias-provenance">
+                          <summary>Source provenance ({alias.source_refs.length})</summary>
+                          {alias.source_refs.length ? alias.source_refs.map((ref: any) => <p><a href={`/sources/${maps.sources.get(ref.source)?.data.slug ?? ref.source}/`} data-knowledge-link>{ref.source}</a><br />{ref.locator}<br /><small>{label(ref.basis)}</small></p>) : <p>Claim-specific source locator not recorded. The legacy source label is not a verified identity assertion.</p>}
+                        </details>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

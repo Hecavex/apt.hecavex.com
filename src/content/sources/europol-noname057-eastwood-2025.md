@@ -16,7 +16,7 @@ link_status: "ok"
 link_checked_at: "2026-09-07T09:55:53.737Z"
 http_status: 200
 draft: false
-link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+link_check_note: "Retrieval only, not claim verification."
 ---
 
 Europol's public account of the July 2025 action against NoName057(16). Arrest warrants and investigative statements are recorded as law-enforcement claims rather than criminal findings.

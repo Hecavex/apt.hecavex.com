@@ -132,6 +132,11 @@ aliases:
     notes: Primarily useful in OT-focused reporting.
 subclusters:
   - name: BadPilot initial-access subgroup
+    source_refs:
+      - source: microsoft-badpilot-2025
+        locator: "Introduction, first paragraph, and Attribution assessment. Microsoft describes an initial-access subgroup inside Seashell Blizzard and names its campaign BadPilot. This is an editorial descriptive subgroup label, not a literal publisher alias or the entire APT44 umbrella."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Microsoft Threat Intelligence
     relationship: subgroup
     confidence: high

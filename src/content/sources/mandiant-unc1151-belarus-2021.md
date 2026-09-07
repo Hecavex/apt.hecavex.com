@@ -16,7 +16,7 @@ link_status: "ok"
 link_checked_at: "2026-09-07T09:55:58.918Z"
 http_status: 200
 draft: false
-link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+link_check_note: "Retrieval only, not claim verification."
 ---
 
 The source supports a high-confidence Belarus-government link. It also explains why UNC1151 and all Ghostwriter activity should not be treated as exact equivalents.

@@ -16,7 +16,7 @@ link_status: "ok"
 link_checked_at: "2026-09-07T09:55:50.920Z"
 http_status: 200
 draft: false
-link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+link_check_note: "Retrieval only, not claim verification."
 ---
 
 The charges are allegations unless adjudicated. The record is used for the United States government's attribution and the operations described in the charging announcement.

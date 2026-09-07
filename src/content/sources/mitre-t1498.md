@@ -15,9 +15,9 @@ link_status: "ok"
 link_checked_at: "2026-09-07T09:55:59.395Z"
 http_status: 200
 draft: false
-link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+link_check_note: "Retrieval only, not claim verification."
 archive_checked_at: "2026-09-07T10:06:09.478Z"
-archive_check_note: "Availability API identified a post-publication capture and its archive response returned HTTP 200. Source content equivalence still requires editorial review."
+archive_check_note: "Post-publication archive: HTTP 200. Content unreviewed."
 archived_url: "https://web.archive.org/web/20260826083536/https://attack.mitre.org/techniques/T1498/"
 ---
 

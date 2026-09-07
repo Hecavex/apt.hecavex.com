@@ -20,6 +20,11 @@ mission: Maintain persistent intelligence access to Ukrainian public-sector and 
 current_assessment: Gamaredon remains one of the most consistently active Russian espionage actors focused on Ukraine. Technical reporting shows repeated spearphishing waves rather than a small number of bespoke operations. EU sanctions and Ukrainian reporting support the state relationship, while current public victimology remains primarily Ukrainian and should not be exaggerated into broad EU-wide targeting.
 aliases:
   - name: UAC-0010
+    source_refs:
+      - source: scpc-uac0010-story-2023
+        locator: "Article title and linked Another UAC-0010 Story PDF, printed page 3, Foreword, first paragraph. SCPC explicitly places UAC-0010, Gamaredon and Armageddon in its naming statement. The PDF is dated January 2023, while the hosting article is dated 1 February 2023."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Ukrainian government reporting
     relationship: government-designation
     confidence: high
@@ -28,6 +33,15 @@ aliases:
     last_seen: "2025"
     notes: Preferred alongside Gamaredon because it preserves the Ukrainian source boundary.
   - name: Armageddon
+    source_refs:
+      - source: eu-gamaredon-sanctions-2024
+        locator: "Main statement, paragraph naming Oleksandr Sklianko and Mykola Chernykh as members of the Armageddon hacker group. This locates the Council naming usage. The SCPC Foreword provides the separate Gamaredon naming bridge."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
+      - source: scpc-uac0010-story-2023
+        locator: "Linked Another UAC-0010 Story PDF, printed page 3, Foreword, first paragraph. SCPC explicitly associates Armageddon with UAC-0010 and Gamaredon. This is a publisher-specific naming link, not proof of identical historical cluster boundaries."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Council of the European Union
     relationship: common-alias
     confidence: high
@@ -36,6 +50,11 @@ aliases:
     last_seen: "2024"
     notes: Retained as an alias, not a claim that every historical Armageddon label identifies an identical operator set.
   - name: Aqua Blizzard
+    source_refs:
+      - source: microsoft-actinium-2022
+        locator: "Current naming notice above the article and opening paragraph. The notice maps ACTINIUM to Aqua Blizzard, while the original introduction identifies ACTINIUM as publicly called Gamaredon. The 2022 publication date is not presented as the date Aqua Blizzard was coined."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: vendor-tracking-cluster
     confidence: high
@@ -92,7 +111,7 @@ external_identifiers:
   mitre_attack: G0047
   other: [UAC-0010, Primitive Bear, Trident Ursa, Armageddon, Aqua Blizzard]
 related_research: []
-sources: [eu-gamaredon-sanctions-2024, eset-gamaredon-2024-2025]
+sources: [eu-gamaredon-sanctions-2024, eset-gamaredon-2024-2025, scpc-uac0010-story-2023, microsoft-actinium-2022]
 updates: [gamaredon-profile-created]
 featured: true
 draft: false
@@ -115,4 +134,3 @@ Ukraine is the central and best-supported victim environment. This is directly r
 ## Attribution and limitations
 
 The state relationship is strongly supported by official reporting. The weaker part of the public record is internal tasking: public sources do not expose who selected every target or whether each tool operator belonged to the same organisational cell. Alias lists are therefore search aids and source mappings, not a promise that every vendor record is coextensive.
-

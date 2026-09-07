@@ -15,9 +15,9 @@ link_status: "unknown"
 link_checked_at: "2026-09-07T09:55:54.070Z"
 http_status: 403
 draft: false
-link_check_note: "HTTP 403 or request failure is inconclusive. Existing citation retained. This is a retrieval check, not a truth or availability verdict."
+link_check_note: "Inconclusive retrieval. Citation retained."
 archive_checked_at: "2026-09-07T10:05:51.865Z"
-archive_check_note: "Availability API identified a post-publication capture and its archive response returned HTTP 200. Source content equivalence still requires editorial review."
+archive_check_note: "Post-publication archive: HTTP 200. Content unreviewed."
 archived_url: "https://web.archive.org/web/20260206055621/https://media.defense.gov/2025/Dec/09/2003840175/-1/-1/0/JOINT_CSA_PRO-RUSSIA_HACKTIVISTS_CONDUCT_ATTACKS_AGAINST_CRITICAL_INFRASTRUCTURE.PDF"
 ---
 

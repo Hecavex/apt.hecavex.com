@@ -16,7 +16,7 @@ link_status: "ok"
 link_checked_at: "2026-09-07T09:55:51.159Z"
 http_status: 200
 draft: false
-link_check_note: "Canonical endpoint returned a successful response. Retrieval does not independently validate every claim."
+link_check_note: "Retrieval only, not claim verification."
 ---
 
 The indictment and press release contain allegations. The dossier preserves the presumption of innocence and does not treat every alias as a mathematically exact cluster boundary.

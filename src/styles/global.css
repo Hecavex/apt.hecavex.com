@@ -1964,6 +1964,9 @@ tbody tr:hover {
 .profile-table .alias-relationship { width: 19%; }
 .profile-table .alias-confidence { width: 14%; }
 .profile-table .alias-notes { width: 38%; }
+.alias-provenance { margin-top: .5rem; }
+.alias-provenance > summary { min-height: 28px; cursor: pointer; }
+.alias-provenance p { margin: .5rem 0; overflow-wrap: anywhere; }
 .profile-table td:first-child,
 .profile-table .badge { white-space: nowrap; }
 

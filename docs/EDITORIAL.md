@@ -109,4 +109,6 @@ A failed release gate blocks deployment. Changes to validation or performance th
 
 ## Publication safety
 
+Every published alias and subcluster needs a dossier-scoped source reference and a usable locator. For editorial display labels, explain the normalization or descriptive wording in the locator. An explicit source statement can support the underlying relationship without literally containing that display label. Preserve subgroup, historical, umbrella and partial-overlap types. A locator check is not a new human analyst review or permission to replace an observation or review date.
+
 APT Notes publishes defensive, public-interest research. It does not store executable malware, credentials, private intelligence or unnecessary victim details. Suspected sensitive-data exposure is handled through the current [HECAVEX security contact](https://hecavex.com/.well-known/security.txt).

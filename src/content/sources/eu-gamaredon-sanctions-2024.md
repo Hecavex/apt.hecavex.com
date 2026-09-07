@@ -16,7 +16,7 @@ link_status: "unknown"
 link_checked_at: "2026-09-07T09:55:52.541Z"
 http_status: 403
 draft: false
-link_check_note: "HTTP 403 or request failure is inconclusive. Existing citation retained. This is a retrieval check, not a truth or availability verdict."
+link_check_note: "Inconclusive retrieval. Citation retained."
 ---
 
 Used for the official state-link and European-impact boundary. The sanctions statement is not treated as proof that every public Gamaredon label covers the same operators.

@@ -69,7 +69,7 @@ const recordUrl = (update: any) => {
       {releaseUpdates.map((update: any) => <li id={update.data.slug} class="change-record"
         data-change-record data-entity={update.data.entity_type} data-type={update.data.update_type}
         data-date={update.data.date.toISOString()}
-        data-search={`${update.data.title} ${update.data.summary} ${update.data.what_changed} ${update.data.why} ${update.data.entity} ${update.data.affected_fields.join(' ')}`.toLowerCase()}
+        data-record-id={update.data.entity}
         data-pagefind-meta="type:Change">
         <div class="change-record-meta">
           <time datetime={update.data.date.toISOString()}>{formatDate(update.data.date)}</time>
@@ -118,6 +118,8 @@ const recordUrl = (update: any) => {
     const form = document.querySelector<HTMLFormElement>('[data-change-controls]');
     if (!form) return;
     const rows = [...document.querySelectorAll<HTMLElement>('[data-change-record]')];
+    // Index rendered text once instead of transmitting duplicate prose in attributes.
+    const searchText = new Map(rows.map((row) => [row, `${row.dataset.recordId} ${row.textContent}`.toLowerCase()]));
     const groups = [...document.querySelectorAll<HTMLElement>('[data-change-release-group]')];
     const count = document.querySelector<HTMLElement>('[data-change-count]')!;
     const empty = document.querySelector<HTMLElement>('[data-change-empty]')!;
@@ -128,7 +130,7 @@ const recordUrl = (update: any) => {
       const entity = String(data.get('entity') ?? '');
       const type = String(data.get('type') ?? '');
       const windowDays = Number(data.get('window') ?? 0);
-      const shown = rows.filter((row) => (!q || row.dataset.search!.includes(q))
+      const shown = rows.filter((row) => (!q || searchText.get(row)!.includes(q))
         && (!entity || row.dataset.entity === entity)
         && (!type || row.dataset.type === type)
         && (!windowDays || asOf - new Date(row.dataset.date!).getTime() <= windowDays * 86_400_000));

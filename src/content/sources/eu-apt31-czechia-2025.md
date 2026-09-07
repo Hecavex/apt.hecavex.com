@@ -16,7 +16,7 @@ link_status: "unknown"
 link_checked_at: "2026-09-07T09:55:52.521Z"
 http_status: 403
 draft: false
-link_check_note: "HTTP 403 or request failure is inconclusive. Existing citation retained. This is a retrieval check, not a truth or availability verdict."
+link_check_note: "Inconclusive retrieval. Citation retained."
 ---
 
 This is diplomatic corroboration of Czechia's national attribution, not an independent technical attribution report.

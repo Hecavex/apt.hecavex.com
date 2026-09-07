@@ -20,6 +20,11 @@ mission: Generate politically timed availability disruption and publicity agains
 current_assessment: A multinational advisory assesses NoName057(16) to be a covert project created inside the Kremlin-established CISM organisation. Operation Eastwood substantially disrupted its infrastructure in July 2025 but did not establish that the network had ceased to exist. CERT-EU recorded later claimed activity with limited confirmed availability effects. The public evidence supports a persistent state-aligned DDoS network, while individual target claims still require victim-side corroboration.
 aliases:
   - name: NoName05716
+    source_refs:
+      - source: europol-noname057-eastwood-2025
+        locator: "Title and opening description use NoName057(16). NoName05716 is the editorial punctuation-normalized display variant, also present in the official page slug, not a separate attribution claim."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Europol
     relationship: common-alias
     confidence: high

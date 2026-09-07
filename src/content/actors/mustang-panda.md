@@ -46,6 +46,11 @@ aliases:
     last_seen: "2025"
     notes: Search and source-correlation aid.
   - name: Twill Typhoon
+    source_refs:
+      - source: microsoft-mustang-panda-name-2023
+        locator: "Summary, paragraph describing the threat actor Mustang Panda and its Twill Typhoon name. This is the actor naming sentence, not the separate malware-signature Aliases field or an equivalence with the detection itself."
+        basis: explicit-statement
+        checked_at: "2026-09-07"
     source: Microsoft
     relationship: vendor-tracking-cluster
     confidence: high
@@ -95,7 +100,7 @@ external_identifiers:
   mitre_attack: G0129
   other: [TA416, RedDelta, Twill Typhoon, Bronze President]
 related_research: []
-sources: [eset-mustang-panda-hodur-2022, eset-mustang-panda-activity-2025]
+sources: [eset-mustang-panda-hodur-2022, eset-mustang-panda-activity-2025, microsoft-mustang-panda-name-2023]
 updates: [mustang-panda-profile-created]
 featured: true
 draft: false
