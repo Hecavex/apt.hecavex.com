@@ -22,6 +22,7 @@ const confidences = unique(relationships.map((relationship: any) => relationship
         <p class="eyebrow">Sourced relationship layer</p>
         <h1>Evidence before edges.</h1>
         <p class="lead">A bounded view of actor-to-technique links backed by procedure evidence in the public dossiers. It is not a complete graph of every catalogue association.</p>
+        <p>Unrecorded claim and date bases are unknown, not negative findings. An inherited confidence label is not independently certified. Dates are not activity windows unless explicitly established; each JSON record preserves the available metadata.</p>
       </div>
       <span class="meta" data-relationship-header-count>{relationships.length} evidenced relationships</span>
     </header>
@@ -67,7 +68,7 @@ const confidences = unique(relationships.map((relationship: any) => relationship
             <p>{relationship.evidence}</p>
             {relationship.assessment.method !== 'not-recorded' && <p><strong>Confidence basis:</strong> {relationship.confidence_rationale}</p>}
             {relationship.assessment.method !== 'not-recorded' && <details><summary>Source comparison and alternatives</summary><p>{relationship.assessment.evidence_type} · compared {relationship.assessment.compared_at}; not independent human review.</p><p>{relationship.assessment.mapping_rationale}</p><p>{relationship.assessment.source_dependence}</p><ul>{relationship.assessment.alternatives.map((alternative: string) => <li>{alternative}</li>)}</ul></details>}
-            <p class="meta">Date basis: {relationship.temporal_scope.date_basis}.{relationship.temporal_scope.date_basis !== 'not-recorded' && ` ${relationship.temporal_scope.note}`}</p>
+            {relationship.temporal_scope.date_basis !== 'not-recorded' && <p class="meta">Date basis: {relationship.temporal_scope.date_basis}. {relationship.temporal_scope.note}</p>}
             <p class="meta">Claim review: {relationship.claim_review.state}{relationship.claim_review.reviewed_at ? ` · ${relationship.claim_review.reviewed_at}` : ''} · version {relationship.claim_review.version}</p>
             {(relationship.claim_review.state !== 'not-recorded' || relationship.source_locators.length > 0) && <p>{relationship.claim_review.rationale}</p>}
             {relationship.claim_review.correction_note && <p>{relationship.claim_review.correction_note}</p>}

@@ -63,7 +63,7 @@ const temporalScope = z.object({
   source_published_at: z.string().nullable().optional(),
   assessment_at: z.string().nullable().optional(),
   note: z.string().min(1)
-}).default({ date_basis: 'not-recorded', note: 'Legacy date basis unknown; publication is not activity.' });
+}).default({ date_basis: 'not-recorded', note: 'Date basis unrecorded.' });
 const base = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -174,7 +174,7 @@ const actors = defineCollection({
       confidence,
       sources: z.array(ref).min(1),
       notes: z.string().min(1),
-      confidence_rationale: z.string().default('Claim basis unrecorded; inherited rating, not certification.'),
+      confidence_rationale: z.string().default('Unrecorded; inherited rating.'),
       assessment: claimAssessment,
       temporal_scope: temporalScope,
       source_locators: claimSources,

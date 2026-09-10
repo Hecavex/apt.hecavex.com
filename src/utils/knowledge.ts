@@ -144,7 +144,7 @@ export const deriveRelationships = (
         editorial_note: evidence.editorial_note,
         deprecated: actor.data.deprecated,
         revoked: actor.data.revoked,
-        scope_note: 'Published from explicit procedure evidence in an APT Notes actor dossier. Broader catalogue associations are not promoted to sourced relationships.',
+        scope_note: 'Explicit dossier procedures; not a full graph.',
         url: `/relationships/#${id}`,
         json_url: `/api/relationships/${id}.json`
       });
