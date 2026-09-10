@@ -20,6 +20,8 @@ Records are kept in `src/content/` by entity type. The schemas in `src/content.c
 
 Actor dossiers remain the primary editorial product. Supporting records are browsed through the Knowledge explorer and open in one progressively enhanced detail panel; their canonical fallback pages remain available for direct links, reloads, search indexing and no-JavaScript access. The Relationships view publishes only actor-to-technique links that already carry explicit procedure evidence and supporting references.
 
+Actor and supporting records include a copyable citation with the stable record ID, record version, dataset release and canonical address. The citation remains readable without JavaScript and in contextual record panels. Publication versions are not analyst-review dates, and a current URL is not an immutable snapshot. Readers should retain the public JSON with their actual access date and cite underlying publishers separately for source claims.
+
 The [Baltic relevance view](https://apt.hecavex.com/baltic-relevance/) is a derived regional reading layer over reviewed actor dossiers. Its structured records distinguish reported compromise, reported targeting, actor claims and reporting connections; inclusion never converts a country-level statement into an inferred victim incident. Complete one-row-per-evidence machine exports are available as [JSON](https://apt.hecavex.com/api/baltic-relevance.json) and [CSV](https://apt.hecavex.com/data/baltic-relevance.csv); the actor CSV remains an actor-level discovery table.
 
 The editorial and release requirements are recorded in [docs/EDITORIAL.md](docs/EDITORIAL.md).

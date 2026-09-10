@@ -11,5 +11,7 @@ export default defineConfig({
     return !pathname.includes('/drafts/') && pathname !== '/search/' && pathname !== '/about/methodology/' && !compatibilityIndexes.has(pathname);
   } })],
   build: { format: 'directory' },
+  // Keep shared client scripts cacheable rather than repeating them in every record.
+  vite: { build: { assetsInlineLimit: (filePath) => filePath.endsWith('.js') ? false : undefined } },
   security: { checkOrigin: true }
 });
