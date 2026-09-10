@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProfileToc from '../../components/ProfileToc.astro';
 import KnowledgeLink from '../../components/knowledge/KnowledgeLink.astro';
+import RecordCitation from '../../components/RecordCitation.astro';
 import { publicEntries, byId, label, formatDate, reviewStatus } from '../../utils/content';
 
 export async function getStaticPaths() {
@@ -222,6 +223,8 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
           <h2>References</h2>
           <ol class="source-list">{d.sources.map((id: string) => { const source = maps.sources.get(id); return <li>{source ? <><a href={source.data.url}>{source.data.title}</a><span>{source.data.publisher} · {formatDate(source.data.published_at)} · <KnowledgeLink collection="sources" slug={source.data.slug}>Reference record</KnowledgeLink></span></> : <span>{id} · reference record pending</span>}</li>; })}</ol>
         </section>
+
+        <RecordCitation title={d.name} recordId={d.id} version={d.version} canonicalHref={`/actors/${d.slug}/`} jsonHref={`/api/actors/${d.slug}.json`} />
 
         {d.updates.length > 0 && (
           <section id="change-history">

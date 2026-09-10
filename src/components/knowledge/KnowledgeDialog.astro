@@ -129,16 +129,6 @@
 
     document.addEventListener('click', (event) => {
       const target = event.target as Element | null;
-      const copy = target?.closest<HTMLButtonElement>('[data-copy-record-url]');
-      if (copy) {
-        const value = copy.dataset.copyRecordUrl || window.location.href;
-        void navigator.clipboard?.writeText(value).then(() => {
-          const previous = copy.textContent;
-          copy.textContent = 'Copied';
-          window.setTimeout(() => { copy.textContent = previous; }, 1600);
-        });
-        return;
-      }
       const link = target?.closest<HTMLAnchorElement>('a[href]');
       if (!link || !isEligible(link, event)) return;
       event.preventDefault();

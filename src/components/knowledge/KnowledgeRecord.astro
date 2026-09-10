@@ -10,6 +10,7 @@ import {
   type RelationshipRecord
 } from '../../utils/knowledge';
 import KnowledgeLink from './KnowledgeLink.astro';
+import RecordCitation from '../RecordCitation.astro';
 
 interface Props {
   collection: Exclude<EntityCollection, 'actors'>;
@@ -294,11 +295,14 @@ const techniqueUrl = collection === 'techniques'
     {d.superseded_by && <p>Superseded by <span class="mono">{d.superseded_by}</span>.</p>}
   </section>
 
-  <footer class="knowledge-record__actions" data-knowledge-section="actions">
+  <RecordCitation title={heading} recordId={d.id} version={d.version} canonicalHref={canonicalHref} jsonHref={jsonHref} />
+
+  <footer class="knowledge-record__actions" data-knowledge-section="actions" data-copy-container>
     <a href="/knowledge/" data-knowledge-back>← Back to Knowledge</a>
     <a class="button" href={jsonHref}>Open public JSON</a>
     <a href={canonicalHref} data-knowledge-open-page data-knowledge-bypass>Open full page</a>
-    <button type="button" data-knowledge-copy-link data-copy-record-url={absoluteCanonicalHref}>Copy record link</button>
+    <button type="button" data-record-copy data-copy-label="Record link" data-copy-value={absoluteCanonicalHref}>Copy record link</button>
+    <span class="meta" data-copy-status role="status" aria-live="polite"></span>
     {techniqueUrl && <a href={techniqueUrl} rel="external">Open MITRE ATT&amp;CK ↗</a>}
     {collection === 'sources' && <a href={d.url} rel="external">Open primary publication ↗</a>}
   </footer>

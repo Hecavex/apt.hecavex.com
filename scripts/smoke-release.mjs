@@ -45,6 +45,68 @@ try {
       if (q === 'Microsoft') assert(count > 30); else if (q === 'APT28') assert(count > 0); else assert.equal(count, 0);
       assert.deepEqual(await page.evaluate(() => window.cspViolations), []);
     }
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: {
+        async writeText(value) {
+          if (!window.allowCopy) throw new DOMException('Denied', 'NotAllowedError');
+          window.copiedRecord = value;
+        }
+      } });
+    });
+    let sourcePath;
+    for (const width of [320, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(new URL('actors/apt28/', base).href);
+      const citation = page.locator('.record-citation');
+      await citation.locator('summary').click();
+      const text = await citation.locator('[data-citation-text]').innerText();
+      const actorJson = await page.request.get(new URL('api/actors/apt28.json', base).href).then(response => response.json());
+      assert(text.includes(`Record ${actorJson.record.id}, version ${actorJson.record.version}.`));
+      assert(text.includes(`Dataset ${actorJson.dataset_version}, release ${actorJson.release_id}.`));
+      assert(text.endsWith('https://apt.hecavex.com/actors/apt28/'));
+      await citation.locator('[data-record-copy]').click();
+      await citation.locator('[data-copy-fallback]').waitFor();
+      assert.equal(await citation.locator('[data-copy-fallback]').inputValue(), text);
+      await page.evaluate(() => { window.allowCopy = true; });
+      await citation.locator('[data-record-copy]').click();
+      await page.waitForFunction(() => Boolean(window.copiedRecord));
+      assert.equal(await page.evaluate(() => window.copiedRecord), text);
+      assert.equal(await citation.locator('[data-copy-fallback]').count(), 0);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+
+      const sourceLink = page.locator('#sources [data-knowledge-link]').first();
+      sourcePath = await sourceLink.getAttribute('href');
+      await sourceLink.click();
+      const dialog = page.locator('[data-knowledge-dialog]');
+      await dialog.locator('[data-knowledge-record-fragment]').waitFor();
+      assert(await dialog.isVisible());
+      await page.evaluate(() => { window.allowCopy = false; });
+      await dialog.locator('.record-citation summary').click();
+      const sourceText = await dialog.locator('[data-citation-text]').innerText();
+      assert(sourceText.endsWith(new URL(sourcePath, 'https://apt.hecavex.com').href));
+      await dialog.locator('.record-citation [data-record-copy]').click();
+      await dialog.locator('.record-citation [data-copy-fallback]').waitFor();
+      assert.equal(await dialog.locator('.record-citation [data-copy-fallback]').inputValue(), sourceText);
+      await page.evaluate(() => { Object.defineProperty(navigator, 'clipboard', { configurable: true, value: undefined }); });
+      await dialog.locator('.knowledge-record__actions [data-record-copy]').click();
+      await dialog.locator('.knowledge-record__actions [data-copy-fallback]').waitFor();
+      assert.equal(await dialog.locator('.knowledge-record__actions [data-copy-fallback]').inputValue(), new URL(sourcePath, 'https://apt.hecavex.com').href);
+      assert.deepEqual(await page.evaluate(() => window.cspViolations), []);
+      await page.goBack();
+      await dialog.waitFor({ state: 'hidden' });
+      assert.equal(new URL(page.url()).pathname, '/actors/apt28/');
+    }
+    const noJs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 320, height: 900 } });
+    try {
+      const staticPage = await noJs.newPage();
+      for (const route of ['actors/apt28/', sourcePath]) {
+        await staticPage.goto(new URL(route, base).href);
+        await staticPage.locator('.record-citation summary').click();
+        assert(await staticPage.locator('[data-citation-text]').isVisible());
+        assert.equal(await staticPage.locator('[data-record-copy]:visible').count(), 0);
+        assert(await staticPage.locator('.record-citation a[download]').isVisible());
+      }
+    } finally { await noJs.close(); }
   } else if (profile === 'labs') {
     await page.goto(new URL('attack-map/?actor=apt28', base).href);
     await page.waitForFunction(() => !/Loading/.test(document.querySelector('#result-count').textContent));

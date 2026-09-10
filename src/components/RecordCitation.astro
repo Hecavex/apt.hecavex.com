@@ -1,0 +1,24 @@
+---
+import { release } from '../data/release';
+
+interface Props {
+  title: string;
+  recordId: string;
+  version: string;
+  canonicalHref: string;
+  jsonHref: string;
+}
+
+const { title, recordId, version, canonicalHref, jsonHref } = Astro.props;
+const citation = `HECAVEX. "${title}." APT Notes. Record ${recordId}, version ${version}. Dataset ${release.datasetVersion}, release ${release.id}. ${new URL(canonicalHref, Astro.site).href}`;
+---
+<details class="record-citation" data-copy-container data-pagefind-ignore>
+  <summary>Cite this catalogue record</summary>
+  <p data-citation-text>{citation}</p>
+  <p class="meta">Record and dataset versions identify the publication, not an analyst-review date. This address can change over time. Retain the public JSON with your actual access date when citing a specific state. Cite the original source separately for its claims.</p>
+  <div class="record-citation__actions">
+    <button type="button" class="button" data-record-copy data-copy-label="Record citation" data-copy-value={citation}>Copy citation</button>
+    <a href={jsonHref} download>Download this record's public JSON</a>
+  </div>
+  <p class="meta" data-copy-status role="status" aria-live="polite"></p>
+</details>

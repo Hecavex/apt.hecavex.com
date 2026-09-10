@@ -59,6 +59,10 @@ for (const file of files) {
     if (fragments !== 1) errors.push(`${relative}: expected one knowledge fallback fragment, found ${fragments}`);
     if (!/data-knowledge-record-heading(?:\s|=|>)/i.test(html)) errors.push(`${relative}: knowledge fallback is missing its focusable heading`);
   }
+  if (/^(actors|campaigns|malware|tools|techniques|sources)\/[^/]+\/index\.html$/.test(relative)) {
+    if ((html.match(/data-citation-text(?:\s|=|>)/g) || []).length !== 1) errors.push(`${relative}: expected one no-JavaScript record citation`);
+    if (!html.includes('not an analyst-review date')) errors.push(`${relative}: citation must distinguish publication version from review date`);
+  }
 
   if (relative === 'about/methodology/index.html') {
     if (!compatibilityRoute) errors.push(`${relative}: missing compatibility-route marker`);
