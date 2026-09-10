@@ -8,6 +8,7 @@ const option = (name) => {
   return index === -1 ? undefined : commandLine[index + 1];
 };
 const contentRoot = path.resolve(option('content-root') ?? 'src/content');
+const retiredRelationships = option('content-root') ? [] : JSON.parse(fs.readFileSync('src/data/retired-relationships.json', 'utf8'));
 const collectionNames = [
   'actors',
   'campaigns',
@@ -477,6 +478,19 @@ for (const actor of recordsByCollection.get('actors') ?? []) {
     if (evidence.review?.state === 'not-recorded' && evidence.review.reviewed_at) errors.push(`${describe(actor)}: unrecorded claim review must not invent a review date`);
     if (['corrected', 'withdrawn'].includes(evidence.review?.state) && !String(evidence.review.correction_note ?? '').trim()) errors.push(`${describe(actor)}: corrected or withdrawn claim needs a correction note`);
     const label = `technique_evidence[${index}]`;
+    const assessment = evidence.assessment;
+    if (assessment) {
+      if (!['not-recorded', 'ai-assisted-source-comparison'].includes(assessment.method)) errors.push(`${describe(actor)}: invalid claim comparison method`);
+      if (assessment.method === 'not-recorded' && assessment.compared_at) errors.push(`${describe(actor)}: unrecorded comparison must not invent a date`);
+      if (assessment.method === 'ai-assisted-source-comparison') {
+        parseDate(actor, assessment.compared_at, 'claim compared_at', { required: true });
+        if (evidence.review?.reviewed_at || evidence.review?.state !== 'not-recorded') errors.push(`${describe(actor)}: AI comparison must not certify independent human review`);
+        for (const field of ['evidence_type', 'confidence_scope', 'source_dependence', 'mapping_rationale']) if (!String(assessment[field] ?? '').trim()) errors.push(`${describe(actor)}: claim comparison requires ${field}`);
+        if (!Array.isArray(assessment.alternatives) || !assessment.alternatives.length) errors.push(`${describe(actor)}: claim comparison requires alternatives`);
+        if (!String(evidence.confidence_rationale ?? '').trim() || !(evidence.source_locators ?? []).length) errors.push(`${describe(actor)}: claim comparison requires rationale and exact source locator`);
+      }
+    }
+    if (evidence.temporal_scope?.date_basis === 'publication-date' && (evidence.temporal_scope.activity_first || evidence.temporal_scope.activity_last)) errors.push(`${describe(actor)}: publication date must not invent activity bounds`);
     if (!String(evidence.notes ?? '').trim()) errors.push(`${describe(actor)}: ${label} has empty notes`);
     if (!allowed.confidence.has(evidence.confidence)) {
       errors.push(`${describe(actor)}: ${label} has invalid confidence "${evidence.confidence}"`);
@@ -594,7 +608,7 @@ for (const update of recordsByCollection.get('updates') ?? []) {
     if (corrected === update) errors.push(`${describe(update)}: correction_of cannot reference itself`);
   }
   for (const relationshipId of data.affected_relationships ?? []) {
-    if (!relationshipRecords.has(relationshipId)) {
+    if (!relationshipRecords.has(relationshipId) && !retiredRelationships.some(record => record.id === relationshipId)) {
       errors.push(`${describe(update)}: unknown affected_relationship "${relationshipId}"`);
     }
   }
@@ -605,6 +619,10 @@ for (const update of recordsByCollection.get('updates') ?? []) {
     timeline.push(update);
     updatesByEntity.set(key, timeline);
   }
+}
+
+for (const retired of retiredRelationships) {
+  if (relationshipRecords.has(retired.id) || !relationshipRecords.has(retired.superseded_by) || retired.lifecycle !== 'superseded' || !retired.reason || retired.previous_claim_reviewed_at !== null) errors.push(`Invalid retired relationship lineage: ${retired.id}`);
 }
 
 for (const [entityKey, timeline] of updatesByEntity) {

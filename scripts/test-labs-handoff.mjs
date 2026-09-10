@@ -5,6 +5,7 @@ import ts from 'typescript';
 import { createHash } from 'node:crypto';
 
 const snapshot = JSON.parse(fs.readFileSync('src/data/labs-evidence-handoff.json', 'utf8'));
+const retired = JSON.parse(fs.readFileSync('src/data/retired-relationships.json', 'utf8'));
 const source = fs.readFileSync('src/utils/labs-handoff.ts', 'utf8');
 const moduleSource = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
 const { labsEvidenceHandoff } = await import('data:text/javascript;base64,' + Buffer.from(moduleSource).toString('base64'));
@@ -18,7 +19,10 @@ for (const included of snapshot.actors) {
   const actualIds = actor.technique_evidence.map(evidence => included.id + ':' + techniques.get(evidence.technique).mitre_id + ':' + (evidence.campaign || 'uncampaigned'));
   assert(included.evidence_ids.length > 0);
   assert.equal(new Set(included.evidence_ids).size, included.evidence_ids.length);
-  for (const id of included.evidence_ids) assert(actualIds.includes(id), 'Recorded Labs evidence ID no longer matches an APT procedure: ' + id);
+  for (const id of included.evidence_ids) {
+    const retirement = retired.find(record => record.previous_evidence_id === id && record.lifecycle === 'superseded');
+    assert(actualIds.includes(id) || (retirement && actualIds.includes(retirement.replacement_evidence_id)), 'Recorded Labs evidence ID needs a current procedure or explicit supersession: ' + id);
+  }
   assert.equal(labsEvidenceHandoff(snapshot, included.id, true).url, 'https://labs.hecavex.com/attack-map/?actor=' + included.id);
 }
 assert.equal(labsEvidenceHandoff(snapshot, 'future-apt-only-actor', true), null);

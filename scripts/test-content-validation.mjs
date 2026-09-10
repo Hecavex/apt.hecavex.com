@@ -12,7 +12,11 @@ manifest.cases.push(
   { name: 'valid source-scoped claim locator', valid: true, claimFixture: 'valid' },
   { name: 'missing name locator is rejected', valid: false, claimFixture: 'missing-name', includes: ['alias or subcluster requires a source locator'] },
   { name: 'invalid source scope and invented review date', valid: false, claimFixture: 'invalid', includes: ['alias locator must refer to a dossier source', 'procedure locator must refer to its supporting source', 'unrecorded claim review must not invent a review date'] },
-  { name: 'correction requires explicit rationale', valid: false, claimFixture: 'correction', includes: ['claim review needs date and rationale', 'corrected or withdrawn claim needs a correction note'] }
+  { name: 'correction requires explicit rationale', valid: false, claimFixture: 'correction', includes: ['claim review needs date and rationale', 'corrected or withdrawn claim needs a correction note'] },
+  { name: 'AI comparison preserves unrecorded human review', valid: true, claimFixture: 'ai-valid' },
+  { name: 'AI comparison cannot certify human review', valid: false, claimFixture: 'ai-human', includes: ['AI comparison must not certify independent human review'] },
+  { name: 'source comparison needs alternatives', valid: false, claimFixture: 'ai-empty', includes: ['claim comparison requires alternatives'] },
+  { name: 'publication day is not an activity date', valid: false, claimFixture: 'ai-time', includes: ['publication date must not invent activity bounds'] }
 );
 const validator = path.join(projectRoot, 'scripts', 'validate-content.mjs');
 const failures = [];
@@ -56,6 +60,14 @@ for (const fixture of manifest.cases) {
       if (fixture.claimFixture === 'missing-name') actor.aliases[0].source_refs = [];
       actor.technique_evidence[0].source_locators = [citation];
       actor.technique_evidence[0].review = { version: '1.0.0', state: fixture.claimFixture === 'correction' ? 'corrected' : 'not-recorded', reviewed_at: fixture.claimFixture === 'invalid' ? '2026-08-02' : null, rationale: '', correction_note: null };
+      if (fixture.claimFixture.startsWith('ai-')) {
+        const evidence = actor.technique_evidence[0];
+        evidence.assessment = { method: 'ai-assisted-source-comparison', compared_at: '2026-08-02', evidence_type: 'Synthetic source allegation', confidence_scope: 'Bounded procedure', source_dependence: 'One fixture source, not independent corroboration.', mapping_rationale: 'Explicit fixture behavior.', alternatives: fixture.claimFixture === 'ai-empty' ? [] : ['No current activity inferred.'] };
+        evidence.confidence_rationale = 'Bounded fixture support, not guilt or detection efficacy.';
+        evidence.review.rationale = 'AI comparison, human review unrecorded.';
+        if (fixture.claimFixture === 'ai-human') { evidence.review.state = 'reviewed'; evidence.review.reviewed_at = '2026-08-02'; }
+        if (fixture.claimFixture === 'ai-time') evidence.temporal_scope = { date_basis: 'publication-date', activity_first: '2026-08-02' };
+      }
       fs.writeFileSync(actorPath, `---\n${stringify(actor)}---\nFixture claim provenance.\n`);
     }
 

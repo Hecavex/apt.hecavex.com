@@ -5,6 +5,7 @@ import YAML from 'yaml';
 const root = path.resolve('dist');
 const contentRoot = path.resolve('src/content');
 const site = 'https://apt.hecavex.com';
+const retiredRelationships = JSON.parse(fs.readFileSync('src/data/retired-relationships.json', 'utf8'));
 const errors = [];
 
 const error = (message) => errors.push(message);
@@ -422,7 +423,7 @@ const updateTargetCollections = {
 for (const record of aggregates.changes?.records ?? []) {
   requireReference(updateTargetCollections[record.entity_type] ?? new Set(), record.entity, `change ${record.id} entity`);
   requireReferences(publicIds.sources, record.sources, `change ${record.id} sources`);
-  requireReferences(new Set(expectedRelationshipIds), record.affected_relationships, `change ${record.id} relationships`);
+  requireReferences(new Set([...expectedRelationshipIds, ...retiredRelationships.map(item => item.id)]), record.affected_relationships, `change ${record.id} relationships`);
 }
 
 const parseCsv = (text, label) => {
@@ -541,6 +542,11 @@ assert(
   stableJson(changesFeedIds) === stableJson(compatibilityFeedIds),
   'feed.xml: compatibility feed entries differ from changes/feed.xml'
 );
+
+for (const retired of retiredRelationships) {
+  const envelope = readJson(`api/relationships/${retired.id}.json`);
+  assert(stableJson(envelope?.record) === stableJson(retired), `Retired relationship ${retired.id} lost its historical correction trail`);
+}
 
 if (errors.length) {
   for (const message of errors) console.error(`ERROR ${message}`);

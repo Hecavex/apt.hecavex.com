@@ -61,7 +61,7 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
     <section class="assessment-strip" aria-labelledby="current-assessment-title">
       <div>
         <p class="eyebrow">Current assessment</p>
-        <h2 id="current-assessment-title">Active threat through {d.last_observed}</h2>
+        <h2 id="current-assessment-title">Published assessment · {label(d.status)}</h2>
         <p>{d.current_assessment}</p>
       </div>
       <dl>
@@ -77,11 +77,16 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
         ['Suspected origin', d.suspected_origins.join(', ') || 'Unknown'],
         ['Motivation', d.motivations.map(label).join(', ')],
         ['Active since', d.active_since],
-        ['Last observed', d.last_observed || 'Not stated'],
+        ['Latest source/activity wording', d.last_observed || 'Not stated'],
         ['Confidence', label(d.confidence)],
         ['Last reviewed', formatDate(d.last_reviewed)]
       ].map(([term, value]) => <div class="fact"><dt>{term}</dt><dd>{value}</dd></div>)}
     </dl>
+    <section class="methodology-note" aria-label="Status and time boundaries">
+      <p><strong>Status assessment date:</strong> {d.status_assessment.assessed_at || 'Not separately recorded'}. {d.status_assessment.basis}</p>
+      <p><strong>Reassess when:</strong> {d.status_assessment.reassessment_trigger}</p>
+      <p class="meta">A publication, court action or dossier review date is not evidence of activity on that date. Historical source wording is preserved; unknown activity dates remain unknown.</p>
+    </section>
 
     <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a>{labsHandoff && <a href={labsHandoff.url}>Inspect and export this actor's Labs evidence ↗</a>}<a href="/methodology/">Review policy →</a></div>
 
@@ -198,7 +203,7 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
 
         {d.techniques.length > 0 && (
           <section id="techniques">
-            <h2>High-confidence ATT&amp;CK evidence</h2>
+            <h2>Source-linked ATT&amp;CK procedures</h2>
             <p>This is a curated evidence set, not a dump of every technique ever associated with {d.name}.</p>
             {labsHandoff && <aside class="callout" aria-label="Labs evidence handoff"><p><a href={labsHandoff.url}>Inspect this actor's mappings in Labs and export an evidence brief ↗</a></p><p>The recorded Labs snapshot contains {labsHandoff.mappings} explicit mappings for this actor. Filter the evidence there, inspect its sources and preserve the JSON alongside a readable brief. This is not the full actor dossier or a defensive coverage measure.</p><p>Recorded dataset release: <span class="mono">{labsHandoff.release}</span>. This evidence snapshot is frozen, not live-synchronized with this dossier. Check the release and claim-review dates before reuse. <a href="/methodology/#evidence-handoff">Handoff guidance</a> · <a href="/lt/metodika/#irodymu-perdavimas" hreflang="lt">Lietuviškai</a>.</p></aside>}
             <div class="technique-grid">
