@@ -28,6 +28,8 @@ The editorial and release requirements are recorded in [docs/EDITORIAL.md](docs/
 
 ## Repository map
 
+The dossier-to-Labs handoff is gated by `src/data/labs-evidence-handoff.json`: an inclusion-only index of actual actor and evidence IDs in a recorded immutable Labs revision, with its source JSON SHA-256. It does not duplicate procedure content, imply live synchronization or declare a new review. `npm run test:content` checks that every recorded ID still references a public APT actor and explicit procedure. Updating this snapshot requires checking the actual Labs source, not inferring inclusion from a new APT dossier. Labs exports remain separately pinned and preserve their existing evidence release.
+
 | Path | Production responsibility |
 | --- | --- |
 | `src/content/` | Reviewed public records and unpublished working drafts |

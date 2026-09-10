@@ -13,6 +13,7 @@ const sections = [
   { href: '#changes', label: 'Changes' },
   { href: '#fallback-records', label: 'Fallback records' },
   { href: '#machine-readable', label: 'Machine access' },
+  { href: '#evidence-handoff', label: 'Evidence handoff' },
   { href: '#limitations', label: 'Limitations' }
 ];
 ---
@@ -138,6 +139,18 @@ const sections = [
         <div class="methodology-section-copy">
           <p>Static JSON and CSV expose all public entity types, sourced relationships and change events. A release manifest provides stable dataset and schema versions. The dedicated Atom feed contains editorial change events only; it does not manufacture updates from review dates.</p>
           <p>Consumers must preserve confidence, evidence, references, revision state and attribution boundaries. The exports are not an IOC feed and should not be converted directly into blocking decisions.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology-detail" id="evidence-handoff" aria-labelledby="evidence-handoff-title" tabindex="-1">
+      <div class="methodology-section-heading">
+        <p class="eyebrow">Evidence reuse</p>
+        <h2 id="evidence-handoff-title">From dossier to a bounded evidence brief</h2>
+        <div class="methodology-section-copy">
+          <p>Actor dossiers link to the <a href="https://labs.hecavex.com/attack-map/">Labs evidence explorer</a> only when that actor has explicit mappings in the recorded frozen Labs snapshot. The link opens an actor filter, not a live synchronization. A newer APT dossier can differ from that snapshot. Check the displayed dataset release, claim-review state and source before reuse.</p>
+          <p>In Labs, narrow the current filters to the question you are answering and check the export count. "Evidence brief (.md)" carries readable procedures, exact evidence IDs, source locators and analytical limits. Keep the JSON or CSV with it for the full public record fields and snapshot provenance. Actor comparison is separate from the exported selection. A filtered collection is not a comprehensive actor assessment, validated detection or measure of defensive coverage.</p>
+          <p>The export distinguishes publication version, pinned APT build revision, source SHA-256 and actual recorded claim review. Its export time creates no new analytical review. Original source rights still apply. JavaScript is not required to follow dossier links or download the canonical Labs source JSON. <a href="/lt/metodika/#irodymu-perdavimas" hreflang="lt">Lietuviška naudojimo santrauka</a>.</p>
         </div>
       </div>
     </section>

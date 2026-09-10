@@ -57,6 +57,10 @@ try {
     for (const width of [320, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(new URL('actors/apt28/', base).href);
+      const handoff = page.locator('[aria-label="Labs evidence handoff"]');
+      assert.equal(await handoff.locator('a').first().getAttribute('href'), 'https://labs.hecavex.com/attack-map/?actor=apt28');
+      assert.match(await handoff.innerText(), /frozen, not live-synchronized/);
+      assert.match(await handoff.innerText(), /not the full actor dossier/);
       const citation = page.locator('.record-citation');
       await citation.locator('summary').click();
       const text = await citation.locator('[data-citation-text]').innerText();
@@ -101,10 +105,16 @@ try {
       const staticPage = await noJs.newPage();
       for (const route of ['actors/apt28/', sourcePath]) {
         await staticPage.goto(new URL(route, base).href);
+        if (route === 'actors/apt28/') assert(await staticPage.locator('[aria-label="Labs evidence handoff"] a').first().isVisible());
         await staticPage.locator('.record-citation summary').click();
         assert(await staticPage.locator('[data-citation-text]').isVisible());
         assert.equal(await staticPage.locator('[data-record-copy]:visible').count(), 0);
         assert(await staticPage.locator('.record-citation a[download]').isVisible());
+      }
+      for (const [route, id] of [['methodology/#evidence-handoff', '#evidence-handoff'], ['lt/metodika/#irodymu-perdavimas', '#irodymu-perdavimas']]) {
+        await staticPage.goto(new URL(route, base).href);
+        assert(await staticPage.locator(id).isVisible());
+        assert(await staticPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       }
     } finally { await noJs.close(); }
   } else if (profile === 'labs') {

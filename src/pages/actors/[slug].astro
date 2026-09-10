@@ -4,6 +4,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProfileToc from '../../components/ProfileToc.astro';
 import KnowledgeLink from '../../components/knowledge/KnowledgeLink.astro';
 import RecordCitation from '../../components/RecordCitation.astro';
+import labsSnapshot from '../../data/labs-evidence-handoff.json';
+import { labsEvidenceHandoff } from '../../utils/labs-handoff';
 import { publicEntries, byId, label, formatDate, reviewStatus } from '../../utils/content';
 
 export async function getStaticPaths() {
@@ -27,6 +29,7 @@ const maps = {
   updates: byId(updates as any)
 } as any;
 const d = entry.data;
+const labsHandoff = labsEvidenceHandoff(labsSnapshot, d.id, d.technique_evidence.length > 0);
 const freshness = reviewStatus(d.last_reviewed);
 
 const tocCandidates = [
@@ -80,7 +83,7 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
       ].map(([term, value]) => <div class="fact"><dt>{term}</dt><dd>{value}</dd></div>)}
     </dl>
 
-    <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a>{d.technique_evidence.length > 0 && <a href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Interactive ATT&amp;CK evidence map ↗</a>}<a href="/methodology/">Review policy →</a></div>
+    <div class="profile-release"><span class={`badge ${freshness.key}`}>{freshness.label}</span><span>Review age: {Math.max(0, freshness.ageDays)} days</span><a href={`/api/actors/${d.slug}.json`} download>Download public JSON ↓</a>{labsHandoff && <a href={labsHandoff.url}>Inspect and export this actor's Labs evidence ↗</a>}<a href="/methodology/">Review policy →</a></div>
 
     <dl class="fact-grid actor-record-state" aria-label="Record state">
       <div class="fact"><dt>Record version</dt><dd class="mono">{d.version}</dd></div>
@@ -197,7 +200,7 @@ const tocItems = [...new Map(tocCandidates.map((item) => [item.slug, item])).val
           <section id="techniques">
             <h2>High-confidence ATT&amp;CK evidence</h2>
             <p>This is a curated evidence set, not a dump of every technique ever associated with {d.name}.</p>
-            {d.technique_evidence.length > 0 && <p><a class="button" href={`https://labs.hecavex.com/attack-map/?actor=${d.slug}`}>Explore the interactive evidence matrix ↗</a></p>}
+            {labsHandoff && <aside class="callout" aria-label="Labs evidence handoff"><p><a href={labsHandoff.url}>Inspect this actor's mappings in Labs and export an evidence brief ↗</a></p><p>The recorded Labs snapshot contains {labsHandoff.mappings} explicit mappings for this actor. Filter the evidence there, inspect its sources and preserve the JSON alongside a readable brief. This is not the full actor dossier or a defensive coverage measure.</p><p>Recorded dataset release: <span class="mono">{labsHandoff.release}</span>. This evidence snapshot is frozen, not live-synchronized with this dossier. Check the release and claim-review dates before reuse. <a href="/methodology/#evidence-handoff">Handoff guidance</a> · <a href="/lt/metodika/#irodymu-perdavimas" hreflang="lt">Lietuviškai</a>.</p></aside>}
             <div class="technique-grid">
               {d.techniques.map((id: string) => { const technique = maps.techniques.get(id); const evidence = d.technique_evidence.find((item: any) => item.technique === id); return technique ? <KnowledgeLink collection="techniques" slug={technique.data.slug}><span class="mono">{technique.data.mitre_id}</span><strong>{technique.data.name}</strong><small>{technique.data.tactic}{evidence ? ` · ${label(evidence.confidence)} confidence` : ''}</small></KnowledgeLink> : null; })}
             </div>

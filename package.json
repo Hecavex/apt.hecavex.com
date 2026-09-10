@@ -20,7 +20,7 @@
     "check:archives": "node scripts/check-source-archives.mjs",
     "check:alias-locators": "node scripts/check-alias-locators.mjs",
     "lint": "node scripts/lint.mjs",
-    "test:content": "node scripts/test-content-validation.mjs",
+    "test:content": "node scripts/test-content-validation.mjs && node scripts/test-labs-handoff.mjs",
     "validate": "node scripts/sync-attack-framework.mjs && node scripts/validate-content.mjs",
     "verify": "npm run lint && npm run test:content && npm run build && npm run audit"
   },
