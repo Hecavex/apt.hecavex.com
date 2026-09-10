@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "source_repository": "Hecavex/labs.hecavex.com",
+  "source_revision": "8bf26d8c32969339631aab1051990e0230927efc",
+  "source_path": "data/attack/intelligence/reviewed-evidence.json",
+  "source_sha256": "7dd38242233c41a70e5ae1a456786c36a367f6605be2c6004804d685fbb4e1ba",
+  "source_release_id": "apt-notes-2026-09-07-procedure-provenance",
+  "scope": "Recorded frozen Labs snapshot. Links are not a promise of live synchronization or independent claim review.",
+  "actors": [
+    {
+      "id": "apt28",
+      "evidence_ids": [
+        "apt28:T1114.002:western-logistics-targeting",
+        "apt28:T1125:western-logistics-targeting",
+        "apt28:T1190:apt28-dns-hijacking",
+        "apt28:T1528:outlook-identity-collection",
+        "apt28:T1557:apt28-dns-hijacking",
+        "apt28:T1566.001:operation-neusploit"
+      ]
+    },
+    {
+      "id": "apt31",
+      "evidence_ids": [
+        "apt31:T1114.002:apt31-global-intrusion-program",
+        "apt31:T1566:apt31-global-intrusion-program"
+      ]
+    },
+    {
+      "id": "apt44",
+      "evidence_ids": [
+        "apt44:T1003.001:badpilot",
+        "apt44:T1005:uncampaigned",
+        "apt44:T1053.005:ukraine-electric-power-2022",
+        "apt44:T1059.001:ukraine-electric-power-2022",
+        "apt44:T1078:prestige-ransomware",
+        "apt44:T1133:badpilot",
+        "apt44:T1190:badpilot",
+        "apt44:T1195.002:notpetya-operation",
+        "apt44:T1203:uncampaigned",
+        "apt44:T1219:badpilot",
+        "apt44:T1485:ukraine-electric-power-2022",
+        "apt44:T1505.003:badpilot",
+        "apt44:T1543.002:ukraine-electric-power-2022",
+        "apt44:T1570:prestige-ransomware"
+      ]
+    },
+    {
+      "id": "black-basta",
+      "evidence_ids": [
+        "black-basta:T1219:black-basta-raas-operations"
+      ]
+    },
+    {
+      "id": "clop",
+      "evidence_ids": [
+        "clop:T1190:clop-moveit-2023"
+      ]
+    },
+    {
+      "id": "cyber-army-russia-reborn",
+      "evidence_ids": [
+        "cyber-army-russia-reborn:T1498:carr-european-ddos"
+      ]
+    },
+    {
+      "id": "evil-corp",
+      "evidence_ids": [
+        "evil-corp:T1566.001:evil-corp-dridex-uk"
+      ]
+    },
+    {
+      "id": "unit-29155",
+      "evidence_ids": [
+        "unit-29155:T1110.003:uncampaigned",
+        "unit-29155:T1190:uncampaigned",
+        "unit-29155:T1561.002:whispergate-operation",
+        "unit-29155:T1567.002:uncampaigned"
+      ]
+    },
+    {
+      "id": "lockbit",
+      "evidence_ids": [
+        "lockbit:T1190:lockbit-raas-operations"
+      ]
+    },
+    {
+      "id": "midnight-blizzard",
+      "evidence_ids": [
+        "midnight-blizzard:T1005:midnight-blizzard-rdp-spearphishing",
+        "midnight-blizzard:T1078:midnight-blizzard-cloud-access",
+        "midnight-blizzard:T1110.003:midnight-blizzard-cloud-access",
+        "midnight-blizzard:T1528:midnight-blizzard-cloud-access",
+        "midnight-blizzard:T1566.001:midnight-blizzard-rdp-spearphishing"
+      ]
+    },
+    {
+      "id": "mustang-panda",
+      "evidence_ids": [
+        "mustang-panda:T1566.001:mustang-panda-hodur-europe"
+      ]
+    },
+    {
+      "id": "noname057-16",
+      "evidence_ids": [
+        "noname057-16:T1498:noname057-european-ddos",
+        "noname057-16:T1498:noname057-nato-summit-2025"
+      ]
+    },
+    {
+      "id": "scattered-spider",
+      "evidence_ids": [
+        "scattered-spider:T1078:scattered-spider-tfl-2024"
+      ]
+    },
+    {
+      "id": "secret-blizzard",
+      "evidence_ids": [
+        "secret-blizzard:T1059.001:secret-blizzard-amadey-access-2024"
+      ]
+    },
+    {
+      "id": "star-blizzard",
+      "evidence_ids": [
+        "star-blizzard:T1078:star-blizzard-credential-spearphishing",
+        "star-blizzard:T1114.002:star-blizzard-credential-spearphishing",
+        "star-blizzard:T1550.004:star-blizzard-credential-spearphishing",
+        "star-blizzard:T1557:star-blizzard-credential-spearphishing",
+        "star-blizzard:T1566.001:star-blizzard-credential-spearphishing",
+        "star-blizzard:T1566.002:star-blizzard-credential-spearphishing",
+        "star-blizzard:T1566.002:star-blizzard-whatsapp-device-linking"
+      ]
+    },
+    {
+      "id": "romcom",
+      "evidence_ids": [
+        "romcom:T1203:romcom-europe-zero-day-2024"
+      ]
+    },
+    {
+      "id": "gamaredon",
+      "evidence_ids": [
+        "gamaredon:T1566.001:gamaredon-ukraine-spearphishing-2024"
+      ]
+    },
+    {
+      "id": "unc1151",
+      "evidence_ids": [
+        "unc1151:T1566.002:unc1151-poland-credential-phishing-2026"
+      ]
+    },
+    {
+      "id": "void-blizzard",
+      "evidence_ids": [
+        "void-blizzard:T1087.004:laundry-bear-cloud-espionage",
+        "void-blizzard:T1110.003:laundry-bear-cloud-espionage",
+        "void-blizzard:T1114:laundry-bear-zimbra",
+        "void-blizzard:T1114.002:laundry-bear-cloud-espionage",
+        "void-blizzard:T1203:laundry-bear-zimbra",
+        "void-blizzard:T1550.004:laundry-bear-cloud-espionage",
+        "void-blizzard:T1557:laundry-bear-cloud-espionage"
+      ]
+    },
+    {
+      "id": "z-pentest",
+      "evidence_ids": [
+        "z-pentest:T1133:z-pentest-danish-water-2024"
+      ]
+    }
+  ]
+}
