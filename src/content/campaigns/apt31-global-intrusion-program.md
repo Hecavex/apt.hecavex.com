@@ -3,9 +3,9 @@ id: apt31-global-intrusion-program
 name: APT31 global intrusion programme
 slug: apt31-global-intrusion-program
 created_at: 2026-08-26
-modified_at: 2026-08-26
-version: 1.0.0
-change_reason: Initial source-backed campaign record.
+modified_at: 2026-09-10
+version: 1.1.0
+change_reason: Corrected the tracking-email catalogue association to reconnaissance; no new human review or activity observation.
 summary: A long-running alleged Chinese Ministry of State Security cyberespionage programme combining targeted email reconnaissance, device exploitation and sustained access to government, political and commercial information.
 last_reviewed: 2026-08-26
 confidence: high
@@ -19,7 +19,7 @@ regions: [Europe, North America, Global]
 sectors: [Government, Politics, Diplomacy, Defence, Information Technology, Telecommunications, Managed Services, Finance, Legal Services, Research]
 malware: []
 tools: []
-techniques: [phishing, remote-email-collection]
+techniques: [spearphishing-for-information-link, remote-email-collection]
 draft: false
 ---
 

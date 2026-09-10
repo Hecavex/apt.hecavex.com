@@ -19,6 +19,6 @@ export const balticEvidenceTypes = ['reported-compromise', 'reported-targeting',
 
 export const confidenceDefinitions = {
   low: 'Limited or weakly corroborated public evidence; the assessment may change materially.',
-  moderate: 'Credible evidence with some corroboration, but important gaps or alternative explanations remain.',
+  moderate: 'Credible, source-specific support, but important gaps, unestablished independence or alternative explanations remain.',
   high: 'Strong, independently corroborated evidence with limited plausible alternatives.'
 } as const;

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { label, unique } from '../../utils/content';
 import { loadKnowledge } from '../../utils/knowledge';
+import retiredRelationships from '../../data/retired-relationships.json';
 
 const knowledge = await loadKnowledge();
 const relationships = knowledge.relationships;
@@ -60,10 +61,13 @@ const confidences = unique(relationships.map((relationship: any) => relationship
           <header>
             <p class="eyebrow"><span class="mono">{relationship.id}</span></p>
             <h2><a href={relationship.source_entity.url}>{relationship.source_entity.name}</a> <span>uses</span> <a href={relationship.target_entity.url} data-knowledge-link>{relationship.target_entity.name}</a></h2>
-            <p class="relationship-identifiers"><span class={`badge ${relationship.confidence}`}>{label(relationship.confidence)} confidence</span><span class="mono">{relationship.target_entity.external_id}</span><span>{technique?.data.tactic}</span></p>
+            <p class="relationship-identifiers"><span class={`badge ${relationship.confidence}`}>Published {relationship.confidence}</span><span>{relationship.assessment.method === 'not-recorded' ? 'Claim basis unrecorded' : 'AI-assisted source comparison'}</span><span class="mono">{relationship.target_entity.external_id}</span><span>{technique?.data.tactic}</span></p>
           </header>
           <div class="relationship-evidence">
             <p>{relationship.evidence}</p>
+            {relationship.assessment.method !== 'not-recorded' && <p><strong>Confidence basis:</strong> {relationship.confidence_rationale}</p>}
+            {relationship.assessment.method !== 'not-recorded' && <details><summary>Source comparison and alternatives</summary><p>{relationship.assessment.evidence_type} · compared {relationship.assessment.compared_at}; not independent human review.</p><p>{relationship.assessment.mapping_rationale}</p><p>{relationship.assessment.source_dependence}</p><ul>{relationship.assessment.alternatives.map((alternative: string) => <li>{alternative}</li>)}</ul></details>}
+            <p class="meta">Date basis: {relationship.temporal_scope.date_basis}.{relationship.temporal_scope.date_basis !== 'not-recorded' && ` ${relationship.temporal_scope.note}`}</p>
             <p class="meta">Claim review: {relationship.claim_review.state}{relationship.claim_review.reviewed_at ? ` · ${relationship.claim_review.reviewed_at}` : ''} · version {relationship.claim_review.version}</p>
             {(relationship.claim_review.state !== 'not-recorded' || relationship.source_locators.length > 0) && <p>{relationship.claim_review.rationale}</p>}
             {relationship.claim_review.correction_note && <p>{relationship.claim_review.correction_note}</p>}
@@ -82,6 +86,7 @@ const confidences = unique(relationships.map((relationship: any) => relationship
       })}
     </div>
     <div class="empty" data-relationship-empty hidden><h2>No matching relationships</h2><p>Remove a filter or broaden the evidence search.</p></div>
+    <section aria-label="Superseded relationships"><h2>Superseded records</h2><p>These retained IDs are not part of the current filtered collection or its counts.</p>{retiredRelationships.map(record => <article id={record.id}><h3>APT31 tracking-email mapping replaced</h3><p>{record.reason}</p><p><a href={record.replacement_url}>Read the replacement procedure</a> · <a href={record.correction_url}>Correction record</a> · <a href={`/api/relationships/${record.id}.json`}>Retirement JSON</a></p></article>)}</section>
   </section>
 </BaseLayout>
 
@@ -241,7 +246,7 @@ const confidences = unique(relationships.map((relationship: any) => relationship
           download('apt-notes-filtered-relationships.json', 'application/json', `${JSON.stringify(payload, null, 2)}\n`);
           return;
         }
-        const headers = ['id', 'actor', 'actor_id', 'technique', 'technique_id', 'tactic', 'confidence', 'campaign', 'evidence', 'first_observed', 'last_observed', 'references'];
+        const headers = ['id', 'actor', 'actor_id', 'technique', 'technique_id', 'tactic', 'confidence', 'campaign', 'evidence', 'first_observed', 'last_observed', 'references', 'record_json'];
         const csvRows = records.map((record) => [
           record.id,
           record.source_entity?.name,
@@ -254,7 +259,8 @@ const confidences = unique(relationships.map((relationship: any) => relationship
           record.evidence,
           record.first_observed,
           record.last_observed,
-          record.references
+          record.references,
+          JSON.stringify(record)
         ]);
         const csv = [headers, ...csvRows].map((row) => row.map(csvCell).join(',')).join('\r\n');
         download('apt-notes-filtered-relationships.csv', 'text/csv;charset=utf-8', `\uFEFF${csv}\r\n`);

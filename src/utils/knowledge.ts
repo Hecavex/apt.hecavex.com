@@ -59,6 +59,9 @@ export interface RelationshipRecord {
   evidence: string;
   references: string[];
   confidence: string;
+  confidence_rationale: string;
+  assessment: Record<string, any>;
+  temporal_scope: Record<string, any>;
   first_observed: string;
   last_observed: string;
   created_at: string;
@@ -126,6 +129,9 @@ export const deriveRelationships = (
         evidence: evidence.notes,
         references,
         confidence: evidence.confidence,
+        confidence_rationale: evidence.confidence_rationale,
+        assessment: evidence.assessment,
+        temporal_scope: evidence.temporal_scope,
         first_observed: evidence.first_observed,
         last_observed: evidence.last_observed,
         created_at: iso(actor.data.created_at),

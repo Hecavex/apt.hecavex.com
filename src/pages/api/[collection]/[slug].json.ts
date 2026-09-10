@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { publication } from '../../../data/release';
+import retiredRelationships from '../../../data/retired-relationships.json';
 import { loadKnowledge } from '../../../utils/knowledge';
 import {
   datasetEnvelope,
@@ -74,6 +75,9 @@ export async function getStaticPaths() {
   }
   for (const relationship of knowledge.relationships) {
     records.push(path({ collection: 'relationships', slug: relationship.id, record: serializeRelationship(relationship) }));
+  }
+  for (const record of retiredRelationships) {
+    records.push(path({ collection: 'relationships', slug: record.id, record }));
   }
   for (const update of knowledge.updates) {
     records.push(path({ collection: 'changes', slug: update.data.slug, record: serializeUpdate(update) }));

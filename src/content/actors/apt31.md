@@ -3,9 +3,9 @@ id: apt31
 name: APT31
 slug: apt31
 created_at: 2026-08-26
-modified_at: 2026-08-26
-version: 1.0.0
-change_reason: Initial source-backed public profile.
+modified_at: 2026-09-10
+version: 1.1.0
+change_reason: AI-assisted comparison separates tracking-mail reconnaissance from access and records claim-level uncertainty; independent human review remains unrecorded.
 summary: A China state-affiliated cyberespionage actor associated in government and legal reporting with the Ministry of State Security and long-running targeting of political, government and strategically important commercial networks.
 actor_types: [state-sponsored]
 status: active
@@ -18,6 +18,11 @@ last_reviewed: 2026-08-26
 authors: [deividas-lis]
 mission: Collect political, diplomatic, security, commercial and personal intelligence in support of Chinese state objectives, including activity directed at critics of the PRC and organisations holding strategically valuable technology or access.
 current_assessment: APT31 remains a defensible government-attributed espionage actor, but its public record mixes intelligence assessments with unproven criminal allegations. Recent European attribution confirms continued government and diplomatic targeting without publishing enough procedure detail to treat every historical cluster label as exactly equivalent.
+status_assessment:
+  assessed_at: null
+  sources: [nukib-apt31-czech-mfa-2025, uk-apt31-2024, doj-apt31-2024]
+  basis: The existing active status reflects the dossier's government-attributed historical programme and Czech attribution published in 2025. A separately dated current-activity adjudication is not recorded; the source does not establish activity on the publication day.
+  reassessment_trigger: New source-supported operational evidence, disruption or changed attribution boundaries; annual dossier review remains separate and absence of reporting is not proof of inactivity.
 parent_entities:
   - name: Hubei State Security Department, Chinese Ministry of State Security
     entity_type: Chinese provincial state-security department
@@ -86,23 +91,79 @@ targeting:
 campaigns: [apt31-global-intrusion-program]
 malware: []
 tools: []
-techniques: [phishing, remote-email-collection]
+techniques: [spearphishing-for-information-link, remote-email-collection]
 vulnerabilities: []
 technique_evidence:
-  - technique: phishing
+  - technique: spearphishing-for-information-link
     campaign: apt31-global-intrusion-program
-    first_observed: "2010 or later"
-    last_observed: "2024 reporting"
-    confidence: high
+    first_observed: "Not stated for this procedure"
+    last_observed: "Reported by 2024-03-25; operational endpoint not stated"
+    confidence: moderate
     sources: [doj-apt31-2024]
     notes: The indictment announcement alleges that more than 10,000 targeted emails contained hidden tracking links which disclosed recipient, device and network information when messages were opened.
+    confidence_rationale: The DOJ announcement explicitly alleges this behavior, and the pinned ATT&CK reconnaissance definition includes tracking beacons. Moderate applies to this reported procedure mapping, not guilt or current activity; the underlying case evidence and independent corroboration are not published in this record.
+    assessment:
+      method: ai-assisted-source-comparison
+      compared_at: "2026-09-10"
+      evidence_type: Legal allegation in a charging announcement, not an adjudicated finding or HECAVEX telemetry.
+      confidence_scope: Support for the narrowly described tracking-email procedure and its reconnaissance mapping; actor attribution and individual guilt remain separate.
+      source_dependence: One DOJ announcement is the immediate procedure source. MITRE defines the behavior but is not independent evidence that this campaign occurred; other governments' related attributions do not independently prove this exact procedure.
+      alternatives: [Opening a tracking email does not establish device or account compromise., The source separately describes malware-link emails; that access behavior is not the procedure represented here.]
+      mapping_rationale: T1598.003 covers tracking beacons used to profile recipients before subsequent targeting. T1566 initial access was too broad for the recorded tracking-only procedure. No additional malware-delivery mapping is inferred from adjacent allegations.
+      supersedes_mapping: "apt31:T1566:apt31-global-intrusion-program"
+    temporal_scope:
+      date_basis: mixed-source-reporting
+      activity_first: null
+      activity_last: null
+      source_published_at: "2024-03-25"
+      assessment_at: "2026-09-10"
+      note: The programme is alleged to date from at least 2010, but that is not an established start for every tracking email. The announcement date is a reporting cutoff, not an observed activity endpoint. Assessment time records an AI-assisted comparison, not human review.
+    source_locators:
+      - source: doj-apt31-2024
+        locator: "25 March 2024 announcement, updated 6 February 2025: Hacking Scheme, opening three paragraphs (tracking-email profiling followed by separate hacking); final presumption-of-innocence paragraph."
+        basis: procedure-evidence
+        checked_at: "2026-09-10"
+    review:
+      version: 1.1.0
+      reviewed_at: null
+      state: not-recorded
+      rationale: AI-assisted source comparison performed 10 September 2026. Independent human claim review remains unrecorded.
+      correction_note: Replaced tracking-only T1566 mapping with T1598.003; changed the published claim confidence from high to moderate because this record does not establish the independence required by the high-confidence definition. Programme/report dates are no longer presented as exact procedure activity dates.
   - technique: remote-email-collection
     campaign: apt31-global-intrusion-program
-    first_observed: "2010 or later"
-    last_observed: "2024 reporting"
-    confidence: high
+    first_observed: "Not stated for this procedure"
+    last_observed: "Reported by 2024-03-25; operational endpoint not stated"
+    confidence: moderate
     sources: [doj-apt31-2024]
     notes: US legal reporting alleges successful access to email and cloud accounts, with surveillance of some compromised mailboxes continuing for years.
+    confidence_rationale: The source explicitly alleges access and prolonged mailbox surveillance, supporting Remote Email Collection as reported conduct. Moderate reflects undisclosed underlying evidence and unresolved collection mechanics, not a rule that a single source is weak.
+    assessment:
+      method: ai-assisted-source-comparison
+      compared_at: "2026-09-10"
+      evidence_type: Legal allegation in a charging announcement; underlying mailbox evidence is not reproduced here.
+      confidence_scope: Reported remote mailbox surveillance, not a conclusion about every targeted account, exact collection mechanism or individual guilt.
+      source_dependence: The DOJ announcement is the immediate source. Other related attribution statements do not independently corroborate this precise mailbox-collection allegation.
+      alternatives: [Successful account access alone would not prove every mailbox was collected., The source does not identify IMAP, EWS or a uniform collection method for all accounts.]
+      mapping_rationale: T1114.002 fits the explicit allegation of prolonged surveillance of compromised email accounts; no protocol, complete victim inventory or continuous activity window is inferred.
+      supersedes_mapping: null
+    temporal_scope:
+      date_basis: mixed-source-reporting
+      activity_first: null
+      activity_last: null
+      source_published_at: "2024-03-25"
+      assessment_at: "2026-09-10"
+      note: The announcement describes a long-running programme but gives no precise window for this procedure. Its publication date is not the last observed mailbox access; comparison time is not human review.
+    source_locators:
+      - source: doj-apt31-2024
+        locator: "25 March 2024 announcement, updated 6 February 2025: Overview, third paragraph (successful account compromises and years of mailbox surveillance); final presumption-of-innocence paragraph."
+        basis: procedure-evidence
+        checked_at: "2026-09-10"
+    review:
+      version: 1.1.0
+      reviewed_at: null
+      state: not-recorded
+      rationale: AI-assisted source comparison performed 10 September 2026. Independent human claim review remains unrecorded.
+      correction_note: Retained T1114.002 with an exact locator, narrower temporal semantics and moderate claim confidence; no independent corroboration is established by this record.
 operational_timeline:
   - date: "2010-2024 reporting"
     title: United States describes a long-running global intrusion programme
@@ -124,7 +185,7 @@ external_identifiers:
   other: [APT31, Zirconium, Judgment Panda]
 related_research: []
 sources: [nukib-apt31-czech-mfa-2025, eu-apt31-czechia-2025, uk-apt31-2024, doj-apt31-2024]
-updates: [apt31-profile-created]
+updates: [apt31-profile-created, apt31-claim-assurance-2026-09-10]
 featured: true
 draft: false
 ---

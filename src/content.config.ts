@@ -46,6 +46,24 @@ const claimReview = z.object({
   rationale: z.string().min(1),
   correction_note: z.string().default('')
 }).default({ version: '1.0.0', reviewed_at: null, state: 'not-recorded', rationale: 'The source dossier predates claim-level review tracking. No independent claim review date is recorded.', correction_note: '' });
+const claimAssessment = z.discriminatedUnion('method', [z.object({ method: z.literal('not-recorded') }), z.object({
+  method: z.literal('ai-assisted-source-comparison'),
+  compared_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable(),
+  evidence_type: z.string().min(1),
+  confidence_scope: z.string().min(1),
+  source_dependence: z.string().min(1),
+  alternatives: z.array(z.string().min(1)),
+  mapping_rationale: z.string().min(1),
+  supersedes_mapping: z.string().nullable().default(null)
+})]).default({ method: 'not-recorded' });
+const temporalScope = z.object({
+  date_basis: z.enum(['not-recorded', 'activity-window', 'publication-date', 'mixed-source-reporting']),
+  activity_first: z.string().nullable().optional(),
+  activity_last: z.string().nullable().optional(),
+  source_published_at: z.string().nullable().optional(),
+  assessment_at: z.string().nullable().optional(),
+  note: z.string().min(1)
+}).default({ date_basis: 'not-recorded', note: 'Legacy date basis unknown; publication is not activity.' });
 const base = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -69,6 +87,12 @@ const actors = defineCollection({
     authors: z.array(z.string()).min(1),
     mission: z.string().default(''),
     current_assessment: z.string().default(''),
+    status_assessment: z.object({
+      assessed_at: z.string().nullable(),
+      sources: z.array(ref),
+      basis: z.string().min(1),
+      reassessment_trigger: z.string().min(1)
+    }).default({ assessed_at: null, sources: [], basis: 'Legacy published status. A separately dated status adjudication is not recorded; read the current assessment and source-specific timeline.', reassessment_trigger: 'New source-supported activity, disruption, attribution correction or changed actor boundaries; silence alone does not establish inactivity.' }),
     aliases: z.array(z.object({
       name: z.string(),
       source: z.string(),
@@ -150,6 +174,9 @@ const actors = defineCollection({
       confidence,
       sources: z.array(ref).min(1),
       notes: z.string().min(1),
+      confidence_rationale: z.string().default('Claim basis unrecorded; inherited rating, not certification.'),
+      assessment: claimAssessment,
+      temporal_scope: temporalScope,
       source_locators: claimSources,
       review: claimReview,
       editorial_note: z.string().default(
@@ -258,7 +285,14 @@ const sources = defineCollection({
     archive_checked_at: z.coerce.date().optional(),
     archive_check_note: z.string().default(''),
     http_status: z.number().int().min(100).max(599).optional(),
-    final_url: z.url().optional()
+    final_url: z.url().optional(),
+    source_identity: z.object({
+      edition: z.string().min(1),
+      accessed_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      access_outcome: z.string().min(1),
+      body_sha256: z.string().regex(/^[a-f0-9]{64}$/).nullable(),
+      preservation: z.string().min(1)
+    }).optional()
   })
 });
 

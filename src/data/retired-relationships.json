@@ -1,0 +1,23 @@
+[
+  {
+    "object_type": "retired-relationship",
+    "id": "rel-apt31-uses-phishing-during-apt31-global-intrusion-program",
+    "lifecycle": "superseded",
+    "superseded_by": "rel-apt31-uses-spearphishing-for-information-link-during-apt31-global-intrusion-program",
+    "retired_at": "2026-09-10",
+    "method": "ai-assisted-source-comparison",
+    "reason": "The recorded tracking-only behavior is reconnaissance, not proof of Initial Access. This retirement is not independent human review.",
+    "source_release": "apt-notes-2026-09-07-procedure-provenance",
+    "previous_evidence": "The indictment announcement alleges that more than 10,000 targeted emails contained hidden tracking links which disclosed recipient, device and network information when messages were opened.",
+    "previous_technique_id": "T1566",
+    "previous_evidence_id": "apt31:T1566:apt31-global-intrusion-program",
+    "replacement_evidence_id": "apt31:T1598.003:apt31-global-intrusion-program",
+    "previous_confidence": "high",
+    "previous_first_observed": "2010 or later",
+    "previous_last_observed": "2024 reporting",
+    "previous_claim_reviewed_at": null,
+    "references": ["doj-apt31-2024"],
+    "correction_url": "https://apt.hecavex.com/changes/#apt31-claim-assurance-2026-09-10",
+    "replacement_url": "https://apt.hecavex.com/relationships/#rel-apt31-uses-spearphishing-for-information-link-during-apt31-global-intrusion-program"
+  }
+]
