@@ -11,6 +11,7 @@ export function readTypographyRoles() {
     heroLead: '.brand-hero .lead', heroAction: '.brand-hero .hero-actions > a',
     heroButton: '.catalogue-search button', sectionTitle: '.section-head h2',
     previewTitle: '.dossier-preview h3',
+    footerNavigation: '.site-footer nav a', footerBrand: '.footer-brand strong',
   };
   return Object.fromEntries(Object.entries(selectors).map(([role, selector]) => {
     const element = document.querySelector(selector);
@@ -24,7 +25,7 @@ export function readTypographyRoles() {
 }
 
 export function assertTypographyRoles(roles, { route, width }) {
-  for (const name of ['body', 'title', 'brandMetadata', 'productMetadata', 'networkNavigation', 'productNavigation', 'mobileNavigation', 'menuControl', 'headerSearch', 'headerLanguage']) {
+  for (const name of ['body', 'title', 'brandMetadata', 'productMetadata', 'networkNavigation', 'productNavigation', 'mobileNavigation', 'menuControl', 'headerSearch', 'headerLanguage', 'footerNavigation', 'footerBrand']) {
     assert(roles[name], `${route || '/'} missing required typography role: ${name}`);
   }
   if (route === '') {
@@ -54,4 +55,6 @@ export function assertTypographyRoles(roles, { route, width }) {
   check('heroLead', { size: Math.max(17.6, Math.min(width * 0.016, 20)), weight: '400', leading: 1.45, tracking: -0.006 });
   check('sectionTitle', { family: 'Space Grotesk', leading: 1.1, tracking: -0.035 });
   check('previewTitle', { family: 'Space Grotesk', leading: 1.2, tracking: -0.035 });
+  check('footerNavigation', { size: 12, weight: '500' });
+  check('footerBrand', { family: 'IBM Plex Mono', size: 12, tracking: 0.12 });
 }
