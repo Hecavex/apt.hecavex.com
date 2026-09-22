@@ -344,7 +344,8 @@ html:not([data-record-copy-ready]) [data-record-copy] {
 }
 
 .record-citation summary {
-  min-height: 2rem;
+  min-height: 2.75rem;
+  padding-block: 0.5rem;
   cursor: pointer;
   color: var(--text);
   font-weight: 600;
@@ -369,13 +370,13 @@ html:not([data-record-copy-ready]) [data-record-copy] {
 }
 
 .knowledge-record__actions > :is(a, button):not(.button) {
-  min-height: 2.6rem;
+  min-height: 2.75rem;
   padding: 0.6rem 0;
   border: 0;
   background: transparent;
   color: var(--cyan);
   cursor: pointer;
-  font: 600 0.75rem var(--mono);
+  font: 500 0.8125rem var(--sans);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -424,7 +425,7 @@ html:not([data-record-copy-ready]) [data-record-copy] {
 }
 
 .knowledge-dialog-bar button {
-  min-height: 2.2rem;
+  min-height: 2.75rem;
   padding: 0.35rem 0.6rem;
   border: 1px solid var(--line-strong);
   background: transparent;

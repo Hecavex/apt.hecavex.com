@@ -86,6 +86,13 @@ try {
     await page.locator('#actor-controls button[type="reset"]').click();
     await page.waitForFunction(() => document.querySelector('#actor-empty').hidden);
     assert((await page.locator('.actor-row:visible').count()) > 1);
+    await page.goto(new URL('actors/?origin=russia&sort=reviewed', base).href);
+    assert.equal(await page.locator('#advanced-actor-filters').getAttribute('open'), '');
+    assert.equal(await page.locator('[data-active-filter-count]').innerText(), '1');
+    const filteredActors = await page.locator('.actor-row:visible').evaluateAll(rows => rows.map(row => ({ origin: row.dataset.origin, reviewed: row.dataset.reviewed })));
+    assert(filteredActors.length > 0);
+    assert(filteredActors.every(row => row.origin.split('|').includes('russia')));
+    assert.deepEqual(filteredActors.map(row => row.reviewed), filteredActors.map(row => row.reviewed).sort().reverse());
     for (const q of ['APT28', 'Microsoft', 'quarkflibbertigibbet']) {
       await page.goto(new URL('search/?q=' + q, base).href);
       await page.waitForFunction(() => document.querySelector('#search-status').textContent.startsWith('Showing'));
