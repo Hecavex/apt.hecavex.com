@@ -5,7 +5,7 @@ read-only. Do not treat a visual change as permission to change analytical data.
 
 ## Presentation
 
-- `src/layouts/BaseLayout.astro`: document metadata, shell, footer, consent-aware
+- `src/layouts/BaseLayout.astro`: document metadata, shell, footer, DNT-aware
   analytics and ordered style imports.
 - `src/components/AppHeader.astro`: shared portfolio/product navigation and
   no-JavaScript mobile disclosure.
@@ -26,7 +26,8 @@ read-only. Do not treat a visual change as permission to change analytical data.
 - `src/pages/index.astro`: overview composition using actual public records.
 - `src/pages/actors/index.astro`: server-rendered actor catalogue and filter fields.
 - `src/scripts/actor-catalogue.ts`: client filter matching, sorting, URL restore,
-  URL updates, empty state and reset; each responsibility has a named function.
+  and URL updates have named helpers. `initialiseActorCatalogue` owns event
+  wiring and reset; its `applyFilters` callback updates results and the empty state.
 - `src/pages/actors/[slug].astro`: complete actor dossier and bounded Labs handoff.
 - `src/components/ProfileToc.astro`: desktop/mobile section tracking and anchors.
 - `src/components/knowledge/KnowledgeExplorer.astro`: catalogue views, filtering
