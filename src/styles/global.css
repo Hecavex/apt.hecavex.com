@@ -1,166 +1,3 @@
-/* HECAVEX visual system — operational mode. */
-@font-face {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-ext-400-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-400-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-ext-400-italic.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-400-italic.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-ext-500-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-500-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-ext-600-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-600-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-ext-700-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/inter/inter-latin-700-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-400-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-500-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-600-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono/ibm-plex-mono-latin-600-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-700-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono/ibm-plex-mono-latin-700-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
 :root {
   color-scheme: dark;
   --graphite: #111416;
@@ -203,15 +40,16 @@
   --amber-soft: rgb(210 170 98 / 11%);
   --shadow: rgb(0 0 0 / 45%);
   --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --display: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
   --mono: "IBM Plex Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
   --content: 94rem;
   --reading: 72ch;
   --header-offset: 7.25rem;
   --page-gutter: clamp(1rem, 3.5vw, 3.5rem);
-  --space-page-top: clamp(3.25rem, 5vw, 4.75rem);
+  --space-page-top: clamp(2rem, 3vw, 3rem);
   --space-page-bottom: clamp(4rem, 8vw, 8rem);
-  --space-major-section: clamp(3.5rem, 7vw, 6.5rem);
-  --frame-product-hero: clamp(21rem, 26.2vw, 23.5625rem);
+  --space-major-section: clamp(3rem, 5vw, 4.5rem);
+  --frame-product-hero: 20rem;
   --type-page-title: clamp(2.4rem, 3.6vw, 3.25rem);
   --type-display-title: clamp(2.5rem, 4.2vw, 4rem);
   --type-section-title: clamp(1.45rem, 2.4vw, 2rem);
@@ -243,7 +81,7 @@ body {
   overflow-x: clip;
   background: var(--bg);
   color: var(--text-soft);
-  font: 400 0.95rem/1.66 var(--sans);
+  font: 400 1rem/1.65 var(--sans);
   letter-spacing: -0.006em;
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
@@ -288,7 +126,7 @@ h2,
 h3,
 h4 {
   color: var(--text);
-  font-family: var(--sans);
+  font-family: var(--display);
   font-weight: 600;
   letter-spacing: -0.035em;
   line-height: 1.1;
@@ -297,7 +135,7 @@ h4 {
 h1 {
   margin: 0.45rem 0;
   font-size: var(--type-page-title);
-  line-height: 1;
+  line-height: 1.08;
 }
 
 h2 {
@@ -311,10 +149,7 @@ h3 {
 
 code,
 pre,
-.mono,
-.eyebrow,
-.meta,
-.badge {
+.mono {
   font-family: var(--mono);
   letter-spacing: 0;
 }
@@ -421,9 +256,8 @@ pre {
 .brand-copy small {
   margin-top: 0.42rem;
   color: var(--faint);
-  font: 500 0.56rem var(--mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font: 400 0.75rem var(--sans);
+  letter-spacing: 0;
 }
 
 .portfolio-navigation,
@@ -439,10 +273,10 @@ pre {
 .portfolio-navigation a,
 .product-navigation a {
   color: var(--muted);
-  font: 600 0.65rem var(--mono);
-  letter-spacing: 0.055em;
+  font: 600 0.75rem var(--sans);
+  letter-spacing: 0;
   text-decoration: none;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .portfolio-navigation a:hover,
@@ -452,13 +286,16 @@ pre {
   color: var(--text);
 }
 
-.portfolio-navigation a[aria-current="page"]::before {
-  width: 0.28rem;
-  height: 0.28rem;
-  margin-right: 0.55rem;
-  border-radius: 50%;
-  background: var(--cyan);
-  content: "";
+.portfolio-navigation a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+}
+
+.portfolio-navigation a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: var(--cyan);
+  text-underline-offset: 0.5rem;
 }
 
 .product-bar {
@@ -486,9 +323,8 @@ pre {
 .product-identity span {
   margin-top: 0.32rem;
   color: var(--faint);
-  font: 500 0.53rem var(--mono);
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
+  font: 400 0.75rem var(--sans);
+  letter-spacing: 0;
 }
 
 .product-navigation {
@@ -518,7 +354,7 @@ pre {
 .header-search {
   display: flex;
   min-width: 0;
-  min-height: 2.25rem;
+  min-height: 2.75rem;
   align-items: center;
   gap: 0.35rem;
   padding: 0 0.55rem;
@@ -548,7 +384,7 @@ pre {
   outline: 0;
   background: transparent;
   color: var(--text);
-  font-size: 0.74rem;
+  font-size: 0.875rem;
 }
 
 .header-search input::placeholder {
@@ -571,10 +407,10 @@ pre {
   border: 1px solid var(--line);
   color: var(--text-soft);
   cursor: pointer;
-  font: 600 0.67rem var(--mono);
-  letter-spacing: 0.06em;
+  font: 600 0.75rem var(--sans);
+  letter-spacing: 0;
   list-style: none;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .mobile-navigation summary::-webkit-details-marker {
@@ -626,22 +462,21 @@ pre {
 .navigation-label {
   padding: 0.55rem 0.65rem;
   color: var(--cyan);
-  font: 600 0.6rem var(--mono);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font: 600 0.75rem var(--sans);
+  letter-spacing: 0;
 }
 
 .mobile-navigation-panel a {
   display: flex;
-  min-height: 2.65rem;
+  min-height: 2.75rem;
   align-items: center;
   padding: 0.55rem 0.65rem;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font: 600 0.68rem var(--mono);
-  letter-spacing: 0.04em;
+  font: 500 0.875rem var(--sans);
+  letter-spacing: 0;
   text-decoration: none;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .mobile-navigation-panel a:hover,
@@ -650,13 +485,8 @@ pre {
   color: var(--text);
 }
 
-.mobile-portfolio-navigation a[aria-current="page"]::before {
-  width: 0.28rem;
-  height: 0.28rem;
-  margin-right: 0.55rem;
-  border-radius: 50%;
-  background: var(--cyan);
-  content: "";
+.mobile-portfolio-navigation a[aria-current="page"] {
+  box-shadow: inset 2px 0 var(--cyan);
 }
 
 /* Page frame */
@@ -690,18 +520,10 @@ main > .shell {
   gap: 0.45rem;
   margin: 0 0 0.8rem;
   color: var(--cyan);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.eyebrow::before {
-  width: 0.55rem;
-  height: 1px;
-  flex: 0 0 auto;
-  background: currentcolor;
-  content: "";
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .lead {
@@ -713,23 +535,19 @@ main > .shell {
 
 .meta {
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.55;
 }
 
 .brand-hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(18rem, 0.6fr);
+  grid-template-columns: minmax(0, 1.7fr) minmax(18rem, 1fr);
   min-height: var(--frame-product-hero);
   gap: clamp(2rem, 4vw, 4rem);
-  padding: clamp(1.75rem, 3vw, 2.15rem) clamp(1.75rem, 3vw, 3rem);
-  overflow: hidden;
-  border-top: 3px solid var(--cyan);
-  border-right: 1px solid var(--line-strong);
+  padding: 1.5rem 0 2.5rem;
   border-bottom: 1px solid var(--line-strong);
-  border-left: 1px solid var(--line-strong);
-  background: var(--surface);
+  background: transparent;
 }
 
 .brand-hero-copy,
@@ -746,11 +564,11 @@ main > .shell {
 }
 
 .brand-hero h1 {
-  max-width: 18ch;
+  max-width: 24ch;
   margin: 0;
   font-size: var(--type-page-title);
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.08;
   letter-spacing: -0.035em;
 }
 
@@ -762,8 +580,8 @@ main > .shell {
 .hero-meta {
   margin: 0;
   color: var(--muted);
-  font: 600 0.66rem var(--mono);
-  letter-spacing: 0.1em;
+  font: 400 0.8125rem/1.6 var(--sans);
+  letter-spacing: 0;
 }
 
 .page-head {
@@ -772,7 +590,7 @@ main > .shell {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
   gap: 2rem;
-  padding: clamp(2.75rem, 5vw, 4.5rem) 0 clamp(2.2rem, 3.5vw, 3rem);
+  padding: 1rem 0 clamp(1.5rem, 3vw, 2.5rem);
   border-bottom: 1px solid var(--line);
 }
 
@@ -794,7 +612,7 @@ main > .shell {
   max-width: 18ch;
   margin: 0;
   font-size: var(--type-page-title);
-  line-height: 1;
+  line-height: 1.08;
 }
 
 .page-head .lead {
@@ -821,8 +639,8 @@ main > .shell {
   border-radius: 0;
   background: var(--cyan);
   color: var(--bg);
-  font: 600 0.7rem var(--mono);
-  letter-spacing: 0.035em;
+  font: 600 0.875rem var(--sans);
+  letter-spacing: 0;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
@@ -840,15 +658,14 @@ main > .shell {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   margin: 2rem 0 0;
-  border: 1px solid var(--line);
-  background: var(--line);
-  gap: 1px;
+  border-bottom: 1px solid var(--line);
+  gap: 1.5rem;
 }
 
 .stat {
   min-width: 0;
-  padding: 1.05rem 1.15rem;
-  background: var(--surface);
+  padding: 0 0 1.5rem;
+  background: transparent;
 }
 
 .stat strong,
@@ -858,26 +675,22 @@ main > .shell {
 
 .stat strong {
   color: var(--text);
-  font: 600 clamp(1.5rem, 2.5vw, 2.1rem) var(--mono);
+  font: 600 clamp(1.5rem, 2.5vw, 2.1rem) var(--display);
   letter-spacing: -0.04em;
 }
 
 .stat span {
   margin-top: 0.4rem;
   color: var(--faint);
-  font: 600 0.61rem var(--mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font: 400 0.8125rem var(--sans);
+  letter-spacing: 0;
 }
 
 .scope-note {
   margin: 1rem 0 0;
-  padding: 0.95rem 1.1rem;
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--cyan);
-  background: var(--cyan-soft);
+  padding: 0.25rem 0;
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: 0.875rem;
 }
 
 .section-head {
@@ -897,10 +710,10 @@ main > .shell {
 
 .section-head > a {
   flex: 0 0 auto;
-  font: 600 0.67rem var(--mono);
-  letter-spacing: 0.035em;
+  font: 600 0.8125rem var(--sans);
+  letter-spacing: 0;
   text-decoration: none;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .grid {
@@ -1198,7 +1011,7 @@ a.panel:hover {
 .profile-head h1 {
   margin: 0.35rem 0;
   font-size: var(--type-display-title);
-  line-height: 1;
+  line-height: 1.08;
 }
 
 .alias-line {
@@ -1674,7 +1487,7 @@ a.panel:hover {
   max-width: 14ch;
   margin: 0;
   font-size: var(--type-page-title);
-  line-height: 1;
+  line-height: 1.08;
   letter-spacing: -0.052em;
 }
 
@@ -1755,7 +1568,7 @@ a.panel:hover {
   max-width: 15ch;
   margin: 0;
   font-size: var(--type-page-title);
-  line-height: 1;
+  line-height: 1.08;
   letter-spacing: -0.052em;
 }
 
@@ -2280,7 +2093,7 @@ tbody tr:hover {
 .site-footer nav a {
   display: inline-flex;
   align-items: center;
-  min-height: 2rem;
+  min-height: 2.75rem;
   padding-block: .35rem;
   color: var(--muted);
   font: 500 0.62rem var(--mono);
@@ -3094,6 +2907,10 @@ html:not([data-record-copy-ready]) [data-record-copy] {
 }
 
 @media (max-width: 900px) {
+  .brand-hero { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+  .brand-hero-utility { max-width: 36rem; }
+  .db-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .db-row .db-cell:first-child { grid-column: 1 / -1; }
   .methodology-heading,
   .methodology-section-heading {
     grid-template-columns: 1fr;
@@ -3199,6 +3016,8 @@ html:not([data-record-copy-ready]) [data-record-copy] {
 }
 
 @media (max-width: 680px) {
+  .dossier-previews { grid-template-columns: minmax(0, 1fr); }
+  .overview-revisions li { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
   .network-bar {
     min-height: 4rem;
     padding-inline: 1rem;
@@ -3227,7 +3046,7 @@ html:not([data-record-copy-ready]) [data-record-copy] {
     grid-template-columns: minmax(0, 1fr);
     min-height: auto;
     gap: 1.5rem;
-    padding: 1.5rem;
+    padding: 0.75rem 0 2rem;
   }
 
   .about-actions {
