@@ -30,6 +30,69 @@ try {
     document.addEventListener('securitypolicyviolation', event => window.cspViolations.push(event.violatedDirective));
   });
   if (profile === 'apt') {
+    // The September 2026 visual contract preserves the shell while replacing
+    // oversized framed heroes and tiny all-caps controls with readable surfaces.
+    for (const width of [320, 768, 1161, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const route of ['', 'lt/', 'actors/', 'knowledge/', 'relationships/', 'about/']) {
+        await page.goto(new URL(route, base).href);
+        await page.evaluate(() => document.fonts.ready);
+        const layout = await page.evaluate(() => {
+          const frame = document.querySelector('.network-bar').getBoundingClientRect();
+          const hero = document.querySelector('.brand-hero');
+          const heroStyle = hero && getComputedStyle(hero);
+          const title = document.querySelector('h1');
+          const targets = [...document.querySelectorAll('.catalogue-search, .controls, .dossier-preview, .page-head, .brand-hero, .profile-grid')];
+          return {
+            bodySize: getComputedStyle(document.body).fontSize,
+            titleFont: getComputedStyle(title).fontFamily,
+            overflow: document.documentElement.scrollWidth > innerWidth,
+            clipped: targets.some(node => {
+              const rect = node.getBoundingClientRect();
+              return rect.width > 0 && (rect.left < -1 || rect.right > innerWidth + 1);
+            }),
+            frameHeight: frame.height,
+            heroBorder: heroStyle && [heroStyle.borderTopWidth, heroStyle.borderLeftWidth, heroStyle.borderRightWidth],
+            heroHeight: hero?.getBoundingClientRect().height,
+            navigationVisible: getComputedStyle(document.querySelector('.product-bar')).display !== 'none',
+            navFits: [...document.querySelectorAll('.product-navigation a')].every(node => {
+              const nav = node.closest('.product-navigation').getBoundingClientRect();
+              const rect = node.getBoundingClientRect();
+              return rect.left >= nav.left - 1 && rect.right <= nav.right + 1;
+            })
+          };
+        });
+        assert.equal(layout.bodySize, '16px', `${route} body type at ${width}`);
+        assert.match(layout.titleFont, /Space Grotesk/, `${route} display type`);
+        assert.equal(layout.overflow || layout.clipped, false, `${route} viewport at ${width}`);
+        assert.equal(layout.frameHeight, 64, `${route} shared network row`);
+        assert.equal(layout.navigationVisible, width > 1160, `${route} navigation breakpoint`);
+        if (width > 1160) assert(layout.navFits, `${route} desktop navigation fits at ${width}`);
+        if (layout.heroBorder) {
+          assert.deepEqual(layout.heroBorder, ['0px', '0px', '0px']);
+          if (width > 900) assert(layout.heroHeight >= 320, 'Open hero minimum height');
+        }
+        assert.deepEqual(await page.evaluate(() => window.cspViolations), []);
+      }
+    }
+    await page.goto(base);
+    await page.locator('#overview-actor-search').fill('APT28');
+    await page.locator('.catalogue-search button').click();
+    await page.waitForURL('**/actors/?q=APT28');
+    await page.waitForFunction(() => document.querySelector('#result-count').textContent === '1 profile');
+    assert.equal(await page.locator('.actor-row:visible h2').innerText(), 'APT28');
+    await page.locator('#actor-controls input[name="q"]').fill('quarkflibbertigibbet');
+    assert(await page.locator('#actor-empty').isVisible());
+    await page.locator('#actor-controls button[type="reset"]').click();
+    await page.waitForFunction(() => document.querySelector('#actor-empty').hidden);
+    assert((await page.locator('.actor-row:visible').count()) > 1);
+    await page.goto(new URL('actors/?origin=russia&sort=reviewed', base).href);
+    assert.equal(await page.locator('#advanced-actor-filters').getAttribute('open'), '');
+    assert.equal(await page.locator('[data-active-filter-count]').innerText(), '1');
+    const filteredActors = await page.locator('.actor-row:visible').evaluateAll(rows => rows.map(row => ({ origin: row.dataset.origin, reviewed: row.dataset.reviewed })));
+    assert(filteredActors.length > 0);
+    assert(filteredActors.every(row => row.origin.split('|').includes('russia')));
+    assert.deepEqual(filteredActors.map(row => row.reviewed), filteredActors.map(row => row.reviewed).sort().reverse());
     for (const q of ['APT28', 'Microsoft', 'quarkflibbertigibbet']) {
       await page.goto(new URL('search/?q=' + q, base).href);
       await page.waitForFunction(() => document.querySelector('#search-status').textContent.startsWith('Showing'));

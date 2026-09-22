@@ -1,0 +1,19 @@
+.profile-toc-frame {
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: transparent;
+}
+.profile-toc :is(.profile-toc-eyebrow, .profile-toc-status-line, .profile-toc-status-line strong, .profile-toc-now-next dt, .profile-toc-now-next dd, .profile-toc-number, .profile-toc-top),
+.profile-toc-mobile :is(.profile-toc-eyebrow, .profile-toc-number, summary small) {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.profile-toc [data-profile-toc-link], .profile-toc-mobile [data-profile-toc-link] {
+  min-height: 2.75rem;
+  font: 400 0.8125rem/1.5 var(--sans);
+}
+.profile-toc-number {
+  font-variant-numeric: tabular-nums;
+}
