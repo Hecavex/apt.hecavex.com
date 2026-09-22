@@ -31,7 +31,8 @@
   border: 1px solid var(--cyan);
   background: var(--cyan);
   color: var(--bg);
-  font: 600 0.875rem var(--sans);
+  font: 600 0.875rem/1.5 var(--sans);
+  letter-spacing: 0;
   cursor: pointer;
 }
 .catalogue-search button:hover {
@@ -39,7 +40,8 @@
   color: var(--cyan);
 }
 .brand-hero .hero-actions > a:not(.button) {
-  font: 500 0.8125rem var(--sans);
+  font: 600 0.875rem/1.5 var(--sans);
+  letter-spacing: 0;
   text-transform: none;
   text-underline-offset: 0.3em;
 }
@@ -173,7 +175,7 @@
   min-height: 2.75rem;
 }
 .filter-reset {
-  font: 500 0.8125rem var(--sans);
+  font: 600 0.875rem/1.5 var(--sans);
   letter-spacing: 0;
   text-transform: none;
 }
@@ -183,7 +185,7 @@
 .knowledge-record__breadcrumb, .knowledge-dialog-bar,
 .relationship-record footer > span, .change-group-header :is(h2, span),
 .change-subscriptions nav a, .change-support strong, .entity-card > strong,
-.entity-card-meta, .methodology-toc > span, .about-actions > a:not(.button), th {
+.entity-card-meta, .methodology-toc > span, th {
   font-family: var(--sans); font-size: 0.75rem; letter-spacing: 0; text-transform: none;
 }
 .badge {

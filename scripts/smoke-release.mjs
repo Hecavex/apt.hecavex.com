@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
 import { pathToFileURL } from 'node:url';
+import { assertTypographyRoles, readTypographyRoles } from './typography-contract.mjs';
 const [target, profile] = process.argv.slice(2);
 const { chromium } = await import(pathToFileURL(path.resolve(process.env.PLAYWRIGHT_MODULE || '.browser-check/node_modules/playwright-core/index.mjs')).href);
 let server;
@@ -37,6 +38,7 @@ try {
       for (const route of ['', 'lt/', 'actors/', 'knowledge/', 'relationships/', 'about/']) {
         await page.goto(new URL(route, base).href);
         await page.evaluate(() => document.fonts.ready);
+        assertTypographyRoles(await page.evaluate(readTypographyRoles), { route, width });
         const layout = await page.evaluate(() => {
           const frame = document.querySelector('.network-bar').getBoundingClientRect();
           const hero = document.querySelector('.brand-hero');

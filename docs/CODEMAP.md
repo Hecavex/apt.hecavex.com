@@ -58,6 +58,8 @@ read-only. Do not treat a visual change as permission to change analytical data.
 - `npm run audit`: built routes/data and unchanged transfer-size budgets.
 - `scripts/smoke-release.mjs dist apt`: responsive shell/discovery, source
   dialogs, history, citation clipboard fallback, search pagination and no-JS.
+- `scripts/typography-contract.mjs`: rendered typography roles shared with
+  Research, checked by the served-release smoke across routes and viewports.
 - `.github/workflows/pages.yml`: gates, Pages deployment and exact live artifact
   verification. `scripts/release.mjs` binds the publication to the source SHA.
 
