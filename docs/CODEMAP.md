@@ -10,8 +10,16 @@ read-only. Do not treat a visual change as permission to change analytical data.
 - `src/components/AppHeader.astro`: shared portfolio/product navigation and
   no-JavaScript mobile disclosure.
 - `src/styles/fonts.css`: self-hosted typefaces and language subsets.
-- `src/styles/global.css`: tokens, shared shell, existing page/component layout
-  and responsive breakpoints.
+- `src/styles/global.css`: semantic tokens, reset, common typography and focus.
+- `src/styles/shell.css` / `footer.css`: portfolio navigation and footer.
+- `src/styles/page-layout.css`: shared page frames and introductory layouts.
+- `src/styles/catalogue-base.css`: base metrics, lists, search and filters.
+- `src/styles/profiles.css`: dossiers, contents rail, methodology and evidence
+  reading components.
+- `src/styles/knowledge.css`: in-context supporting records, relationship
+  evidence and revision views.
+- `src/styles/responsive.css`: ordered shared breakpoints, reduced motion and
+  print. Keep this after the base modules in the explicit layout import order.
 - `src/styles/catalogue.css`: research-first overview, dossier previews,
   discovery controls and catalogue table readability.
 - `src/styles/reading.css`: readable dossier contents rail and progress labels.

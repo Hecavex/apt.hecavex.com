@@ -29,7 +29,10 @@ const walk = (directory) => {
 roots.forEach(walk);
 
 const cssPath = path.join("src", "styles", "global.css");
-const css = fs.readFileSync(cssPath, "utf8");
+// Match BaseLayout's explicit cascade. Inspect every semantic module, not an
+// obsolete monolith or only the final overrides.
+const styleModules = ["fonts", "global", "shell", "page-layout", "catalogue-base", "profiles", "footer", "knowledge", "responsive", "catalogue", "reading"];
+const css = styleModules.map(name => fs.readFileSync(path.join("src", "styles", `${name}.css`), "utf8")).join("\n");
 const cssContract = [
   [/\.site-footer nav a\s*\{[^}]*min-height:\s*2\.75rem;/s, "footer links must retain 44px touch-target height"],
   [/--page-gutter:\s*clamp\(1rem,\s*3\.5vw,\s*3\.5rem\);/, "missing shared page gutter token"],
