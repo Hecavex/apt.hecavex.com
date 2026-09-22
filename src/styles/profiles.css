@@ -326,13 +326,6 @@
   color: var(--faint);
 }
 
-.profile-toc.is-enhanced [data-profile-toc-item].is-past .profile-toc-number::after,
-.profile-toc-mobile.is-enhanced [data-profile-toc-item].is-past .profile-toc-number::after {
-  margin-left: 0.18rem;
-  color: var(--cyan);
-  content: "✓";
-}
-
 .profile-toc.is-enhanced [data-profile-toc-item].is-current [data-profile-toc-link],
 .profile-toc-mobile.is-enhanced [data-profile-toc-item].is-current [data-profile-toc-link] {
   border-left-color: var(--cyan);
