@@ -213,8 +213,8 @@
   max-width: 30ch;
   margin: 0;
   font-size: clamp(1.85rem, 3.2vw, 2.8rem);
-  line-height: 1.05;
-  letter-spacing: -0.035em;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
 }
 
 .knowledge-record__header .lead {
@@ -376,7 +376,8 @@ html:not([data-record-copy-ready]) [data-record-copy] {
   background: transparent;
   color: var(--cyan);
   cursor: pointer;
-  font: 500 0.8125rem var(--sans);
+  font: 600 0.875rem/1.5 var(--sans);
+  letter-spacing: 0;
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -431,7 +432,8 @@ html:not([data-record-copy-ready]) [data-record-copy] {
   background: transparent;
   color: var(--text-soft);
   cursor: pointer;
-  font: inherit;
+  font: 600 0.875rem/1.5 var(--sans);
+  letter-spacing: 0;
 }
 
 .knowledge-dialog-bar button:hover {

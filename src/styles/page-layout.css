@@ -29,9 +29,8 @@ main > .shell {
   gap: 0.45rem;
   margin: 0 0 0.8rem;
   color: var(--cyan);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0;
+  font: 600 0.75rem/1.5 var(--sans);
+  letter-spacing: 0.02em;
   text-transform: none;
 }
 
@@ -78,12 +77,13 @@ main > .shell {
   font-size: var(--type-page-title);
   font-weight: 600;
   line-height: 1.08;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
 }
 
 .brand-hero .lead {
   margin: 1.5rem 0 0;
-  font-size: 1.15rem;
+  font: 400 clamp(1.1rem, 1.6vw, 1.25rem)/1.45 var(--sans);
+  letter-spacing: -0.006em;
 }
 
 .hero-meta {
@@ -148,7 +148,7 @@ main > .shell {
   border-radius: 0;
   background: var(--cyan);
   color: var(--bg);
-  font: 600 0.875rem var(--sans);
+  font: 600 0.875rem/1.5 var(--sans);
   letter-spacing: 0;
   text-decoration: none;
   white-space: nowrap;

@@ -481,7 +481,7 @@
   margin: 0;
   font-size: var(--type-page-title);
   line-height: 1.08;
-  letter-spacing: -0.052em;
+  letter-spacing: -0.04em;
 }
 
 .about-summary .lead {
@@ -507,9 +507,9 @@
   display: inline-flex;
   min-height: 2.8rem;
   align-items: center;
-  font: 600 0.75rem var(--mono);
-  letter-spacing: 0.035em;
-  text-transform: uppercase;
+  font: 600 0.875rem/1.5 var(--sans);
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .about-head .project-facts {
@@ -562,7 +562,7 @@
   margin: 0;
   font-size: var(--type-page-title);
   line-height: 1.08;
-  letter-spacing: -0.052em;
+  letter-spacing: -0.04em;
 }
 
 .methodology-heading > p {
@@ -638,7 +638,7 @@
 .methodology-section-heading > h2 {
   margin: 0;
   font-size: var(--type-section-title);
-  line-height: 1.08;
+  line-height: 1.1;
   letter-spacing: -0.035em;
 }
 
