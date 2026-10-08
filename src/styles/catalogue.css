@@ -46,6 +46,29 @@
   text-underline-offset: 0.3em;
 }
 
+.overview-revision-note {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.overview-revision-note time {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.overview-revision-note a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+#actor-empty .filter-reset {
+  width: auto;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
 .dossier-previews {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

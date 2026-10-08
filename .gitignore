@@ -5,6 +5,8 @@ dist/
 .browser-check/
 .venv/
 .DS_Store
+Thumbs.db
+*.tmp
 *.log
 .env
 .env.*

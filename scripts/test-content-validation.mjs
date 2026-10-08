@@ -20,6 +20,12 @@ manifest.cases.push(
 );
 const validator = path.join(projectRoot, 'scripts', 'validate-content.mjs');
 const failures = [];
+manifest.cases.push({ name: 'HTTP and HTTPS reference URLs remain valid', valid: true, urlFixture: 'valid' });
+for (const field of ['url', 'archived_url', 'final_url', 'related_research']) {
+  for (const scheme of ['javascript', 'data']) {
+    manifest.cases.push({ name: `${field} rejects ${scheme} URI`, valid: false, urlFixture: field, scheme, includes: ['must use an absolute HTTP(S) reference URL'] });
+  }
+}
 
 const filesBelow = (directory) => fs.readdirSync(directory, { withFileTypes: true })
   .sort((left, right) => left.name.localeCompare(right.name))
@@ -52,6 +58,22 @@ for (const fixture of manifest.cases) {
   try {
     fs.cpSync(path.join(fixtureRoot, 'base'), contentRoot, { recursive: true });
     if (fixture.overlay) copyOverlay(path.join(fixtureRoot, fixture.overlay), contentRoot);
+    if (fixture.urlFixture) {
+      const sourcePath = path.join(contentRoot, 'sources', 'government', 'source-one.md');
+      const source = parse(fs.readFileSync(sourcePath, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/)[1]);
+      const rejectedUrl = fixture.scheme === 'data' ? 'data:text/html,fixture' : 'javascript:void(0)';
+      if (fixture.urlFixture === 'valid') {
+        source.url = 'http://example.org/report';
+        source.archived_url = 'https://example.org/archive/report';
+        source.final_url = 'https://example.org/report';
+      } else if (fixture.urlFixture === 'related_research') {
+        const actorPath = path.join(contentRoot, 'actors', 'europe', 'actor-one.md');
+        const actor = parse(fs.readFileSync(actorPath, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/)[1]);
+        actor.related_research = [{ title: 'Synthetic navigation fixture', url: rejectedUrl }];
+        fs.writeFileSync(actorPath, `---\n${stringify(actor)}---\nFixture reference boundary.\n`);
+      } else source[fixture.urlFixture] = rejectedUrl;
+      fs.writeFileSync(sourcePath, `---\n${stringify(source)}---\nFixture reference boundary.\n`);
+    }
     if (fixture.claimFixture) {
       const actorPath = path.join(contentRoot, 'actors', 'europe', 'actor-one.md');
       const actor = parse(fs.readFileSync(actorPath, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/)[1]);

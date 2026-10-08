@@ -85,9 +85,12 @@ try {
     assert.equal(await page.locator('.actor-row:visible h2').innerText(), 'APT28');
     await page.locator('#actor-controls input[name="q"]').fill('quarkflibbertigibbet');
     assert(await page.locator('#actor-empty').isVisible());
-    await page.locator('#actor-controls button[type="reset"]').click();
+    await page.locator('#actor-empty button[type="reset"]').click();
     await page.waitForFunction(() => document.querySelector('#actor-empty').hidden);
     assert((await page.locator('.actor-row:visible').count()) > 1);
+    assert.equal(new URL(page.url()).search, '', 'Empty-state reset clears shareable filter state');
+    assert.equal(await page.locator('#actor-controls input[name="q"]').inputValue(), '');
+    assert(await page.locator('#actor-controls input[name="q"]').evaluate(input => input === document.activeElement), 'Reset returns focus to search');
     await page.goto(new URL('actors/?origin=russia&sort=reviewed', base).href);
     assert.equal(await page.locator('#advanced-actor-filters').getAttribute('open'), '');
     assert.equal(await page.locator('[data-active-filter-count]').innerText(), '1');
