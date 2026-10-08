@@ -3,6 +3,8 @@
 Start here when changing a feature. The site is Astro-generated, public and
 read-only. Do not treat a visual change as permission to change analytical data.
 
+Use [MAINTENANCE.md](MAINTENANCE.md) for reproducible setup, verification and release operations; the root README is the product and contributor entrypoint.
+
 ## Presentation
 
 - `src/layouts/BaseLayout.astro`: document metadata, shell, footer, DNT-aware
@@ -23,11 +25,15 @@ read-only. Do not treat a visual change as permission to change analytical data.
 - `src/styles/catalogue.css`: research-first overview, dossier previews,
   discovery controls and catalogue table readability.
 - `src/styles/reading.css`: readable dossier contents rail and progress labels.
-- `src/pages/index.astro`: overview composition using actual public records.
+- `src/pages/index.astro`: overview composition using actual public records,
+  the source-linked Baltic evidence route and true substantive change records.
+  Dossier review and same-day substantive update ordering have explicit tie-breaks.
 - `src/pages/actors/index.astro`: server-rendered actor catalogue and filter fields.
 - `src/scripts/actor-catalogue.ts`: client filter matching, sorting, URL restore,
   and URL updates have named helpers. `initialiseActorCatalogue` owns event
   wiring and reset; its `applyFilters` callback updates results and the empty state.
+  The nearby empty-state reset clears shareable filter state and returns focus
+  to search; `scripts/smoke-release.mjs` checks this complete recovery flow.
 - `src/pages/actors/[slug].astro`: complete actor dossier and bounded Labs handoff.
 - `src/components/ProfileToc.astro`: desktop/mobile section tracking and anchors.
 - `src/components/knowledge/KnowledgeExplorer.astro`: catalogue views, filtering
@@ -47,6 +53,9 @@ read-only. Do not treat a visual change as permission to change analytical data.
 - `src/utils/labs-handoff.ts` and `src/data/labs-evidence-handoff.json`: frozen
   evidence handoff. Never imply that the complete dossier is live-synchronised.
 - `src/pages/api/` and `src/pages/data/`: machine-readable contracts.
+- `src/content.config.ts` and `scripts/validate-content.mjs`: HTTP(S)-only
+  source, archive, final and related URL boundaries; rejection fixtures live in
+  `scripts/test-content-validation.mjs`.
 - `scripts/apply-csp.mjs`: generated output CSP; preserve no remote-font runtime.
 
 ## Verification

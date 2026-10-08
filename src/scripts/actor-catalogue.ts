@@ -78,6 +78,7 @@ export function initialiseActorCatalogue(): void {
   form.addEventListener('reset', () => requestAnimationFrame(() => {
     advanced.open = false;
     applyFilters();
+    form.querySelector<HTMLInputElement>('input[name="q"]')?.focus();
   }));
   applyFilters();
 }

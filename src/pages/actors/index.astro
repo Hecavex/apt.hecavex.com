@@ -42,7 +42,7 @@ const origins=unique(actors.flatMap(a=>a.data.suspected_origins)).sort(); const 
     <div class="db-cell"><small>Review</small><span class={`badge ${freshness.key}`}>{freshness.label}</span><br/>{formatDate(a.data.last_reviewed)}</div>
   </article>
 })}</div>
-<div class="empty" id="actor-empty" hidden><h2>No matching actors</h2><p>Remove a filter or broaden the search. Draft profiles are never included.</p></div></section>
+<div class="empty" id="actor-empty" hidden><h2>No matching actors</h2><p>Remove a filter or broaden the search. Draft profiles are never included.</p><button class="filter-reset" type="reset" form="actor-controls">Clear search and filters</button></div></section>
 <script>
 import { initialiseActorCatalogue } from '../../scripts/actor-catalogue';
 initialiseActorCatalogue();

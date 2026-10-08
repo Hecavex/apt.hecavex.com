@@ -121,6 +121,19 @@ const describe = (record) => relativeFile(record.file);
 const isPublic = (record) => record.data.draft === false;
 const isCurrent = (record) => isPublic(record) && record.data.deprecated !== true && record.data.revoked !== true;
 
+const checkWebReferenceUrl = (record, value, field, { required = false } = {}) => {
+  if (value === undefined) {
+    if (required) errors.push(`${describe(record)}: missing ${field}`);
+    return;
+  }
+  try {
+    // A syntactically valid URI may still execute code when used as a citation link.
+    if (typeof value !== 'string' || !['http:', 'https:'].includes(new URL(value).protocol)) throw new Error('Unsupported reference scheme');
+  } catch {
+    errors.push(`${describe(record)}: ${field} must use an absolute HTTP(S) reference URL`);
+  }
+};
+
 const parseFrontMatter = (file) => {
   const raw = fs.readFileSync(file, 'utf8');
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -440,6 +453,9 @@ for (const record of recordsByCollection.get('techniques') ?? []) {
 
 for (const record of recordsByCollection.get('sources') ?? []) {
   const { data } = record;
+  checkWebReferenceUrl(record, data.url, 'url', { required: true });
+  checkWebReferenceUrl(record, data.archived_url, 'archived_url');
+  checkWebReferenceUrl(record, data.final_url, 'final_url');
   const publishedAt = parseDate(record, data.published_at, 'published_at', { required: true });
   const accessedAt = parseDate(record, data.accessed_at, 'accessed_at', { required: true });
   if (publishedAt !== null && accessedAt !== null && accessedAt < publishedAt) {
@@ -456,6 +472,17 @@ for (const record of recordsByCollection.get('sources') ?? []) {
   }
   if (isPublic(record) && !data.archived_url) {
     warnings.push(`${describe(record)}: source has no archived_url`);
+  }
+}
+
+for (const record of allRecords) {
+  const references = record.data.related_research ?? [];
+  if (!Array.isArray(references)) {
+    errors.push(`${describe(record)}: related_research must be an array`);
+    continue;
+  }
+  for (const [index, reference] of references.entries()) {
+    checkWebReferenceUrl(record, reference?.url, `related_research[${index}].url`, { required: true });
   }
 }
 

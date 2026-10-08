@@ -16,6 +16,8 @@ import {
 } from './data/vocabularies';
 
 const confidence = z.enum(confidenceValues);
+// Public citations are browser navigation targets, not arbitrary URI schemes.
+const webReferenceUrl = z.url({ protocol: /^https?$/ });
 const ref = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const semanticVersion = z.string().regex(/^\d+\.\d+\.\d+$/);
 const migrationDate = new Date('2026-08-26T00:00:00.000Z');
@@ -32,7 +34,7 @@ const lifecycleFields = {
   superseded_by: ref.optional()
 };
 
-const relatedResearch = z.array(z.object({ title: z.string(), url: z.url() })).default([]);
+const relatedResearch = z.array(z.object({ title: z.string(), url: webReferenceUrl })).default([]);
 const claimSources = z.array(z.object({
   source: ref,
   locator: z.string().min(1),
@@ -274,8 +276,8 @@ const sources = defineCollection({
     authors: z.array(z.string()).default([]),
     published_at: z.coerce.date(),
     accessed_at: z.coerce.date(),
-    url: z.url(),
-    archived_url: z.url().optional(),
+    url: webReferenceUrl,
+    archived_url: webReferenceUrl.optional(),
     source_type: z.enum(sourceTypes),
     language: z.string().length(2),
     notes: z.string().default(''),
@@ -285,7 +287,7 @@ const sources = defineCollection({
     archive_checked_at: z.coerce.date().optional(),
     archive_check_note: z.string().default(''),
     http_status: z.number().int().min(100).max(599).optional(),
-    final_url: z.url().optional(),
+    final_url: webReferenceUrl.optional(),
     source_identity: z.object({
       edition: z.string().min(1),
       accessed_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

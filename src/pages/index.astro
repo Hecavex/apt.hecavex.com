@@ -5,8 +5,9 @@ import { loadKnowledge } from '../utils/knowledge';
 const knowledge = await loadKnowledge();
 const { actors, campaigns, malware, tools, techniques, sources, updates, relationships } = knowledge;
 const aliases = actors.reduce((sum, actor:any) => sum + actor.data.aliases.length, 0);
-const recent = [...actors].sort((a:any,b:any) => +new Date(b.data.last_reviewed)-+new Date(a.data.last_reviewed)).slice(0,5);
-const latest = [...updates].sort((a:any,b:any) => +new Date(b.data.date)-+new Date(a.data.date)).slice(0,5);
+const recent = [...actors].sort((a:any,b:any) => +new Date(b.data.last_reviewed)-+new Date(a.data.last_reviewed) || a.data.name.localeCompare(b.data.name, 'en')).slice(0,5);
+const latest = [...updates].filter((update:any) => update.data.substantive).sort((a:any,b:any) => +new Date(b.data.date)-+new Date(a.data.date) || a.data.slug.localeCompare(b.data.slug, 'en')).slice(0,5);
+const latestRevision = latest[0];
 const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaigns.length],['Software',malware.length + tools.length],['Techniques',techniques.length],['Relationships',relationships.length]];
 ---
 <BaseLayout>
@@ -22,8 +23,9 @@ const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaig
           <label for="overview-actor-search">Start with a name, alias or sector</label>
           <div><input id="overview-actor-search" name="q" type="search" placeholder="Search actor dossiers" /><button type="submit" aria-label="Search actor dossiers">Search</button></div>
         </form>
-        <div class="hero-actions"><a href="/actors/">Browse all {actors.length} actors</a><a href="/knowledge/">Explore supporting records</a></div>
+        <div class="hero-actions"><a href="/actors/">Browse all {actors.length} actors</a><a href="/baltic-relevance/">Explore source-linked Baltic evidence</a></div>
         <p class="hero-meta">{sources.length} public references. Sources and assessment boundaries stay visible.</p>
+        {latestRevision && <p class="overview-revision-note">Latest substantive change: <time datetime={latestRevision.data.date.toISOString()}>{formatDate(latestRevision.data.date)}</time>. <a href={`/changes/#${latestRevision.data.slug}`}>Read the revision</a>.</p>}
       </div>
     </header>
     <div class="stat-grid" aria-label="Public knowledge base statistics">{stats.map(([name,count]) => <div class="stat"><strong>{count}</strong><span>{name}</span></div>)}</div>

@@ -20,7 +20,8 @@
     "check:archives": "node scripts/check-source-archives.mjs",
     "check:alias-locators": "node scripts/check-alias-locators.mjs",
     "lint": "node scripts/lint.mjs",
-    "test:content": "node scripts/test-content-validation.mjs && node scripts/test-labs-handoff.mjs && node scripts/test-claim-assurance.mjs",
+    "test:content": "node scripts/test-content-validation.mjs && node scripts/test-labs-handoff.mjs && node scripts/test-claim-assurance.mjs && npm run test:structured-data",
+    "test:structured-data": "node scripts/test-structured-data.mjs",
     "validate": "node scripts/sync-attack-framework.mjs && node scripts/validate-content.mjs",
     "verify": "npm run lint && npm run test:content && npm run build && npm run audit"
   },
