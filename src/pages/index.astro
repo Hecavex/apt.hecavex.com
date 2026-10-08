@@ -25,7 +25,7 @@ const stats = [['Actors',actors.length],['Aliases',aliases],['Campaigns',campaig
         </form>
         <div class="hero-actions"><a href="/actors/">Browse all {actors.length} actors</a><a href="/baltic-relevance/">Explore source-linked Baltic evidence</a></div>
         <p class="hero-meta">{sources.length} public references. Sources and assessment boundaries stay visible.</p>
-        {latestRevision && <p class="overview-revision-note">Latest substantive change: <time datetime={latestRevision.data.date.toISOString()}>{formatDate(latestRevision.data.date)}</time>. <a href={`/changes/#${latestRevision.data.slug}`}>Read the revision</a>.</p>}
+        {latestRevision && <p class="overview-revision-note">Latest substantive change: <time datetime={latestRevision.data.date.toISOString()}>{formatDate(latestRevision.data.date)}</time>. <a href={`/changes/#${latestRevision.data.slug}`}>Read the revision</a></p>}
       </div>
     </header>
     <div class="stat-grid" aria-label="Public knowledge base statistics">{stats.map(([name,count]) => <div class="stat"><strong>{count}</strong><span>{name}</span></div>)}</div>
